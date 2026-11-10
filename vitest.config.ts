@@ -1,4 +1,4 @@
-import { defineConfig } from "vitest/config";
+import { configDefaults, defineConfig } from "vitest/config";
 import path from "path";
 
 // Compute an absolute path to the SQLite DB so Vitest worker processes
@@ -12,6 +12,7 @@ export default defineConfig({
     environment: "node",
     globals: true,
     include: ["**/*.test.ts"],
+    exclude: [...configDefaults.exclude, "mobile/**"],
     fileParallelism: false, // Sequential execution prevents SQLite file locks across test suites
     testTimeout: 30000,
     hookTimeout: 30000,

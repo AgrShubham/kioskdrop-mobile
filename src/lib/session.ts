@@ -1,4 +1,4 @@
-import { cookies } from "next/headers";
+import { cookies, headers } from "next/headers";
 import crypto from "crypto";
 
 export interface UserSession {
@@ -78,9 +78,27 @@ export function verifySession(token: string): UserSession | null {
 }
 
 /**
- * Retrieves the active session from server cookies, defaulting to Aarav Sharma (EMPLOYEE).
+ * Retrieves the active session from Bearer Authorization header (mobile/API) or server cookies (web),
+ * defaulting to Aarav Sharma (EMPLOYEE).
  */
 export async function getSession(): Promise<UserSession> {
+  // 1. Mobile / API Bearer Token Precedence
+  try {
+    const headerStore = headers();
+    const authHeader =
+      headerStore.get("authorization") || headerStore.get("Authorization");
+    if (authHeader && authHeader.toLowerCase().startsWith("bearer ")) {
+      const bearerToken = authHeader.slice(7).trim();
+      if (bearerToken) {
+        const decoded = verifySession(bearerToken);
+        if (decoded) return decoded;
+      }
+    }
+  } catch {
+    // Outside request context (e.g., Vitest direct service calls)
+  }
+
+  // 2. Web Cookie Fallback (100% preserved)
   try {
     const cookieStore = cookies();
     const token = cookieStore.get(SESSION_COOKIE_NAME)?.value;

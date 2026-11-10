@@ -14,6 +14,9 @@ export async function GET(request: NextRequest) {
 
   const stream = new ReadableStream({
     start(controller) {
+      // 0. Flush an initial SSE comment frame immediately so XMLHttpRequest clients (react-native-sse) transition to LOADING/open right away
+      controller.enqueue(encoder.encode(": connected\n\n"));
+
       // 1. Replay missed events if client reconnected with Last-Event-ID
       if (lastEventId) {
         const missed = telemetryBus.getEventsSince(lastEventId);
