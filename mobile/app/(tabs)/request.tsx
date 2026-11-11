@@ -7,11 +7,13 @@ import {
   Text,
   View,
 } from "react-native";
+import { LinearGradient } from "expo-linear-gradient";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import {
   AlertTriangle,
   Compass,
+  MapPin,
   QrCode,
   RefreshCw,
   Zap,
@@ -20,12 +22,11 @@ import { PinPassCard } from "@/components/request/PinPassCard";
 import { SymptomCard } from "@/components/request/SymptomCard";
 import { ChamferCard } from "@/components/ui/ChamferCard";
 import { ScreenHeader } from "@/components/ui/ScreenHeader";
-import { StatusBadge } from "@/components/ui/StatusBadge";
 import { DIAGNOSTIC_SYMPTOMS, type SymptomOption } from "@/constants/symptoms";
 import { QUERY_KEYS } from "@/hooks/useSession";
 import { generateIdempotencyKey, kioskApi } from "@/lib/api";
+import { formatEnumLabel, formatLockerHubLabel } from "@/lib/format";
 import { haptics } from "@/lib/haptics";
-import { formatLockerHubLabel } from "@/lib/format";
 import { getPalette } from "@/lib/theme";
 import { useAppStore } from "@/store/app-store";
 import type { DiagnoseReserveResult } from "@/types/domain";
@@ -65,7 +66,6 @@ export default function RapidDropRequestScreen() {
   );
   const lastAppliedRoomParamRef = useRef<string | null>(null);
 
-  // Sync ?room= once per incoming QR/deep-link param change
   useEffect(() => {
     const paramRoomRaw = Array.isArray(searchParams.room)
       ? searchParams.room[0]
@@ -106,7 +106,6 @@ export default function RapidDropRequestScreen() {
     [selectedSymptomCode]
   );
 
-  // Determine nearest hub proximity hint (Floor 3 -> Floor 4 Hub)
   const nearestHubHint = useMemo(() => {
     if (!selectedRoom) return null;
     if (lockers.length === 0) {
@@ -197,13 +196,11 @@ export default function RapidDropRequestScreen() {
   return (
     <ScrollView
       style={{ flex: 1, backgroundColor: palette.background }}
-      contentContainerStyle={{ padding: 16, paddingBottom: 40, gap: 14 }}
+      contentContainerStyle={{ padding: 16, paddingBottom: 40, gap: 16 }}
     >
       <ScreenHeader
-        badge="RAPID-DROP PORTAL"
-        badgeVariant="sapphire"
-        title="AV Diagnostic Triage"
-        subtitle="Scan a meeting room plaque or select a conference suite to dispatch certified Zero-Trust AV spares."
+        title="Rapid-Drop Triage"
+        subtitle="Select a room & symptom to reserve an instant pickup PIN."
         rightSlot={
           <Pressable
             accessibilityRole="button"
@@ -214,24 +211,37 @@ export default function RapidDropRequestScreen() {
             }}
             style={{
               minHeight: 44,
-              paddingHorizontal: 12,
-              borderRadius: 12,
-              backgroundColor: palette.primary,
-              flexDirection: "row",
-              alignItems: "center",
-              gap: 6,
+              justifyContent: "center",
             }}
           >
-            <QrCode size={16} color="#FFFFFF" />
-            <Text style={{ color: "#FFFFFF", fontSize: 12, fontWeight: "800" }}>
-              Scan Room QR
-            </Text>
+            <View
+              style={{
+                height: 38,
+                paddingHorizontal: 13,
+                borderRadius: 999,
+                backgroundColor: palette.primarySoft,
+                flexDirection: "row",
+                alignItems: "center",
+                gap: 6,
+              }}
+            >
+              <QrCode size={15} color={palette.primaryText} />
+              <Text
+                style={{
+                  color: palette.primaryText,
+                  fontSize: 12,
+                  fontWeight: "800",
+                }}
+              >
+                Scan QR
+              </Text>
+            </View>
           </Pressable>
         }
       />
 
-      {/* Step 1: Conference Room Context */}
-      <ChamferCard style={{ gap: 10 }}>
+      {/* Step 1: Room Carousel */}
+      <View style={{ gap: 8 }}>
         <View
           style={{
             flexDirection: "row",
@@ -241,12 +251,14 @@ export default function RapidDropRequestScreen() {
         >
           <Text
             style={{
-              color: palette.foreground,
-              fontSize: 14,
+              color: palette.mutedForeground,
+              fontSize: 11,
               fontWeight: "800",
+              letterSpacing: 0.8,
+              textTransform: "uppercase",
             }}
           >
-            1. Conference Room Context
+            1 · Select Meeting Suite
           </Text>
           {roomsQuery.isError ? (
             <Pressable
@@ -254,18 +266,18 @@ export default function RapidDropRequestScreen() {
               accessibilityLabel="Retry loading meeting rooms"
               onPress={() => void roomsQuery.refetch()}
               style={{
-                minHeight: 44,
-                paddingHorizontal: 10,
+                minHeight: 36,
+                paddingHorizontal: 8,
                 flexDirection: "row",
                 alignItems: "center",
                 gap: 4,
               }}
             >
-              <RefreshCw size={13} color={palette.destructive} />
+              <RefreshCw size={12} color={palette.destructive} />
               <Text
                 style={{
                   color: palette.destructive,
-                  fontSize: 12,
+                  fontSize: 11,
                   fontWeight: "700",
                 }}
               >
@@ -276,14 +288,18 @@ export default function RapidDropRequestScreen() {
         </View>
 
         {roomsQuery.isLoading ? (
-          <View style={{ flexDirection: "row", alignItems: "center", gap: 8 }}>
+          <ChamferCard style={{ flexDirection: "row", alignItems: "center", gap: 8 }}>
             <ActivityIndicator size="small" color={palette.primaryText} />
             <Text style={{ color: palette.mutedForeground, fontSize: 12 }}>
               Loading enterprise conference suites...
             </Text>
-          </View>
+          </ChamferCard>
         ) : (
-          <View style={{ flexDirection: "row", flexWrap: "wrap", gap: 8 }}>
+          <ScrollView
+            horizontal
+            showsHorizontalScrollIndicator={false}
+            contentContainerStyle={{ gap: 10, paddingVertical: 2 }}
+          >
             {rooms.map((room) => {
               const active = selectedRoom?.qrCodeSlug === room.qrCodeSlug;
               return (
@@ -298,71 +314,91 @@ export default function RapidDropRequestScreen() {
                     setSubmitError(null);
                   }}
                   style={{
-                    minHeight: 44,
-                    paddingHorizontal: 12,
-                    paddingVertical: 8,
-                    borderRadius: 12,
-                    borderWidth: 1,
+                    width: 204,
+                    minHeight: 96,
+                    padding: 13,
+                    borderRadius: 16,
+                    borderWidth: active ? 1.5 : 1,
                     borderColor: active ? palette.primary : palette.border,
-                    backgroundColor: active
-                      ? themeMode === "dark"
-                        ? "rgba(59, 130, 246, 0.16)"
-                        : "rgba(37, 99, 235, 0.10)"
-                      : palette.muted,
-                    justifyContent: "center",
+                    backgroundColor: active ? palette.primarySoft : palette.card,
+                    justifyContent: "space-between",
+                    gap: 8,
                   }}
                 >
-                  <Text
+                  <View
                     style={{
-                      color: active ? palette.primaryText : palette.foreground,
-                      fontSize: 12,
-                      fontWeight: "700",
+                      flexDirection: "row",
+                      alignItems: "center",
+                      justifyContent: "space-between",
+                      gap: 6,
                     }}
                   >
-                    {room.qrCodeSlug}
-                  </Text>
+                    <View
+                      style={{
+                        flexDirection: "row",
+                        alignItems: "center",
+                        gap: 4,
+                      }}
+                    >
+                      <MapPin
+                        size={11}
+                        color={active ? palette.primaryText : palette.mutedForeground}
+                      />
+                      <Text
+                        style={{
+                          color: active ? palette.primaryText : palette.mutedForeground,
+                          fontSize: 11,
+                          fontWeight: "700",
+                        }}
+                      >
+                        Floor {room.floor}
+                      </Text>
+                    </View>
+                    <Text
+                      numberOfLines={1}
+                      style={{
+                        color: palette.mutedForeground,
+                        fontSize: 10,
+                        fontWeight: "600",
+                      }}
+                    >
+                      {formatEnumLabel(room.roomSystem)}
+                    </Text>
+                  </View>
+
+                  <View style={{ gap: 2 }}>
+                    <Text
+                      numberOfLines={2}
+                      style={{
+                        color: palette.foreground,
+                        fontSize: 13.5,
+                        lineHeight: 18,
+                        fontWeight: "800",
+                      }}
+                    >
+                      {room.name}
+                    </Text>
+                    <Text
+                      numberOfLines={1}
+                      style={{
+                        color: active ? palette.primaryText : palette.mutedForeground,
+                        fontSize: 11,
+                        fontWeight: "600",
+                      }}
+                    >
+                      {room.qrCodeSlug}
+                    </Text>
+                  </View>
                 </Pressable>
               );
             })}
-          </View>
+          </ScrollView>
         )}
-
-        {selectedRoom ? (
-          <View
-            style={{
-              backgroundColor: palette.muted,
-              borderRadius: 12,
-              padding: 10,
-              borderWidth: 1,
-              borderColor: palette.border,
-              gap: 4,
-            }}
-          >
-            <Text
-              style={{
-                color: palette.foreground,
-                fontSize: 13,
-                fontWeight: "800",
-              }}
-            >
-              {selectedRoom.name}
-            </Text>
-            <Text style={{ color: palette.mutedForeground, fontSize: 11 }}>
-              Floor {selectedRoom.floor} · {selectedRoom.displayType} ·{" "}
-              {selectedRoom.roomSystem} · {selectedRoom.qrCodeSlug}
-            </Text>
-          </View>
-        ) : null}
 
         {nearestHubHint ? (
           <View
             style={{
-              backgroundColor:
-                themeMode === "dark"
-                  ? "rgba(59, 130, 246, 0.14)"
-                  : "rgba(37, 99, 235, 0.08)",
-              borderColor: palette.primary,
-              borderWidth: 1,
+              backgroundColor: palette.primarySoft,
               borderRadius: 12,
               paddingHorizontal: 12,
               paddingVertical: 9,
@@ -371,7 +407,7 @@ export default function RapidDropRequestScreen() {
               gap: 8,
             }}
           >
-            <Compass size={15} color={palette.primaryText} />
+            <Compass size={14} color={palette.primaryText} />
             <Text
               style={{
                 color: palette.primaryText,
@@ -384,18 +420,20 @@ export default function RapidDropRequestScreen() {
             </Text>
           </View>
         ) : null}
-      </ChamferCard>
+      </View>
 
       {/* Step 2: 5 AV Failure Symptom Cards */}
-      <View style={{ gap: 10 }}>
+      <View style={{ gap: 8 }}>
         <Text
           style={{
-            color: palette.foreground,
-            fontSize: 14,
+            color: palette.mutedForeground,
+            fontSize: 11,
             fontWeight: "800",
+            letterSpacing: 0.8,
+            textTransform: "uppercase",
           }}
         >
-          2. Report Meeting Room Symptom
+          2 · Identify AV Issue
         </Text>
 
         {DIAGNOSTIC_SYMPTOMS.map((symptom) => {
@@ -426,79 +464,56 @@ export default function RapidDropRequestScreen() {
         })}
 
         {selectedSymptomCode === "SYMPTOM_NO_DISPLAY_BYOD" ? (
-          <ChamferCard tone="amber" style={{ gap: 8 }}>
-            <View
-              style={{
-                flexDirection: "row",
-                alignItems: "center",
-                justifyContent: "space-between",
-                gap: 12,
-              }}
-            >
-              <View style={{ flex: 1, gap: 2 }}>
-                <Text
-                  style={{
-                    color: palette.foreground,
-                    fontSize: 13,
-                    fontWeight: "700",
-                  }}
-                >
-                  Laptop USB-C port physically loose/damaged
-                </Text>
-                <Text style={{ color: palette.mutedForeground, fontSize: 11 }}>
-                  Bypass physical port with 4K Wireless HDMI Kit
-                </Text>
-              </View>
-              <Switch
-                testID="port-damaged-switch"
-                accessibilityLabel="Laptop USB-C port physically loose or damaged"
-                value={portDamaged}
-                onValueChange={(val) => {
-                  void haptics.selection();
-                  setPortDamaged(val);
+          <View
+            style={{
+              flexDirection: "row",
+              alignItems: "center",
+              justifyContent: "space-between",
+              gap: 12,
+              backgroundColor: portDamaged ? palette.amberSoft : palette.card,
+              borderRadius: 15,
+              borderWidth: 1,
+              borderColor: portDamaged
+                ? "rgba(245, 158, 11, 0.35)"
+                : palette.border,
+              paddingHorizontal: 14,
+              paddingVertical: 11,
+            }}
+          >
+            <View style={{ flex: 1, gap: 2 }}>
+              <Text
+                style={{
+                  color: palette.foreground,
+                  fontSize: 13,
+                  fontWeight: "700",
                 }}
-                trackColor={{ false: palette.border, true: palette.amber }}
-                thumbColor="#FFFFFF"
-              />
+              >
+                Laptop USB-C port loose/damaged?
+              </Text>
+              <Text style={{ color: palette.mutedForeground, fontSize: 11 }}>
+                Switch dispatch to wireless 4K HDMI kit
+              </Text>
             </View>
-          </ChamferCard>
+            <Switch
+              testID="port-damaged-switch"
+              accessibilityLabel="Laptop USB-C port physically loose or damaged"
+              value={portDamaged}
+              onValueChange={(val) => {
+                void haptics.selection();
+                setPortDamaged(val);
+              }}
+              trackColor={{ false: palette.borderStrong, true: palette.amber }}
+              thumbColor="#FFFFFF"
+            />
+          </View>
         ) : null}
       </View>
-
-      {/* Live Diagnostic Preview */}
-      <ChamferCard tone="sky" style={{ gap: 8 }}>
-        <View
-          style={{
-            flexDirection: "row",
-            alignItems: "center",
-            justifyContent: "space-between",
-            flexWrap: "wrap",
-            gap: 6,
-          }}
-        >
-          <StatusBadge label="DIAGNOSTIC PREVIEW" variant="sky" compact />
-          <Text style={{ color: palette.mutedForeground, fontSize: 11, fontWeight: "700" }}>
-            ServiceNow INC auto-ticket + 10m TTL
-          </Text>
-        </View>
-        <Text
-          style={{
-            color: palette.foreground,
-            fontSize: 14,
-            fontWeight: "800",
-          }}
-        >
-          {previewSkuName}
-        </Text>
-      </ChamferCard>
 
       {submitError ? (
         <View
           style={{
             backgroundColor: palette.destructiveSoft,
-            borderColor: palette.destructive,
-            borderWidth: 1,
-            borderRadius: 12,
+            borderRadius: 14,
             padding: 12,
             flexDirection: "row",
             alignItems: "center",
@@ -519,37 +534,88 @@ export default function RapidDropRequestScreen() {
         </View>
       ) : null}
 
-      {/* Reserve CTA */}
-      <Pressable
-        accessibilityRole="button"
-        accessibilityLabel="Diagnose and Reserve Hardware"
-        accessibilityState={{
-          disabled: reserveMutation.isPending || !selectedRoom,
-        }}
-        disabled={reserveMutation.isPending || !selectedRoom}
-        onPress={() => reserveMutation.mutate()}
-        style={{
-          minHeight: 52,
-          borderRadius: 14,
-          backgroundColor: palette.primary,
-          flexDirection: "row",
-          alignItems: "center",
-          justifyContent: "center",
-          gap: 8,
-          opacity: reserveMutation.isPending || !selectedRoom ? 0.65 : 1,
-        }}
-      >
-        {reserveMutation.isPending ? (
-          <ActivityIndicator size="small" color="#FFFFFF" />
-        ) : (
-          <Zap size={18} color="#FFFFFF" />
-        )}
-        <Text style={{ color: "#FFFFFF", fontSize: 15, fontWeight: "800" }}>
-          {reserveMutation.isPending
-            ? "Reserving Smart Bay..."
-            : "Diagnose & Reserve Hardware"}
+      {/* Unified Diagnostic Dispatch Checkout Card */}
+      <ChamferCard style={{ gap: 12 }}>
+        <View
+          style={{
+            flexDirection: "row",
+            alignItems: "center",
+            justifyContent: "space-between",
+            gap: 8,
+          }}
+        >
+          <Text
+            style={{
+              color: palette.mutedForeground,
+              fontSize: 10,
+              fontWeight: "800",
+              letterSpacing: 0.9,
+              textTransform: "uppercase",
+            }}
+          >
+            Auto-Matched Spare
+          </Text>
+          <Text
+            style={{
+              color: palette.mutedForeground,
+              fontSize: 11,
+              fontWeight: "600",
+            }}
+          >
+            ServiceNow INC · 10m hold
+          </Text>
+        </View>
+
+        <Text
+          style={{
+            color: palette.foreground,
+            fontSize: 15,
+            fontWeight: "800",
+          }}
+        >
+          {previewSkuName}
         </Text>
-      </Pressable>
+
+        <Pressable
+          accessibilityRole="button"
+          accessibilityLabel="Diagnose and Reserve Hardware"
+          accessibilityState={{
+            disabled: reserveMutation.isPending || !selectedRoom,
+          }}
+          disabled={reserveMutation.isPending || !selectedRoom}
+          onPress={() => reserveMutation.mutate()}
+          style={{
+            borderRadius: 14,
+            overflow: "hidden",
+            opacity: reserveMutation.isPending || !selectedRoom ? 0.65 : 1,
+          }}
+        >
+          <LinearGradient
+            colors={palette.heroGradient}
+            start={{ x: 0, y: 0 }}
+            end={{ x: 1, y: 0 }}
+            style={{
+              minHeight: 50,
+              flexDirection: "row",
+              alignItems: "center",
+              justifyContent: "center",
+              gap: 8,
+              paddingHorizontal: 16,
+            }}
+          >
+            {reserveMutation.isPending ? (
+              <ActivityIndicator size="small" color="#FFFFFF" />
+            ) : (
+              <Zap size={17} color="#FFFFFF" />
+            )}
+            <Text style={{ color: "#FFFFFF", fontSize: 14, fontWeight: "800" }}>
+              {reserveMutation.isPending
+                ? "Reserving Smart Bay..."
+                : "Diagnose & Reserve Hardware"}
+            </Text>
+          </LinearGradient>
+        </Pressable>
+      </ChamferCard>
 
       {/* Active Digital Pickup Pass */}
       {reservationResult ? (

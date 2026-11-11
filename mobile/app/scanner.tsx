@@ -9,17 +9,21 @@ import {
 } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useQuery } from "@tanstack/react-query";
-import { CameraView, useCameraPermissions, type BarcodeScanningResult } from "expo-camera";
+import {
+  CameraView,
+  useCameraPermissions,
+  type BarcodeScanningResult,
+} from "expo-camera";
 import { useRouter } from "expo-router";
 import {
   AlertTriangle,
+  ChevronRight,
   Flashlight,
   MapPin,
   Settings,
   X,
 } from "lucide-react-native";
 import { ChamferCard } from "@/components/ui/ChamferCard";
-import { StatusBadge } from "@/components/ui/StatusBadge";
 import { QUERY_KEYS } from "@/hooks/useSession";
 import { kioskApi } from "@/lib/api";
 import { haptics } from "@/lib/haptics";
@@ -99,7 +103,29 @@ export default function QrScannerModalScreen() {
           justifyContent: "space-between",
         }}
       >
-        <StatusBadge label="CAMERA FALLBACK" variant="amber" />
+        <View>
+          <Text
+            style={{
+              color: palette.primaryText,
+              fontSize: 11,
+              fontWeight: "700",
+              letterSpacing: 0.9,
+              textTransform: "uppercase",
+            }}
+          >
+            Room Selection
+          </Text>
+          <Text
+            style={{
+              color: palette.foreground,
+              fontSize: 21,
+              fontWeight: "800",
+              letterSpacing: -0.4,
+            }}
+          >
+            Choose Meeting Room
+          </Text>
+        </View>
         <Pressable
           accessibilityRole="button"
           accessibilityLabel="Close room scanner"
@@ -107,49 +133,58 @@ export default function QrScannerModalScreen() {
           style={{
             minWidth: 44,
             minHeight: 44,
-            borderRadius: 12,
-            backgroundColor: palette.muted,
             alignItems: "center",
             justifyContent: "center",
           }}
         >
-          <X size={18} color={palette.foreground} />
+          <View
+            style={{
+              width: 34,
+              height: 34,
+              borderRadius: 999,
+              backgroundColor: palette.muted,
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
+            <X size={16} color={palette.foreground} />
+          </View>
         </Pressable>
       </View>
 
       <ChamferCard tone="amber" style={{ gap: 10 }}>
         <View style={{ flexDirection: "row", alignItems: "center", gap: 8 }}>
-          <AlertTriangle size={20} color={palette.amber} />
+          <AlertTriangle size={18} color={palette.amber} />
           <Text
             style={{
               flex: 1,
               color: palette.foreground,
-              fontSize: 16,
+              fontSize: 14.5,
               fontWeight: "800",
             }}
           >
-            Room Camera Unavailable / Manual Select
+            Manual Room Lookup
           </Text>
         </View>
         <Text
           style={{
             color: palette.mutedForeground,
-            fontSize: 13,
-            lineHeight: 19,
+            fontSize: 12.5,
+            lineHeight: 18,
           }}
         >
           {subtitle}
         </Text>
 
         {!permission?.granted ? (
-          <View style={{ flexDirection: "row", flexWrap: "wrap", gap: 8, marginTop: 4 }}>
+          <View style={{ flexDirection: "row", flexWrap: "wrap", gap: 8, marginTop: 2 }}>
             {permission?.canAskAgain !== false ? (
               <Pressable
                 accessibilityRole="button"
                 accessibilityLabel="Grant camera permission"
                 onPress={() => void requestPermission()}
                 style={{
-                  minHeight: 46,
+                  minHeight: 44,
                   paddingHorizontal: 14,
                   borderRadius: 12,
                   backgroundColor: palette.primary,
@@ -168,12 +203,12 @@ export default function QrScannerModalScreen() {
               accessibilityLabel="Open device settings to enable camera permission"
               onPress={() => void Linking.openSettings()}
               style={{
-                minHeight: 46,
+                minHeight: 44,
                 paddingHorizontal: 14,
                 borderRadius: 12,
-                backgroundColor: palette.muted,
+                backgroundColor: palette.surfaceElevated,
                 borderWidth: 1,
-                borderColor: palette.border,
+                borderColor: palette.borderStrong,
                 flexDirection: "row",
                 alignItems: "center",
                 gap: 6,
@@ -201,11 +236,11 @@ export default function QrScannerModalScreen() {
               alignSelf: "flex-start",
               paddingHorizontal: 12,
               borderRadius: 10,
-              backgroundColor: palette.muted,
+              backgroundColor: palette.surfaceElevated,
               justifyContent: "center",
             }}
           >
-            <Text style={{ color: palette.primaryText, fontSize: 12, fontWeight: "700" }}>
+            <Text style={{ color: palette.primaryText, fontSize: 12.5, fontWeight: "700" }}>
               Back to Camera View
             </Text>
           </Pressable>
@@ -217,15 +252,23 @@ export default function QrScannerModalScreen() {
           color: palette.mutedForeground,
           fontSize: 11,
           fontWeight: "700",
-          letterSpacing: 0.8,
+          letterSpacing: 0.7,
           marginTop: 4,
         }}
       >
         SELECT MEETING ROOM DIRECTLY
       </Text>
 
-      <View style={{ gap: 10 }}>
-        {roomList.map((room) => (
+      <View
+        style={{
+          backgroundColor: palette.card,
+          borderRadius: 18,
+          borderWidth: 1,
+          borderColor: palette.border,
+          overflow: "hidden",
+        }}
+      >
+        {roomList.map((room, idx) => (
           <Pressable
             key={room.qrCodeSlug}
             accessibilityRole="button"
@@ -235,20 +278,31 @@ export default function QrScannerModalScreen() {
               navigateWithRoom(room.qrCodeSlug);
             }}
             style={{
-              minHeight: 56,
-              padding: 14,
-              borderRadius: 14,
-              backgroundColor: palette.card,
-              borderWidth: 1,
-              borderColor: palette.border,
+              minHeight: 62,
+              paddingHorizontal: 14,
+              paddingVertical: 12,
+              borderBottomWidth: idx < roomList.length - 1 ? 1 : 0,
+              borderBottomColor: palette.border,
               flexDirection: "row",
               alignItems: "center",
               justifyContent: "space-between",
+              gap: 10,
             }}
           >
-            <View style={{ flexDirection: "row", alignItems: "center", gap: 10 }}>
-              <MapPin size={17} color={palette.primaryText} />
-              <View>
+            <View style={{ flexDirection: "row", alignItems: "center", gap: 12, flex: 1 }}>
+              <View
+                style={{
+                  width: 38,
+                  height: 38,
+                  borderRadius: 11,
+                  backgroundColor: palette.primarySoft,
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+              >
+                <MapPin size={17} color={palette.primaryText} />
+              </View>
+              <View style={{ flex: 1 }}>
                 <Text
                   style={{
                     color: palette.foreground,
@@ -258,12 +312,12 @@ export default function QrScannerModalScreen() {
                 >
                   {room.name}
                 </Text>
-                <Text style={{ color: palette.mutedForeground, fontSize: 11 }}>
+                <Text style={{ color: palette.mutedForeground, fontSize: 11.5 }}>
                   Floor {room.floor} · {room.qrCodeSlug}
                 </Text>
               </View>
             </View>
-            <StatusBadge label="OPEN TRIAGE" variant="sapphire" compact />
+            <ChevronRight size={17} color={palette.mutedForeground} />
           </Pressable>
         ))}
       </View>
@@ -274,8 +328,8 @@ export default function QrScannerModalScreen() {
     const fallbackMessage = !permission
       ? "Checking device camera authorization for room QR scanning."
       : !permission.granted
-      ? "Camera permission is currently disabled. Grant camera permission in OS Settings or select your conference room manually below."
-      : "Choose your meeting room tag manually to route straight into Rapid-Drop Triage.";
+      ? "Camera permission is currently disabled. Grant access in OS Settings or select your conference room below."
+      : "Choose your meeting room tag manually to open Rapid-Drop Triage.";
     return renderManualRoomPicker(fallbackMessage);
   }
 
@@ -297,7 +351,7 @@ export default function QrScannerModalScreen() {
           paddingTop: Math.max(insets.top, 16) + 8,
           paddingBottom: Math.max(insets.bottom, 18) + 8,
           paddingHorizontal: 18,
-          backgroundColor: "rgba(11, 15, 23, 0.35)",
+          backgroundColor: "rgba(7, 10, 16, 0.36)",
         }}
       >
         {/* Top Bar */}
@@ -318,21 +372,21 @@ export default function QrScannerModalScreen() {
             style={{
               minHeight: 44,
               minWidth: 44,
-              paddingHorizontal: 12,
-              borderRadius: 12,
+              paddingHorizontal: 14,
+              borderRadius: 999,
               backgroundColor: torchOn
-                ? "rgba(59, 130, 246, 0.85)"
-                : "rgba(18, 25, 39, 0.85)",
+                ? "rgba(37, 99, 235, 0.88)"
+                : "rgba(15, 21, 33, 0.78)",
               borderWidth: 1,
-              borderColor: "rgba(255,255,255,0.22)",
+              borderColor: "rgba(255,255,255,0.20)",
               flexDirection: "row",
               alignItems: "center",
               gap: 6,
             }}
           >
-            <Flashlight size={16} color="#FFFFFF" />
-            <Text style={{ color: "#FFFFFF", fontSize: 12, fontWeight: "700" }}>
-              {torchOn ? "Torch ON" : "Torch"}
+            <Flashlight size={15} color="#FFFFFF" />
+            <Text style={{ color: "#FFFFFF", fontSize: 12.5, fontWeight: "700" }}>
+              {torchOn ? "Torch On" : "Torch"}
             </Text>
           </Pressable>
 
@@ -343,10 +397,10 @@ export default function QrScannerModalScreen() {
             style={{
               minWidth: 44,
               minHeight: 44,
-              borderRadius: 12,
-              backgroundColor: "rgba(18, 25, 39, 0.85)",
+              borderRadius: 999,
+              backgroundColor: "rgba(15, 21, 33, 0.78)",
               borderWidth: 1,
-              borderColor: "rgba(255,255,255,0.22)",
+              borderColor: "rgba(255,255,255,0.20)",
               alignItems: "center",
               justifyContent: "center",
             }}
@@ -355,37 +409,96 @@ export default function QrScannerModalScreen() {
           </Pressable>
         </View>
 
-        {/* Sapphire Corner Reticule */}
-        <View style={{ alignItems: "center", gap: 16 }}>
+        {/* Crisp Corner Brackets Reticule */}
+        <View style={{ alignItems: "center", gap: 18 }}>
           <View
             style={{
-              width: 240,
-              height: 240,
-              borderRadius: 24,
-              borderWidth: 2,
-              borderColor: "rgba(59, 130, 246, 0.85)",
-              backgroundColor: "rgba(59, 130, 246, 0.06)",
+              width: 244,
+              height: 244,
+              position: "relative",
               justifyContent: "center",
               alignItems: "center",
             }}
           >
+            {/* 4 Corner Brackets */}
+            <View
+              style={{
+                position: "absolute",
+                top: 0,
+                left: 0,
+                width: 34,
+                height: 34,
+                borderTopWidth: 3.5,
+                borderLeftWidth: 3.5,
+                borderTopLeftRadius: 16,
+                borderColor: "#60A5FA",
+              }}
+            />
+            <View
+              style={{
+                position: "absolute",
+                top: 0,
+                right: 0,
+                width: 34,
+                height: 34,
+                borderTopWidth: 3.5,
+                borderRightWidth: 3.5,
+                borderTopRightRadius: 16,
+                borderColor: "#60A5FA",
+              }}
+            />
+            <View
+              style={{
+                position: "absolute",
+                bottom: 0,
+                left: 0,
+                width: 34,
+                height: 34,
+                borderBottomWidth: 3.5,
+                borderLeftWidth: 3.5,
+                borderBottomLeftRadius: 16,
+                borderColor: "#60A5FA",
+              }}
+            />
+            <View
+              style={{
+                position: "absolute",
+                bottom: 0,
+                right: 0,
+                width: 34,
+                height: 34,
+                borderBottomWidth: 3.5,
+                borderRightWidth: 3.5,
+                borderBottomRightRadius: 16,
+                borderColor: "#60A5FA",
+              }}
+            />
+          </View>
+
+          <View
+            style={{
+              backgroundColor: "rgba(15, 21, 33, 0.75)",
+              borderRadius: 999,
+              paddingHorizontal: 14,
+              paddingVertical: 7,
+            }}
+          >
             <Text
               style={{
-                color: "rgba(241, 245, 249, 0.85)",
+                color: "rgba(248, 250, 252, 0.92)",
                 fontSize: 12,
-                fontWeight: "700",
+                fontWeight: "600",
                 textAlign: "center",
-                paddingHorizontal: 20,
               }}
             >
-              Align Meeting Room QR Tag Inside Frame
+              Point camera at a meeting room QR plaque
             </Text>
           </View>
 
           {scanFeedback ? (
             <View
               style={{
-                backgroundColor: "rgba(220, 38, 38, 0.90)",
+                backgroundColor: "rgba(225, 29, 72, 0.92)",
                 borderRadius: 12,
                 paddingHorizontal: 14,
                 paddingVertical: 10,
@@ -415,15 +528,15 @@ export default function QrScannerModalScreen() {
           }}
           style={{
             minHeight: 48,
-            borderRadius: 14,
-            backgroundColor: "rgba(18, 25, 39, 0.90)",
+            borderRadius: 999,
+            backgroundColor: "rgba(15, 21, 33, 0.85)",
             borderWidth: 1,
-            borderColor: "rgba(255,255,255,0.22)",
+            borderColor: "rgba(255,255,255,0.20)",
             alignItems: "center",
             justifyContent: "center",
           }}
         >
-          <Text style={{ color: "#F1F5F9", fontSize: 13, fontWeight: "700" }}>
+          <Text style={{ color: "#F8FAFC", fontSize: 13.5, fontWeight: "700" }}>
             Enter Room Manually
           </Text>
         </Pressable>
