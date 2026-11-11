@@ -207,3 +207,69 @@ export function formatLockerHubLabel(
   return canonical;
 }
 
+const ENUM_DISPLAY_MAP: Record<string, string> = {
+  IT_ADMIN: "IT Admin",
+  FINOPS_AUDITOR: "FinOps Auditor",
+  EMPLOYEE: "Employee",
+  "4K_LED_WALL": "4K LED Wall",
+  DUAL_MONITOR: "Dual Display",
+  SINGLE_DISPLAY: "Single Display",
+  PROJECTOR: "Projector",
+  BYOD_LEGACY: "BYOD / Wireless",
+  TEAMS_ROOM: "Teams Room",
+  ZOOM_ROOM: "Zoom Room",
+  HYBRID_MTR: "MTR Hybrid",
+  P1_CRITICAL: "P1 Critical",
+  P2_HIGH: "P2 High",
+  P3_STANDARD: "P3 Standard",
+  DIRECT_IMPORT: "Direct Import",
+  DOMESTIC_WHOLESALE: "Domestic Wholesale",
+  PENDING_RECEPTION: "Pending Intake",
+  INSPECTED_STOCKED: "Stocked",
+  ZAGGLE_CARD: "Zaggle Corp Card",
+  HAPPAY_PETTY_CASH: "Happay Petty Cash",
+  SAP_S4HANA: "SAP S/4HANA",
+  ORACLE_NETSUITE: "Oracle NetSuite",
+  ZOHO_BOOKS: "Zoho Books",
+  SYNCED: "Synced",
+  PENDING: "Pending",
+  FAILED: "Failed",
+  STOCKED_AVAILABLE: "In Locker",
+  RESERVED_FOR_PICKUP: "Reserved",
+  DOOR_OPEN_AWAITING_REMOVAL: "Door Open",
+  CHECKED_OUT: "Checked Out",
+  MAINTENANCE_QUARANTINE: "Quarantined",
+  QUARANTINED: "Quarantined",
+  AVAILABLE: "Available",
+  IN_LOCKER: "In Locker",
+  HEALTHY: "Healthy",
+  DAMAGED: "Damaged",
+  NEEDS_INSPECTION: "Needs Check",
+  SERVICENOW: "ServiceNow",
+  ZENDESK: "Zendesk",
+  INBOUND: "Inbound",
+  OUTBOUND: "Outbound",
+  SUCCESS: "Delivered",
+  REPLAYED: "Replayed",
+};
+
+/**
+ * Converts backend screaming snake-case enums into concise, readable UI labels.
+ */
+export function formatEnumLabel(value?: string | null): string {
+  if (!value) return "";
+  const trimmed = value.trim();
+  if (ENUM_DISPLAY_MAP[trimmed]) return ENUM_DISPLAY_MAP[trimmed];
+  return trimmed
+    .toLowerCase()
+    .split("_")
+    .filter(Boolean)
+    .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
+    .join(" ");
+}
+
+export function formatRoleLabel(role?: string | null): string {
+  return formatEnumLabel(role || "EMPLOYEE");
+}
+
+

@@ -2,8 +2,10 @@ import {
   calculateLandedCostPreview,
   formatCompactINR,
   formatCountdown,
+  formatEnumLabel,
   formatLockerHubLabel,
   formatPaiseToINR,
+  formatRoleLabel,
 } from "@/lib/format";
 import { normalizeApiBaseUrl, resolveApiBaseUrl } from "@/lib/env";
 
@@ -84,6 +86,19 @@ describe("format utilities", () => {
       "Floor 3 -> Floor 4 Boardroom Hub"
     );
     expect(formatLockerHubLabel(1, "Lobby Annex")).toBe("Floor 1 Lobby Annex");
+  });
+
+  it("formats technical enums and roles into readable UI labels", () => {
+    expect(formatEnumLabel("DIRECT_IMPORT")).toBe("Direct Import");
+    expect(formatEnumLabel("SAP_S4HANA")).toBe("SAP S/4HANA");
+    expect(formatEnumLabel("P1_CRITICAL")).toBe("P1 Critical");
+    expect(formatEnumLabel("CUSTOM_NEW_STATE")).toBe("Custom New State");
+    expect(formatEnumLabel(null)).toBe("");
+
+    expect(formatRoleLabel("IT_ADMIN")).toBe("IT Admin");
+    expect(formatRoleLabel("FINOPS_AUDITOR")).toBe("FinOps Auditor");
+    expect(formatRoleLabel("EMPLOYEE")).toBe("Employee");
+    expect(formatRoleLabel(undefined)).toBe("Employee");
   });
 });
 
