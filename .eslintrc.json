@@ -1,5 +1,6 @@
 {
   "extends": "next/core-web-vitals",
+  "ignorePatterns": ["mobile/"],
   "rules": {
     "@next/next/no-html-link-for-pages": "off"
   }

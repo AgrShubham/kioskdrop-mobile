@@ -1,0 +1,81 @@
+{
+  "expo": {
+    "name": "KioskDrop Enterprise",
+    "slug": "kioskdrop-enterprise",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "scheme": "kioskdrop",
+    "userInterfaceStyle": "automatic",
+    "backgroundColor": "#070A10",
+    "experiments": {
+      "typedRoutes": true
+    },
+    "ios": {
+      "bundleIdentifier": "com.kioskdrop.enterprise",
+      "supportsTablet": true,
+      "infoPlist": {
+        "NSCameraUsageDescription": "KioskDrop scans meeting-room QR tags and equipment barcodes for Zero-Trust AV dispatch.",
+        "NSFaceIDUsageDescription": "KioskDrop uses Face ID to authorize rapid smart-locker solenoid unlock."
+      }
+    },
+    "android": {
+      "package": "com.kioskdrop.enterprise",
+      "adaptiveIcon": {
+        "backgroundColor": "#0B0F17",
+        "foregroundImage": "./assets/android-icon-foreground.png",
+        "backgroundImage": "./assets/android-icon-background.png",
+        "monochromeImage": "./assets/android-icon-monochrome.png"
+      },
+      "predictiveBackGestureEnabled": false,
+      "permissions": [
+        "CAMERA",
+        "USE_BIOMETRIC",
+        "USE_FINGERPRINT"
+      ],
+      "intentFilters": [
+        {
+          "action": "VIEW",
+          "autoVerify": true,
+          "data": [
+            {
+              "scheme": "kioskdrop"
+            }
+          ],
+          "category": [
+            "BROWSABLE",
+            "DEFAULT"
+          ]
+        }
+      ]
+    },
+    "web": {
+      "bundler": "metro",
+      "output": "single",
+      "favicon": "./assets/favicon.png"
+    },
+    "plugins": [
+      "expo-router",
+      "expo-secure-store",
+      [
+        "expo-navigation-bar",
+        {
+          "style": "light",
+          "enforceContrast": false
+        }
+      ],
+      [
+        "expo-camera",
+        {
+          "cameraPermission": "KioskDrop scans meeting-room QR tags and equipment barcodes for Zero-Trust AV dispatch."
+        }
+      ],
+      [
+        "expo-local-authentication",
+        {
+          "faceIDPermission": "KioskDrop uses Face ID to authorize rapid smart-locker solenoid unlock."
+        }
+      ]
+    ]
+  }
+}

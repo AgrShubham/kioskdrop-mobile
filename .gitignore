@@ -24,3 +24,20 @@ test-results/
 .env*
 .mobile_audit/
 recordings/
+
+# React Native / Expo Mobile Workspace
+mobile/node_modules/
+mobile/.expo/
+mobile/dist/
+mobile/web-build/
+mobile/android/
+mobile/ios/
+mobile/.env
+mobile/.env*.local
+!mobile/.env.example
+mobile/*.jks
+mobile/*.p8
+mobile/*.p12
+mobile/*.key
+mobile/*.mobileprovision
+mobile/*.orig.*

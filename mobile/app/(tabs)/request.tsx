@@ -1,0 +1,638 @@
+import React, { useEffect, useMemo, useRef, useState } from "react";
+import {
+  ActivityIndicator,
+  Pressable,
+  ScrollView,
+  Switch,
+  Text,
+  View,
+} from "react-native";
+import { LinearGradient } from "expo-linear-gradient";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useLocalSearchParams, useRouter } from "expo-router";
+import {
+  AlertTriangle,
+  Compass,
+  MapPin,
+  QrCode,
+  RefreshCw,
+  Zap,
+} from "lucide-react-native";
+import { PinPassCard } from "@/components/request/PinPassCard";
+import { SymptomCard } from "@/components/request/SymptomCard";
+import { ChamferCard } from "@/components/ui/ChamferCard";
+import { ScreenHeader } from "@/components/ui/ScreenHeader";
+import { DIAGNOSTIC_SYMPTOMS, type SymptomOption } from "@/constants/symptoms";
+import { QUERY_KEYS } from "@/hooks/useSession";
+import { generateIdempotencyKey, kioskApi } from "@/lib/api";
+import { formatEnumLabel, formatLockerHubLabel } from "@/lib/format";
+import { haptics } from "@/lib/haptics";
+import { getPalette } from "@/lib/theme";
+import { useAppStore } from "@/store/app-store";
+import type { DiagnoseReserveResult } from "@/types/domain";
+
+export default function RapidDropRequestScreen() {
+  const router = useRouter();
+  const queryClient = useQueryClient();
+  const searchParams = useLocalSearchParams<{ room?: string | string[] }>();
+
+  const themeMode = useAppStore((s) => s.themeMode);
+  const palette = getPalette(themeMode);
+
+  const [selectedRoomSlug, setSelectedRoomSlug] = useState<string>("");
+  const [selectedSymptomCode, setSelectedSymptomCode] =
+    useState<SymptomOption["code"]>("SYMPTOM_NO_DISPLAY_BYOD");
+  const [portDamaged, setPortDamaged] = useState(false);
+  const [reservationResult, setReservationResult] =
+    useState<DiagnoseReserveResult | null>(null);
+  const [submitError, setSubmitError] = useState<string | null>(null);
+
+  const roomsQuery = useQuery({
+    queryKey: QUERY_KEYS.rooms,
+    queryFn: () => kioskApi.getRooms(),
+    staleTime: 60_000,
+  });
+
+  const lockersQuery = useQuery({
+    queryKey: QUERY_KEYS.lockers,
+    queryFn: () => kioskApi.getLockers(),
+    staleTime: 15_000,
+  });
+
+  const rooms = useMemo(() => roomsQuery.data?.rooms ?? [], [roomsQuery.data]);
+  const lockers = useMemo(
+    () => lockersQuery.data?.lockers ?? [],
+    [lockersQuery.data]
+  );
+  const lastAppliedRoomParamRef = useRef<string | null>(null);
+
+  useEffect(() => {
+    const paramRoomRaw = Array.isArray(searchParams.room)
+      ? searchParams.room[0]
+      : searchParams.room;
+
+    if (
+      paramRoomRaw &&
+      rooms.length > 0 &&
+      lastAppliedRoomParamRef.current !== paramRoomRaw
+    ) {
+      const matched = rooms.find(
+        (r) =>
+          r.qrCodeSlug.toLowerCase() === paramRoomRaw.trim().toLowerCase() ||
+          r.name.toLowerCase() === paramRoomRaw.trim().toLowerCase()
+      );
+      if (matched) {
+        lastAppliedRoomParamRef.current = paramRoomRaw;
+        setSelectedRoomSlug(matched.qrCodeSlug);
+        return;
+      }
+    }
+
+    if (!selectedRoomSlug && rooms.length > 0) {
+      setSelectedRoomSlug(rooms[0].qrCodeSlug);
+    }
+  }, [searchParams.room, rooms, selectedRoomSlug]);
+
+  const selectedRoom = useMemo(
+    () =>
+      rooms.find((r) => r.qrCodeSlug === selectedRoomSlug) ?? rooms[0] ?? null,
+    [rooms, selectedRoomSlug]
+  );
+
+  const selectedSymptom = useMemo(
+    () =>
+      DIAGNOSTIC_SYMPTOMS.find((s) => s.code === selectedSymptomCode) ??
+      DIAGNOSTIC_SYMPTOMS[0],
+    [selectedSymptomCode]
+  );
+
+  const nearestHubHint = useMemo(() => {
+    if (!selectedRoom) return null;
+    if (lockers.length === 0) {
+      return selectedRoom.floor === 3
+        ? "Nearest Hub Routing: Floor 3 -> Floor 4 Boardroom Hub"
+        : null;
+    }
+
+    const sameFloorLocker = lockers.find((l) => l.floor === selectedRoom.floor);
+    if (sameFloorLocker) return null;
+
+    const nearest = [...lockers].sort(
+      (a, b) =>
+        Math.abs(a.floor - selectedRoom.floor) -
+        Math.abs(b.floor - selectedRoom.floor)
+    )[0];
+
+    if (!nearest) return null;
+    return `Nearest Hub Routing: ${formatLockerHubLabel(
+      nearest.floor,
+      nearest.name,
+      "Arrow",
+      selectedRoom.floor
+    )}`;
+  }, [selectedRoom, lockers]);
+
+  const previewSkuName = useMemo(() => {
+    if (selectedSymptom.code === "SYMPTOM_NO_DISPLAY_BYOD" && portDamaged) {
+      return (
+        selectedSymptom.portDamagedOverrideSkuName ??
+        "Barco CS-400W 4K Wireless HDMI Kit"
+      );
+    }
+    if (
+      selectedSymptom.code === "SYMPTOM_VIDEO_WALL_BLACKOUT" &&
+      selectedRoom?.displayType !== "4K_LED_WALL"
+    ) {
+      return (
+        selectedSymptom.fallbackSkuName ?? selectedSymptom.defaultSkuName
+      );
+    }
+    return selectedSymptom.defaultSkuName;
+  }, [selectedSymptom, portDamaged, selectedRoom]);
+
+  const reserveMutation = useMutation({
+    mutationFn: async () => {
+      if (!selectedRoom) {
+        throw new Error("Select a meeting room before reserving hardware.");
+      }
+      setSubmitError(null);
+      const idempotencyKey = generateIdempotencyKey();
+      return kioskApi.diagnoseAndReserve(
+        {
+          meetingRoomId: selectedRoom.id,
+          qrCodeSlug: selectedRoom.qrCodeSlug,
+          symptomCode: selectedSymptomCode,
+          portDamaged:
+            selectedSymptomCode === "SYMPTOM_NO_DISPLAY_BYOD"
+              ? portDamaged
+              : false,
+        },
+        idempotencyKey
+      );
+    },
+    onSuccess: async (data) => {
+      await haptics.success();
+      setReservationResult({
+        ticketId: data.ticketId,
+        itsmTicketNumber: data.itsmTicketNumber,
+        locker: data.locker,
+        allocatedAsset: data.allocatedAsset,
+        accessPin: data.accessPin,
+        expiresAt: data.expiresAt,
+      });
+      await queryClient.invalidateQueries({ queryKey: QUERY_KEYS.lockers });
+      await queryClient.invalidateQueries({ queryKey: QUERY_KEYS.analytics });
+    },
+    onError: async (err) => {
+      await haptics.error();
+      setSubmitError(
+        err instanceof Error
+          ? err.message
+          : "Unable to complete diagnostic reservation."
+      );
+    },
+  });
+
+  return (
+    <ScrollView
+      style={{ flex: 1, backgroundColor: palette.background }}
+      contentContainerStyle={{ padding: 16, paddingBottom: 40, gap: 16 }}
+    >
+      <ScreenHeader
+        title="Rapid-Drop Triage"
+        subtitle="Select a room & symptom to reserve an instant pickup PIN."
+        rightSlot={
+          <Pressable
+            accessibilityRole="button"
+            accessibilityLabel="Scan Meeting Room QR Code"
+            onPress={() => {
+              void haptics.tap();
+              router.push("/scanner");
+            }}
+            style={{
+              minHeight: 44,
+              justifyContent: "center",
+            }}
+          >
+            <View
+              style={{
+                height: 38,
+                paddingHorizontal: 13,
+                borderRadius: 999,
+                backgroundColor: palette.primarySoft,
+                flexDirection: "row",
+                alignItems: "center",
+                gap: 6,
+              }}
+            >
+              <QrCode size={15} color={palette.primaryText} />
+              <Text
+                style={{
+                  color: palette.primaryText,
+                  fontSize: 12,
+                  fontWeight: "800",
+                }}
+              >
+                Scan QR
+              </Text>
+            </View>
+          </Pressable>
+        }
+      />
+
+      {/* Step 1: Room Carousel */}
+      <View style={{ gap: 8 }}>
+        <View
+          style={{
+            flexDirection: "row",
+            alignItems: "center",
+            justifyContent: "space-between",
+          }}
+        >
+          <Text
+            style={{
+              color: palette.mutedForeground,
+              fontSize: 11,
+              fontWeight: "800",
+              letterSpacing: 0.8,
+              textTransform: "uppercase",
+            }}
+          >
+            1 · Select Meeting Suite
+          </Text>
+          {roomsQuery.isError ? (
+            <Pressable
+              accessibilityRole="button"
+              accessibilityLabel="Retry loading meeting rooms"
+              onPress={() => void roomsQuery.refetch()}
+              style={{
+                minHeight: 36,
+                paddingHorizontal: 8,
+                flexDirection: "row",
+                alignItems: "center",
+                gap: 4,
+              }}
+            >
+              <RefreshCw size={12} color={palette.destructive} />
+              <Text
+                style={{
+                  color: palette.destructive,
+                  fontSize: 11,
+                  fontWeight: "700",
+                }}
+              >
+                Retry
+              </Text>
+            </Pressable>
+          ) : null}
+        </View>
+
+        {roomsQuery.isLoading ? (
+          <ChamferCard style={{ flexDirection: "row", alignItems: "center", gap: 8 }}>
+            <ActivityIndicator size="small" color={palette.primaryText} />
+            <Text style={{ color: palette.mutedForeground, fontSize: 12 }}>
+              Loading enterprise conference suites...
+            </Text>
+          </ChamferCard>
+        ) : (
+          <ScrollView
+            horizontal
+            showsHorizontalScrollIndicator={false}
+            contentContainerStyle={{ gap: 10, paddingVertical: 2 }}
+          >
+            {rooms.map((room) => {
+              const active = selectedRoom?.qrCodeSlug === room.qrCodeSlug;
+              return (
+                <Pressable
+                  key={room.id}
+                  accessibilityRole="button"
+                  accessibilityLabel={`Select meeting room ${room.name}`}
+                  accessibilityState={{ selected: active }}
+                  onPress={() => {
+                    void haptics.selection();
+                    setSelectedRoomSlug(room.qrCodeSlug);
+                    setSubmitError(null);
+                  }}
+                  style={{
+                    width: 204,
+                    minHeight: 96,
+                    padding: 13,
+                    borderRadius: 16,
+                    borderWidth: active ? 1.5 : 1,
+                    borderColor: active ? palette.primary : palette.border,
+                    backgroundColor: active ? palette.primarySoft : palette.card,
+                    justifyContent: "space-between",
+                    gap: 8,
+                  }}
+                >
+                  <View
+                    style={{
+                      flexDirection: "row",
+                      alignItems: "center",
+                      justifyContent: "space-between",
+                      gap: 6,
+                    }}
+                  >
+                    <View
+                      style={{
+                        flexDirection: "row",
+                        alignItems: "center",
+                        gap: 4,
+                      }}
+                    >
+                      <MapPin
+                        size={11}
+                        color={active ? palette.primaryText : palette.mutedForeground}
+                      />
+                      <Text
+                        style={{
+                          color: active ? palette.primaryText : palette.mutedForeground,
+                          fontSize: 11,
+                          fontWeight: "700",
+                        }}
+                      >
+                        Floor {room.floor}
+                      </Text>
+                    </View>
+                    <Text
+                      numberOfLines={1}
+                      style={{
+                        color: palette.mutedForeground,
+                        fontSize: 10,
+                        fontWeight: "600",
+                      }}
+                    >
+                      {formatEnumLabel(room.roomSystem)}
+                    </Text>
+                  </View>
+
+                  <View style={{ gap: 2 }}>
+                    <Text
+                      numberOfLines={2}
+                      style={{
+                        color: palette.foreground,
+                        fontSize: 13.5,
+                        lineHeight: 18,
+                        fontWeight: "800",
+                      }}
+                    >
+                      {room.name}
+                    </Text>
+                    <Text
+                      numberOfLines={1}
+                      style={{
+                        color: active ? palette.primaryText : palette.mutedForeground,
+                        fontSize: 11,
+                        fontWeight: "600",
+                      }}
+                    >
+                      {room.qrCodeSlug}
+                    </Text>
+                  </View>
+                </Pressable>
+              );
+            })}
+          </ScrollView>
+        )}
+
+        {nearestHubHint ? (
+          <View
+            style={{
+              backgroundColor: palette.primarySoft,
+              borderRadius: 12,
+              paddingHorizontal: 12,
+              paddingVertical: 9,
+              flexDirection: "row",
+              alignItems: "center",
+              gap: 8,
+            }}
+          >
+            <Compass size={14} color={palette.primaryText} />
+            <Text
+              style={{
+                color: palette.primaryText,
+                fontSize: 12,
+                fontWeight: "700",
+                flex: 1,
+              }}
+            >
+              {nearestHubHint}
+            </Text>
+          </View>
+        ) : null}
+      </View>
+
+      {/* Step 2: 5 AV Failure Symptom Cards */}
+      <View style={{ gap: 8 }}>
+        <Text
+          style={{
+            color: palette.mutedForeground,
+            fontSize: 11,
+            fontWeight: "800",
+            letterSpacing: 0.8,
+            textTransform: "uppercase",
+          }}
+        >
+          2 · Identify AV Issue
+        </Text>
+
+        {DIAGNOSTIC_SYMPTOMS.map((symptom) => {
+          const preview =
+            symptom.code === "SYMPTOM_NO_DISPLAY_BYOD" && portDamaged
+              ? symptom.portDamagedOverrideSkuName ?? symptom.defaultSkuName
+              : symptom.code === "SYMPTOM_VIDEO_WALL_BLACKOUT" &&
+                selectedRoom?.displayType !== "4K_LED_WALL"
+              ? symptom.fallbackSkuName ?? symptom.defaultSkuName
+              : symptom.defaultSkuName;
+
+          return (
+            <SymptomCard
+              key={symptom.code}
+              symptom={symptom}
+              selected={selectedSymptomCode === symptom.code}
+              previewSkuName={preview}
+              onSelect={() => {
+                void haptics.selection();
+                setSelectedSymptomCode(symptom.code);
+                if (symptom.code !== "SYMPTOM_NO_DISPLAY_BYOD") {
+                  setPortDamaged(false);
+                }
+                setSubmitError(null);
+              }}
+            />
+          );
+        })}
+
+        {selectedSymptomCode === "SYMPTOM_NO_DISPLAY_BYOD" ? (
+          <View
+            style={{
+              flexDirection: "row",
+              alignItems: "center",
+              justifyContent: "space-between",
+              gap: 12,
+              backgroundColor: portDamaged ? palette.amberSoft : palette.card,
+              borderRadius: 15,
+              borderWidth: 1,
+              borderColor: portDamaged
+                ? "rgba(245, 158, 11, 0.35)"
+                : palette.border,
+              paddingHorizontal: 14,
+              paddingVertical: 11,
+            }}
+          >
+            <View style={{ flex: 1, gap: 2 }}>
+              <Text
+                style={{
+                  color: palette.foreground,
+                  fontSize: 13,
+                  fontWeight: "700",
+                }}
+              >
+                Laptop USB-C port loose/damaged?
+              </Text>
+              <Text style={{ color: palette.mutedForeground, fontSize: 11 }}>
+                Switch dispatch to wireless 4K HDMI kit
+              </Text>
+            </View>
+            <Switch
+              testID="port-damaged-switch"
+              accessibilityLabel="Laptop USB-C port physically loose or damaged"
+              value={portDamaged}
+              onValueChange={(val) => {
+                void haptics.selection();
+                setPortDamaged(val);
+              }}
+              trackColor={{ false: palette.borderStrong, true: palette.amber }}
+              thumbColor="#FFFFFF"
+            />
+          </View>
+        ) : null}
+      </View>
+
+      {submitError ? (
+        <View
+          style={{
+            backgroundColor: palette.destructiveSoft,
+            borderRadius: 14,
+            padding: 12,
+            flexDirection: "row",
+            alignItems: "center",
+            gap: 8,
+          }}
+        >
+          <AlertTriangle size={16} color={palette.destructive} />
+          <Text
+            style={{
+              color: palette.destructive,
+              fontSize: 12,
+              fontWeight: "700",
+              flex: 1,
+            }}
+          >
+            {submitError}
+          </Text>
+        </View>
+      ) : null}
+
+      {/* Unified Diagnostic Dispatch Checkout Card */}
+      <ChamferCard style={{ gap: 12 }}>
+        <View
+          style={{
+            flexDirection: "row",
+            alignItems: "center",
+            justifyContent: "space-between",
+            gap: 8,
+          }}
+        >
+          <Text
+            style={{
+              color: palette.mutedForeground,
+              fontSize: 10,
+              fontWeight: "800",
+              letterSpacing: 0.9,
+              textTransform: "uppercase",
+            }}
+          >
+            Auto-Matched Spare
+          </Text>
+          <Text
+            style={{
+              color: palette.mutedForeground,
+              fontSize: 11,
+              fontWeight: "600",
+            }}
+          >
+            ServiceNow INC · 10m hold
+          </Text>
+        </View>
+
+        <Text
+          style={{
+            color: palette.foreground,
+            fontSize: 15,
+            fontWeight: "800",
+          }}
+        >
+          {previewSkuName}
+        </Text>
+
+        <Pressable
+          accessibilityRole="button"
+          accessibilityLabel="Diagnose and Reserve Hardware"
+          accessibilityState={{
+            disabled: reserveMutation.isPending || !selectedRoom,
+          }}
+          disabled={reserveMutation.isPending || !selectedRoom}
+          onPress={() => reserveMutation.mutate()}
+          style={{
+            borderRadius: 14,
+            overflow: "hidden",
+            opacity: reserveMutation.isPending || !selectedRoom ? 0.65 : 1,
+          }}
+        >
+          <LinearGradient
+            colors={palette.heroGradient}
+            start={{ x: 0, y: 0 }}
+            end={{ x: 1, y: 0 }}
+            style={{
+              minHeight: 50,
+              flexDirection: "row",
+              alignItems: "center",
+              justifyContent: "center",
+              gap: 8,
+              paddingHorizontal: 16,
+            }}
+          >
+            {reserveMutation.isPending ? (
+              <ActivityIndicator size="small" color="#FFFFFF" />
+            ) : (
+              <Zap size={17} color="#FFFFFF" />
+            )}
+            <Text style={{ color: "#FFFFFF", fontSize: 14, fontWeight: "800" }}>
+              {reserveMutation.isPending
+                ? "Reserving Smart Bay..."
+                : "Diagnose & Reserve Hardware"}
+            </Text>
+          </LinearGradient>
+        </Pressable>
+      </ChamferCard>
+
+      {/* Active Digital Pickup Pass */}
+      {reservationResult ? (
+        <PinPassCard
+          reservation={reservationResult}
+          onOpenKiosk={(params) => {
+            router.push({
+              pathname: "/(tabs)/kiosk",
+              params,
+            });
+          }}
+          onReserveAgain={() => {
+            setReservationResult(null);
+            reserveMutation.mutate();
+          }}
+        />
+      ) : null}
+    </ScrollView>
+  );
+}

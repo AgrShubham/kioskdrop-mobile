@@ -42,6 +42,7 @@ export async function POST(request: NextRequest) {
     const response = successResponse({
       message: `Switched active persona to ${targetUser.name} (${targetUser.role})`,
       session: sessionData,
+      token, // Stored securely in expo-secure-store by the React Native client
     });
 
     response.cookies.set("kioskdrop_session", token, {
