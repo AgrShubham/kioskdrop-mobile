@@ -58,6 +58,18 @@ jest.mock("expo-clipboard", () => ({
   getStringAsync: jest.fn(async () => ""),
 }));
 
+// Navigation bar & SystemUI mocks
+jest.mock("expo-navigation-bar", () => ({
+  NavigationBar: () => null,
+  setStyle: jest.fn(),
+  setHidden: jest.fn(),
+}));
+
+jest.mock("expo-system-ui", () => ({
+  setBackgroundColorAsync: jest.fn(async () => undefined),
+  getBackgroundColorAsync: jest.fn(async () => "#0F1521"),
+}));
+
 // Camera mock
 jest.mock("expo-camera", () => {
   const MockReact = require("react");

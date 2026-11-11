@@ -7,6 +7,7 @@
     "icon": "./assets/icon.png",
     "scheme": "kioskdrop",
     "userInterfaceStyle": "automatic",
+    "backgroundColor": "#070A10",
     "experiments": {
       "typedRoutes": true
     },
@@ -56,6 +57,13 @@
     "plugins": [
       "expo-router",
       "expo-secure-store",
+      [
+        "expo-navigation-bar",
+        {
+          "style": "light",
+          "enforceContrast": false
+        }
+      ],
       [
         "expo-camera",
         {
