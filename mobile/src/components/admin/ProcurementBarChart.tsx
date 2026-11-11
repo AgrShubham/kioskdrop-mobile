@@ -72,38 +72,51 @@ export function ProcurementBarChart({ trends }: ProcurementBarChartProps) {
     return Math.max(10000, Math.ceil((highest * 1.15) / 10000) * 10000);
   }, [trends]);
 
-  const chartWidth = Math.max(200, Math.min(width - 140, 480));
+  const chartWidth = Math.max(200, Math.min(width - 132, 480));
 
   return (
     <ChamferCard style={{ gap: 12 }}>
-      <View>
+      <View style={{ gap: 2 }}>
         <Text
           style={{
             color: palette.foreground,
             fontSize: 15,
             fontWeight: "800",
+            letterSpacing: -0.2,
           }}
         >
-          Monthly Procurement Savings Trend
+          Monthly Savings Trend
         </Text>
         <Text style={{ color: palette.mutedForeground, fontSize: 12 }}>
-          B2B Wholesale vs Retail Avoided vs Net Enterprise Savings (INR)
+          B2B Wholesale vs. Retail Avoided vs. Net Savings
         </Text>
       </View>
 
-      {/* Legend */}
-      <View style={{ flexDirection: "row", flexWrap: "wrap", gap: 12 }}>
-        <LegendItem color={palette.sky} label="Wholesale B2B" textColor={palette.foreground} />
-        <LegendItem color={palette.emerald} label="Retail Avoided" textColor={palette.foreground} />
-        <LegendItem color={palette.indigo} label="Net Savings" textColor={palette.foreground} />
+      {/* Clean Dot Legend */}
+      <View style={{ flexDirection: "row", flexWrap: "wrap", gap: 14 }}>
+        <LegendItem
+          color={palette.sky}
+          label="Wholesale"
+          textColor={palette.mutedForeground}
+        />
+        <LegendItem
+          color={palette.emerald}
+          label="Retail Avoided"
+          textColor={palette.mutedForeground}
+        />
+        <LegendItem
+          color={palette.indigo}
+          label="Net Saved"
+          textColor={palette.mutedForeground}
+        />
       </View>
 
       <View style={{ paddingVertical: 6, overflow: "hidden" }}>
         <BarChart
           data={chartData}
           width={chartWidth}
-          height={185}
-          barWidth={10}
+          height={180}
+          barWidth={9}
           initialSpacing={12}
           noOfSections={4}
           maxValue={maxChartVal}
@@ -111,7 +124,7 @@ export function ProcurementBarChart({ trends }: ProcurementBarChartProps) {
           isAnimated={false}
           rulesColor={palette.border}
           xAxisColor={palette.border}
-          yAxisColor={palette.border}
+          yAxisColor="transparent"
           yAxisTextStyle={{ color: palette.mutedForeground, fontSize: 10 }}
           yAxisLabelWidth={46}
           formatYLabel={(lbl) => formatCompactINR(Number(lbl) || 0)}
@@ -122,12 +135,12 @@ export function ProcurementBarChart({ trends }: ProcurementBarChartProps) {
           }) => (
             <View
               style={{
-                backgroundColor: palette.card,
-                borderColor: palette.border,
+                backgroundColor: palette.surfaceElevated,
+                borderColor: palette.borderStrong,
                 borderWidth: 1,
-                borderRadius: 8,
-                paddingHorizontal: 8,
-                paddingVertical: 4,
+                borderRadius: 10,
+                paddingHorizontal: 10,
+                paddingVertical: 5,
               }}
             >
               <Text
@@ -135,10 +148,10 @@ export function ProcurementBarChart({ trends }: ProcurementBarChartProps) {
                   color: palette.foreground,
                   fontSize: 11,
                   fontWeight: "800",
+                  fontVariant: ["tabular-nums"],
                 }}
               >
-                {item.monthLabel} · {item.metricLabel}:{" "}
-                {formatCompactINR(item.value)}
+                {item.monthLabel} · {item.metricLabel}: {formatCompactINR(item.value)}
               </Text>
             </View>
           )}
@@ -161,16 +174,15 @@ function LegendItem({
     <View style={{ flexDirection: "row", alignItems: "center", gap: 6 }}>
       <View
         style={{
-          width: 10,
-          height: 10,
-          borderRadius: 3,
+          width: 8,
+          height: 8,
+          borderRadius: 999,
           backgroundColor: color,
         }}
       />
-      <Text style={{ color: textColor, fontSize: 11, fontWeight: "700" }}>
+      <Text style={{ color: textColor, fontSize: 11.5, fontWeight: "700" }}>
         {label}
       </Text>
     </View>
   );
 }
-

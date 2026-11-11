@@ -2,8 +2,8 @@ import React from "react";
 import { ActivityIndicator, Pressable, Text, View } from "react-native";
 import { ShieldAlert, UserCheck } from "lucide-react-native";
 import { ChamferCard } from "@/components/ui/ChamferCard";
-import { StatusBadge } from "@/components/ui/StatusBadge";
 import { useSession } from "@/hooks/useSession";
+import { formatRoleLabel } from "@/lib/format";
 import { haptics } from "@/lib/haptics";
 import { getPalette } from "@/lib/theme";
 import { useAppStore } from "@/store/app-store";
@@ -14,57 +14,61 @@ interface RbacBannerProps {
 }
 
 export function RbacBanner({
-  requiredLabel = "IT_ADMIN or FINOPS_AUDITOR",
+  requiredLabel = "IT Admin or FinOps Auditor",
   onlyItAdmin = false,
 }: RbacBannerProps) {
   const themeMode = useAppStore((s) => s.themeMode);
   const palette = getPalette(themeMode);
   const { session, switchRole, isSwitchingRole } = useSession();
 
+  const activeRoleText = formatRoleLabel(session?.role ?? "EMPLOYEE");
+
   return (
-    <ChamferCard tone="amber" style={{ gap: 10 }}>
-      <View
-        style={{
-          flexDirection: "row",
-          alignItems: "center",
-          justifyContent: "space-between",
-          flexWrap: "wrap",
-          gap: 6,
-        }}
-      >
+    <ChamferCard tone="amber" style={{ gap: 12 }}>
+      <View style={{ flexDirection: "row", alignItems: "center", gap: 10 }}>
         <View
           style={{
-            flexDirection: "row",
+            width: 38,
+            height: 38,
+            borderRadius: 11,
+            backgroundColor: palette.amberSoft,
             alignItems: "center",
-            gap: 8,
-            flex: 1,
-            minWidth: 180,
+            justifyContent: "center",
           }}
         >
           <ShieldAlert size={18} color={palette.amber} />
+        </View>
+        <View style={{ flex: 1, gap: 2 }}>
           <Text
             style={{
               color: palette.foreground,
               fontSize: 15,
               fontWeight: "800",
-              flexShrink: 1,
+              letterSpacing: -0.2,
             }}
           >
-            Role Access Restricted ({session?.role ?? "EMPLOYEE"})
+            Admin Access Required
+          </Text>
+          <Text
+            style={{
+              color: palette.amber,
+              fontSize: 11,
+              fontWeight: "700",
+            }}
+          >
+            Signed in as {session?.name ?? "Aarav Sharma"} · {activeRoleText}
           </Text>
         </View>
-        <StatusBadge label="403 RBAC ENFORCED" variant="amber" compact />
       </View>
 
       <Text
         style={{
           color: palette.mutedForeground,
-          fontSize: 12,
+          fontSize: 12.5,
           lineHeight: 18,
         }}
       >
-        Your current session ({session?.name ?? "Aarav Sharma"}) does not hold{" "}
-        {requiredLabel} privileges required for this module. Landed Cost previews remain open; switch persona below to unlock protected admin telemetry.
+        This module requires {requiredLabel} privileges. Landed Cost previews stay unlocked below—switch roles to inspect live audit records.
       </Text>
 
       <View style={{ flexDirection: "row", flexWrap: "wrap", gap: 8 }}>
@@ -96,8 +100,8 @@ export function RbacBanner({
           ) : (
             <UserCheck size={15} color="#FFFFFF" />
           )}
-          <Text style={{ color: "#FFFFFF", fontSize: 12, fontWeight: "800" }}>
-            Switch to IT Admin (Priya)
+          <Text style={{ color: "#FFFFFF", fontSize: 12.5, fontWeight: "800" }}>
+            Use IT Admin (Priya)
           </Text>
         </Pressable>
 
@@ -116,9 +120,9 @@ export function RbacBanner({
               flex: 1,
               minWidth: 145,
               borderRadius: 12,
-              backgroundColor: palette.muted,
+              backgroundColor: palette.surfaceElevated,
               borderWidth: 1,
-              borderColor: palette.border,
+              borderColor: palette.borderStrong,
               flexDirection: "row",
               alignItems: "center",
               justifyContent: "center",
@@ -131,11 +135,11 @@ export function RbacBanner({
             <Text
               style={{
                 color: palette.foreground,
-                fontSize: 12,
+                fontSize: 12.5,
                 fontWeight: "700",
               }}
             >
-              Switch to FinOps (Vikram)
+              Use FinOps (Vikram)
             </Text>
           </Pressable>
         ) : null}
@@ -143,4 +147,3 @@ export function RbacBanner({
     </ChamferCard>
   );
 }
-

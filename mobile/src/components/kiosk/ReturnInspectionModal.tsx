@@ -117,16 +117,27 @@ export function ReturnInspectionModal({
         <View
           style={{
             backgroundColor: palette.card,
-            borderTopLeftRadius: 24,
-            borderTopRightRadius: 24,
-            borderWidth: 1,
-            borderColor: palette.border,
+            borderTopLeftRadius: 28,
+            borderTopRightRadius: 28,
+            borderTopWidth: 1,
+            borderColor: palette.borderStrong,
             maxHeight: "90%",
             paddingHorizontal: 18,
-            paddingTop: 16,
+            paddingTop: 10,
             paddingBottom: 26,
           }}
         >
+          {/* Sheet Grabber */}
+          <View
+            style={{
+              width: 38,
+              height: 4,
+              borderRadius: 999,
+              backgroundColor: palette.borderStrong,
+              alignSelf: "center",
+              marginBottom: 12,
+            }}
+          />
           {/* Header */}
           <View
             style={{
@@ -134,12 +145,15 @@ export function ReturnInspectionModal({
               alignItems: "center",
               justifyContent: "space-between",
               marginBottom: 12,
+              paddingBottom: 12,
+              borderBottomWidth: 1,
+              borderBottomColor: palette.border,
               gap: 8,
             }}
           >
             <View style={{ flex: 1 }}>
               <StatusBadge
-                label={`BAY #${compartment.compartmentNumber} RETURN SENSOR CHECK`}
+                label={`Bay #${compartment.compartmentNumber} · Sensor Check`}
                 variant="sapphire"
                 compact
               />
@@ -149,6 +163,7 @@ export function ReturnInspectionModal({
                   fontSize: 17,
                   fontWeight: "800",
                   marginTop: 4,
+                  letterSpacing: -0.3,
                 }}
               >
                 Zero-Trust Return Inspection
@@ -161,13 +176,22 @@ export function ReturnInspectionModal({
               style={{
                 minWidth: 44,
                 minHeight: 44,
-                borderRadius: 12,
-                backgroundColor: palette.muted,
                 alignItems: "center",
                 justifyContent: "center",
               }}
             >
-              <X size={18} color={palette.foreground} />
+              <View
+                style={{
+                  width: 32,
+                  height: 32,
+                  borderRadius: 999,
+                  backgroundColor: palette.muted,
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+              >
+                <X size={16} color={palette.foreground} />
+              </View>
             </Pressable>
           </View>
 
@@ -190,223 +214,223 @@ export function ReturnInspectionModal({
                 accessibilityRole="button"
                 accessibilityLabel="Apply Healthy OEM Return preset"
                 onPress={() => applyPreset("HEALTHY")}
-                style={{
-                  minHeight: 46,
-                  padding: 10,
-                  borderRadius: 12,
-                  borderWidth: 1,
-                  borderColor:
-                    selectedPreset === "HEALTHY"
-                      ? palette.emerald
-                      : palette.border,
-                  backgroundColor:
-                    selectedPreset === "HEALTHY"
-                      ? palette.emeraldSoft
-                      : palette.muted,
-                  flexDirection: "row",
-                  alignItems: "center",
-                  gap: 8,
-                }}
-              >
-                <CheckCircle2 size={16} color={palette.emerald} />
-                <View style={{ flex: 1 }}>
-                  <Text
-                    style={{
-                      color: palette.foreground,
-                      fontSize: 13,
-                      fontWeight: "700",
-                    }}
-                  >
-                    Healthy OEM Return
-                  </Text>
-                  <Text style={{ color: palette.mutedForeground, fontSize: 11 }}>
-                    Matching S/N + VID/PID + 5V/3A continuity -&gt; STOCKED_AVAILABLE
-                  </Text>
-                </View>
-              </Pressable>
-
-              <Pressable
-                accessibilityRole="button"
-                accessibilityLabel="Apply Defective 5V Charging Fault preset"
-                onPress={() => applyPreset("FAULT_5V")}
-                style={{
-                  minHeight: 46,
-                  padding: 10,
-                  borderRadius: 12,
-                  borderWidth: 1,
-                  borderColor:
-                    selectedPreset === "FAULT_5V"
-                      ? palette.amber
-                      : palette.border,
-                  backgroundColor:
-                    selectedPreset === "FAULT_5V"
-                      ? palette.amberSoft
-                      : palette.muted,
-                  flexDirection: "row",
-                  alignItems: "center",
-                  gap: 8,
-                }}
-              >
-                <BatteryCharging size={16} color={palette.amber} />
-                <View style={{ flex: 1 }}>
-                  <Text
-                    style={{
-                      color: palette.foreground,
-                      fontSize: 13,
-                      fontWeight: "700",
-                    }}
-                  >
-                    Defective 5V/3A Fault
-                  </Text>
-                  <Text style={{ color: palette.mutedForeground, fontSize: 11 }}>
-                    Closes ticket cleanly, quarantines bay for IT inspection
-                  </Text>
-                </View>
-              </Pressable>
-
-              <Pressable
-                accessibilityRole="button"
-                accessibilityLabel="Apply Counterfeit or BadUSB Swap attack preset"
-                onPress={() => applyPreset("COUNTERFEIT")}
-                style={{
-                  minHeight: 46,
-                  padding: 10,
-                  borderRadius: 12,
-                  borderWidth: 1,
-                  borderColor:
-                    selectedPreset === "COUNTERFEIT"
-                      ? palette.destructive
-                      : palette.border,
-                  backgroundColor:
-                    selectedPreset === "COUNTERFEIT"
-                      ? palette.destructiveSoft
-                      : palette.muted,
-                  flexDirection: "row",
-                  alignItems: "center",
-                  gap: 8,
-                }}
-              >
-                <ShieldAlert size={16} color={palette.destructive} />
-                <View style={{ flex: 1 }}>
-                  <Text
-                    style={{
-                      color: palette.foreground,
-                      fontSize: 13,
-                      fontWeight: "700",
-                    }}
-                  >
-                    Counterfeit / BadUSB Swap
-                  </Text>
-                  <Text style={{ color: palette.mutedForeground, fontSize: 11 }}>
-                    {expectedSerial || BADUSB_SIMULATION_VECTOR.counterfeitSerial} ·{" "}
-                    {BADUSB_SIMULATION_VECTOR.foreignVendorId}/
-                    {BADUSB_SIMULATION_VECTOR.foreignProductId} -&gt; Triggers 409 Alarm
-                  </Text>
-                </View>
-              </Pressable>
-            </View>
-
-            {/* Form Inputs */}
-            <View style={{ gap: 10, marginBottom: 14 }}>
-              <View style={{ gap: 4 }}>
-                <Text
-                  style={{
-                    color: palette.mutedForeground,
-                    fontSize: 11,
-                    fontWeight: "700",
-                  }}
-                >
-                  Plugged Asset Serial Number
-                </Text>
-                <TextInput
-                  value={serialNumber}
-                  onChangeText={setSerialNumber}
-                  autoCapitalize="characters"
-                  placeholder="SN-..."
-                  placeholderTextColor={palette.mutedForeground}
                   style={{
                     minHeight: 46,
-                    borderRadius: 12,
+                    padding: 11,
+                    borderRadius: 13,
+                    borderWidth: 1,
+                    borderColor:
+                      selectedPreset === "HEALTHY"
+                        ? palette.emerald
+                        : palette.border,
+                    backgroundColor:
+                      selectedPreset === "HEALTHY"
+                        ? palette.emeraldSoft
+                        : palette.surfaceElevated,
+                    flexDirection: "row",
+                    alignItems: "center",
+                    gap: 10,
+                  }}
+                >
+                  <CheckCircle2 size={16} color={palette.emerald} />
+                  <View style={{ flex: 1 }}>
+                    <Text
+                      style={{
+                        color: palette.foreground,
+                        fontSize: 13,
+                        fontWeight: "700",
+                      }}
+                    >
+                      Healthy OEM Return
+                    </Text>
+                    <Text style={{ color: palette.mutedForeground, fontSize: 11 }}>
+                      Matching S/N + VID/PID + 5V/3A continuity -&gt; In Locker
+                    </Text>
+                  </View>
+                </Pressable>
+
+                <Pressable
+                  accessibilityRole="button"
+                  accessibilityLabel="Apply Defective 5V Charging Fault preset"
+                  onPress={() => applyPreset("FAULT_5V")}
+                  style={{
+                    minHeight: 46,
+                    padding: 11,
+                    borderRadius: 13,
+                    borderWidth: 1,
+                    borderColor:
+                      selectedPreset === "FAULT_5V"
+                        ? palette.amber
+                        : palette.border,
+                    backgroundColor:
+                      selectedPreset === "FAULT_5V"
+                        ? palette.amberSoft
+                        : palette.surfaceElevated,
+                    flexDirection: "row",
+                    alignItems: "center",
+                    gap: 10,
+                  }}
+                >
+                  <BatteryCharging size={16} color={palette.amber} />
+                  <View style={{ flex: 1 }}>
+                    <Text
+                      style={{
+                        color: palette.foreground,
+                        fontSize: 13,
+                        fontWeight: "700",
+                      }}
+                    >
+                      Defective 5V/3A Fault
+                    </Text>
+                    <Text style={{ color: palette.mutedForeground, fontSize: 11 }}>
+                      Closes ticket cleanly, quarantines bay for IT inspection
+                    </Text>
+                  </View>
+                </Pressable>
+
+                <Pressable
+                  accessibilityRole="button"
+                  accessibilityLabel="Apply Counterfeit or BadUSB Swap attack preset"
+                  onPress={() => applyPreset("COUNTERFEIT")}
+                  style={{
+                    minHeight: 46,
+                    padding: 11,
+                    borderRadius: 13,
+                    borderWidth: 1,
+                    borderColor:
+                      selectedPreset === "COUNTERFEIT"
+                        ? palette.destructive
+                        : palette.border,
+                    backgroundColor:
+                      selectedPreset === "COUNTERFEIT"
+                        ? palette.destructiveSoft
+                        : palette.surfaceElevated,
+                    flexDirection: "row",
+                    alignItems: "center",
+                    gap: 10,
+                  }}
+                >
+                  <ShieldAlert size={16} color={palette.destructive} />
+                  <View style={{ flex: 1 }}>
+                    <Text
+                      style={{
+                        color: palette.foreground,
+                        fontSize: 13,
+                        fontWeight: "700",
+                      }}
+                    >
+                      Counterfeit / BadUSB Swap
+                    </Text>
+                    <Text style={{ color: palette.mutedForeground, fontSize: 11 }}>
+                      {expectedSerial || BADUSB_SIMULATION_VECTOR.counterfeitSerial} ·{" "}
+                      {BADUSB_SIMULATION_VECTOR.foreignVendorId}/
+                      {BADUSB_SIMULATION_VECTOR.foreignProductId} -&gt; Triggers 409 Alarm
+                    </Text>
+                  </View>
+                </Pressable>
+              </View>
+
+              {/* Form Inputs */}
+              <View style={{ gap: 10, marginBottom: 14 }}>
+                <View style={{ gap: 4 }}>
+                  <Text
+                    style={{
+                      color: palette.mutedForeground,
+                      fontSize: 11,
+                      fontWeight: "700",
+                    }}
+                  >
+                    Plugged Asset Serial Number
+                  </Text>
+                  <TextInput
+                    value={serialNumber}
+                    onChangeText={setSerialNumber}
+                    autoCapitalize="characters"
+                    placeholder="SN-..."
+                    placeholderTextColor={palette.mutedForeground}
+                    style={{
+                      minHeight: 46,
+                      borderRadius: 12,
+                      borderWidth: 1,
+                      borderColor: palette.border,
+                      backgroundColor: palette.surfaceElevated,
+                      color: palette.foreground,
+                      paddingHorizontal: 12,
+                      fontSize: 13,
+                    }}
+                  />
+                </View>
+
+                <View style={{ flexDirection: "row", gap: 10 }}>
+                  <View style={{ flex: 1, gap: 4 }}>
+                    <Text
+                      style={{
+                        color: palette.mutedForeground,
+                        fontSize: 11,
+                        fontWeight: "700",
+                      }}
+                    >
+                      USB Vendor ID (VID)
+                    </Text>
+                    <TextInput
+                      value={usbVendorId}
+                      onChangeText={setUsbVendorId}
+                      placeholder="0x046D"
+                      placeholderTextColor={palette.mutedForeground}
+                      style={{
+                        minHeight: 46,
+                        borderRadius: 12,
+                        borderWidth: 1,
+                        borderColor: palette.border,
+                        backgroundColor: palette.surfaceElevated,
+                        color: palette.foreground,
+                        paddingHorizontal: 12,
+                        fontSize: 13,
+                      }}
+                    />
+                  </View>
+
+                  <View style={{ flex: 1, gap: 4 }}>
+                    <Text
+                      style={{
+                        color: palette.mutedForeground,
+                        fontSize: 11,
+                        fontWeight: "700",
+                      }}
+                    >
+                      USB Product ID (PID)
+                    </Text>
+                    <TextInput
+                      value={usbProductId}
+                      onChangeText={setUsbProductId}
+                      placeholder="0xC53E"
+                      placeholderTextColor={palette.mutedForeground}
+                      style={{
+                        minHeight: 46,
+                        borderRadius: 12,
+                        borderWidth: 1,
+                        borderColor: palette.border,
+                        backgroundColor: palette.surfaceElevated,
+                        color: palette.foreground,
+                        paddingHorizontal: 12,
+                        fontSize: 13,
+                      }}
+                    />
+                  </View>
+                </View>
+
+                <View
+                  style={{
+                    flexDirection: "row",
+                    alignItems: "center",
+                    justifyContent: "space-between",
+                    backgroundColor: palette.surfaceElevated,
+                    borderRadius: 13,
                     borderWidth: 1,
                     borderColor: palette.border,
-                    backgroundColor: palette.background,
-                    color: palette.foreground,
                     paddingHorizontal: 12,
-                    fontSize: 13,
+                    paddingVertical: 10,
                   }}
-                />
-              </View>
-
-              <View style={{ flexDirection: "row", gap: 10 }}>
-                <View style={{ flex: 1, gap: 4 }}>
-                  <Text
-                    style={{
-                      color: palette.mutedForeground,
-                      fontSize: 11,
-                      fontWeight: "700",
-                    }}
-                  >
-                    USB Vendor ID (VID)
-                  </Text>
-                  <TextInput
-                    value={usbVendorId}
-                    onChangeText={setUsbVendorId}
-                    placeholder="0x046D"
-                    placeholderTextColor={palette.mutedForeground}
-                    style={{
-                      minHeight: 46,
-                      borderRadius: 12,
-                      borderWidth: 1,
-                      borderColor: palette.border,
-                      backgroundColor: palette.background,
-                      color: palette.foreground,
-                      paddingHorizontal: 12,
-                      fontSize: 13,
-                    }}
-                  />
-                </View>
-
-                <View style={{ flex: 1, gap: 4 }}>
-                  <Text
-                    style={{
-                      color: palette.mutedForeground,
-                      fontSize: 11,
-                      fontWeight: "700",
-                    }}
-                  >
-                    USB Product ID (PID)
-                  </Text>
-                  <TextInput
-                    value={usbProductId}
-                    onChangeText={setUsbProductId}
-                    placeholder="0xC53E"
-                    placeholderTextColor={palette.mutedForeground}
-                    style={{
-                      minHeight: 46,
-                      borderRadius: 12,
-                      borderWidth: 1,
-                      borderColor: palette.border,
-                      backgroundColor: palette.background,
-                      color: palette.foreground,
-                      paddingHorizontal: 12,
-                      fontSize: 13,
-                    }}
-                  />
-                </View>
-              </View>
-
-              <View
-                style={{
-                  flexDirection: "row",
-                  alignItems: "center",
-                  justifyContent: "space-between",
-                  backgroundColor: palette.muted,
-                  borderRadius: 12,
-                  borderWidth: 1,
-                  borderColor: palette.border,
-                  paddingHorizontal: 12,
-                  paddingVertical: 10,
-                }}
               >
                 <View style={{ flex: 1 }}>
                   <Text

@@ -10,11 +10,14 @@ import {
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
   AlertTriangle,
+  BarChart3,
   CheckCircle2,
+  ChevronRight,
+  CreditCard,
   PackageCheck,
   Plus,
-  RefreshCw,
   Send,
+  ShieldCheck,
   Thermometer,
   Webhook,
 } from "lucide-react-native";
@@ -37,6 +40,7 @@ import { StatusBadge } from "@/components/ui/StatusBadge";
 import { QUERY_KEYS, useSession } from "@/hooks/useSession";
 import { ApiClientError, kioskApi } from "@/lib/api";
 import {
+  formatEnumLabel,
   formatLockerHubLabel,
   formatPaiseToINR,
   formatShortTimestamp,
@@ -48,11 +52,31 @@ import type { PurchaseOrder, WebhookEvent } from "@/types/domain";
 
 type AdminModule = "compliance" | "finops" | "analytics" | "webhooks";
 
-const MODULES: Array<{ id: AdminModule; label: string }> = [
-  { id: "compliance", label: "Zero-Trust & Duty" },
-  { id: "finops", label: "FinOps & POs" },
-  { id: "analytics", label: "Analytics & Hubs" },
-  { id: "webhooks", label: "ITSM Webhooks" },
+const MODULES: Array<{
+  id: AdminModule;
+  label: string;
+  renderIcon: (color: string) => React.ReactNode;
+}> = [
+  {
+    id: "compliance",
+    label: "Duty & USB",
+    renderIcon: (color) => <ShieldCheck size={14} color={color} />,
+  },
+  {
+    id: "finops",
+    label: "FinOps & PO",
+    renderIcon: (color) => <CreditCard size={14} color={color} />,
+  },
+  {
+    id: "analytics",
+    label: "Analytics",
+    renderIcon: (color) => <BarChart3 size={14} color={color} />,
+  },
+  {
+    id: "webhooks",
+    label: "Webhooks",
+    renderIcon: (color) => <Webhook size={14} color={color} />,
+  },
 ];
 
 export default function AdminCommandCenterScreen() {
@@ -281,13 +305,11 @@ export default function AdminCommandCenterScreen() {
         }
       >
         <ScreenHeader
-          badge="ENTERPRISE COMMAND CENTER"
-          badgeVariant="sky"
-          title="ITAM, FinOps & Telemetry"
-          subtitle="Zero-Trust USB HID controls, statutory Indian duty stack, PO reception intake, savings analytics, and ITSM webhooks."
+          title="Command Center"
+          subtitle="USB zero-trust policy, customs duty, FinOps POs, and telemetry."
         />
 
-        {/* Scrollable 4-Module Segmented Bar */}
+        {/* Sleek Horizontal Segmented Module Strip */}
         <ScrollView
           horizontal
           showsHorizontalScrollIndicator={false}
@@ -295,6 +317,7 @@ export default function AdminCommandCenterScreen() {
         >
           {MODULES.map((mod) => {
             const active = activeModule === mod.id;
+            const iconColor = active ? "#FFFFFF" : palette.mutedForeground;
             return (
               <Pressable
                 key={mod.id}
@@ -307,21 +330,24 @@ export default function AdminCommandCenterScreen() {
                   setActionBanner(null);
                 }}
                 style={{
-                  minHeight: 44,
+                  minHeight: 42,
                   paddingHorizontal: 14,
-                  borderRadius: 12,
+                  borderRadius: 999,
                   borderWidth: 1,
                   borderColor: active ? palette.primary : palette.border,
                   backgroundColor: active ? palette.primary : palette.card,
+                  flexDirection: "row",
                   alignItems: "center",
                   justifyContent: "center",
+                  gap: 6,
                 }}
               >
+                {mod.renderIcon(iconColor)}
                 <Text
                   style={{
                     color: active ? "#FFFFFF" : palette.foreground,
-                    fontSize: 12,
-                    fontWeight: "800",
+                    fontSize: 12.5,
+                    fontWeight: active ? "800" : "600",
                   }}
                 >
                   {mod.label}
@@ -338,16 +364,11 @@ export default function AdminCommandCenterScreen() {
                 actionBanner.kind === "success"
                   ? palette.emeraldSoft
                   : palette.destructiveSoft,
-              borderColor:
-                actionBanner.kind === "success"
-                  ? palette.emerald
-                  : palette.destructive,
-              borderWidth: 1,
-              borderRadius: 12,
+              borderRadius: 14,
               padding: 12,
               flexDirection: "row",
               alignItems: "center",
-              gap: 8,
+              gap: 9,
             }}
           >
             {actionBanner.kind === "success" ? (
@@ -361,7 +382,7 @@ export default function AdminCommandCenterScreen() {
                   actionBanner.kind === "success"
                     ? palette.emerald
                     : palette.destructive,
-                fontSize: 12,
+                fontSize: 12.5,
                 fontWeight: "700",
                 flex: 1,
               }}
@@ -375,15 +396,15 @@ export default function AdminCommandCenterScreen() {
         {activeModule === "compliance" ? (
           <View style={{ gap: 14 }}>
             {!canViewAudit || isForbiddenError(complianceQuery.error) ? (
-              <RbacBanner requiredLabel="IT_ADMIN or FINOPS_AUDITOR" />
+              <RbacBanner requiredLabel="IT Admin or FinOps Auditor" />
             ) : null}
 
             <LandedCostCalculator />
 
             {canViewAudit && complianceQuery.isLoading ? (
-              <ChamferCard style={{ flexDirection: "row", alignItems: "center", gap: 8 }}>
+              <ChamferCard style={{ flexDirection: "row", alignItems: "center", gap: 10 }}>
                 <ActivityIndicator size="small" color={palette.primaryText} />
-                <Text style={{ color: palette.mutedForeground, fontSize: 12 }}>
+                <Text style={{ color: palette.mutedForeground, fontSize: 12.5 }}>
                   Loading Zero-Trust USB asset registry...
                 </Text>
               </ChamferCard>
@@ -406,17 +427,17 @@ export default function AdminCommandCenterScreen() {
         {/* MODULE 2: FINOPS & POs */}
         {activeModule === "finops" ? (
           !canViewAudit || isForbiddenError(finopsQuery.error) ? (
-            <RbacBanner requiredLabel="IT_ADMIN or FINOPS_AUDITOR" />
+            <RbacBanner requiredLabel="IT Admin or FinOps Auditor" />
           ) : finopsQuery.isLoading ? (
-            <ChamferCard style={{ flexDirection: "row", alignItems: "center", gap: 8 }}>
+            <ChamferCard style={{ flexDirection: "row", alignItems: "center", gap: 10 }}>
               <ActivityIndicator size="small" color={palette.primaryText} />
-              <Text style={{ color: palette.mutedForeground, fontSize: 12 }}>
+              <Text style={{ color: palette.mutedForeground, fontSize: 12.5 }}>
                 Loading corporate card transactions & PO ledger...
               </Text>
             </ChamferCard>
           ) : finopsQuery.isError ? (
             <ChamferCard tone="crimson" style={{ gap: 10 }}>
-              <Text style={{ color: palette.destructive, fontSize: 13, fontWeight: "700" }}>
+              <Text style={{ color: palette.destructive, fontSize: 13.5, fontWeight: "700" }}>
                 Failed to load FinOps ledger.
               </Text>
               <Pressable
@@ -424,13 +445,13 @@ export default function AdminCommandCenterScreen() {
                 onPress={() => void finopsQuery.refetch()}
                 style={{
                   minHeight: 44,
-                  borderRadius: 10,
+                  borderRadius: 12,
                   backgroundColor: palette.destructive,
                   alignItems: "center",
                   justifyContent: "center",
                 }}
               >
-                <Text style={{ color: "#FFFFFF", fontSize: 12, fontWeight: "800" }}>
+                <Text style={{ color: "#FFFFFF", fontSize: 12.5, fontWeight: "800" }}>
                   Retry
                 </Text>
               </Pressable>
@@ -440,19 +461,19 @@ export default function AdminCommandCenterScreen() {
               {/* KPI Metrics Strip */}
               <View style={{ flexDirection: "row", flexWrap: "wrap", gap: 8 }}>
                 <KpiTile
-                  title="WHOLESALE SAVINGS"
+                  title="Wholesale Saved"
                   value={formatPaiseToINR(finopsQuery.data.totalSavingsPaise)}
                   accentColor={palette.emerald}
                   palette={palette}
                 />
                 <KpiTile
-                  title="MONTHLY CARD LIMIT"
+                  title="Card Limit"
                   value="₹1,00,000.00"
                   accentColor={palette.sky}
                   palette={palette}
                 />
                 <KpiTile
-                  title="ERP RECONCILED"
+                  title="ERP Synced"
                   value="100%"
                   accentColor={palette.primaryText}
                   palette={palette}
@@ -470,7 +491,7 @@ export default function AdminCommandCenterScreen() {
                 }}
                 style={{
                   minHeight: 48,
-                  borderRadius: 12,
+                  borderRadius: 14,
                   backgroundColor: palette.primary,
                   flexDirection: "row",
                   alignItems: "center",
@@ -480,10 +501,10 @@ export default function AdminCommandCenterScreen() {
                 }}
               >
                 <Plus size={17} color="#FFFFFF" />
-                <Text style={{ color: "#FFFFFF", fontSize: 13, fontWeight: "800" }}>
+                <Text style={{ color: "#FFFFFF", fontSize: 13.5, fontWeight: "800" }}>
                   {isItAdmin
                     ? "Authorize B2B Replenishment"
-                    : "IT_ADMIN Required to Authorize POs"}
+                    : "IT Admin Required for POs"}
                 </Text>
               </Pressable>
 
@@ -493,10 +514,11 @@ export default function AdminCommandCenterScreen() {
                   color: palette.foreground,
                   fontSize: 15,
                   fontWeight: "800",
+                  letterSpacing: -0.2,
+                  marginTop: 2,
                 }}
               >
-                Purchase Orders & Reception Intake (
-                {finopsQuery.data.purchaseOrders.length})
+                Purchase Orders ({finopsQuery.data.purchaseOrders.length})
               </Text>
 
               {finopsQuery.data.purchaseOrders.map((po) => {
@@ -512,27 +534,27 @@ export default function AdminCommandCenterScreen() {
                         flexDirection: "row",
                         alignItems: "center",
                         justifyContent: "space-between",
-                        flexWrap: "wrap",
-                        gap: 6,
+                        gap: 8,
                       }}
                     >
                       <Text
                         style={{
                           color: palette.foreground,
-                          fontSize: 14,
+                          fontSize: 14.5,
                           fontWeight: "800",
+                          letterSpacing: -0.2,
                         }}
                       >
                         {po.poNumber}
                       </Text>
                       <StatusBadge
-                        label={po.status}
+                        label={formatEnumLabel(po.status)}
                         variant={isPending ? "amber" : "emerald"}
                         compact
                       />
                     </View>
                     <Text style={{ color: palette.mutedForeground, fontSize: 12 }}>
-                      {po.vendorName} · {po.procurementMode}
+                      {po.vendorName} · {formatEnumLabel(po.procurementMode)}
                     </Text>
                     <View
                       style={{
@@ -544,14 +566,21 @@ export default function AdminCommandCenterScreen() {
                       <Text
                         style={{
                           color: palette.foreground,
-                          fontSize: 13,
+                          fontSize: 13.5,
                           fontWeight: "800",
+                          fontVariant: ["tabular-nums"],
                         }}
                       >
-                        Total: {formatPaiseToINR(po.totalAmountPaise)}
+                        Total {formatPaiseToINR(po.totalAmountPaise)}
                       </Text>
-                      <Text style={{ color: palette.mutedForeground, fontSize: 11 }}>
-                        Duty: {formatPaiseToINR(po.landedDutyPaise)}
+                      <Text
+                        style={{
+                          color: palette.mutedForeground,
+                          fontSize: 11.5,
+                          fontVariant: ["tabular-nums"],
+                        }}
+                      >
+                        Duty {formatPaiseToINR(po.landedDutyPaise)}
                       </Text>
                     </View>
 
@@ -566,21 +595,20 @@ export default function AdminCommandCenterScreen() {
                         }}
                         style={{
                           minHeight: 44,
-                          borderRadius: 10,
+                          borderRadius: 12,
                           backgroundColor: palette.emeraldSoft,
-                          borderWidth: 1,
-                          borderColor: palette.emerald,
                           flexDirection: "row",
                           alignItems: "center",
                           justifyContent: "center",
                           gap: 6,
+                          marginTop: 2,
                         }}
                       >
                         <PackageCheck size={15} color={palette.emerald} />
                         <Text
                           style={{
                             color: palette.emerald,
-                            fontSize: 12,
+                            fontSize: 12.5,
                             fontWeight: "800",
                           }}
                         >
@@ -592,69 +620,84 @@ export default function AdminCommandCenterScreen() {
                 );
               })}
 
-              {/* FinOps Card & ERP Ledger */}
+              {/* Brex/Ramp-style Corporate Card & ERP Ledger */}
               <Text
                 style={{
                   color: palette.foreground,
                   fontSize: 15,
                   fontWeight: "800",
+                  letterSpacing: -0.2,
                   marginTop: 4,
                 }}
               >
-                CGST Rule 46 Corporate Card Ledger (
-                {finopsQuery.data.transactions.length})
+                CGST Rule 46 Card Ledger ({finopsQuery.data.transactions.length})
               </Text>
 
               {finopsQuery.data.transactions.map((txn) => (
-                <ChamferCard key={txn.id} style={{ gap: 6 }}>
+                <ChamferCard key={txn.id} style={{ gap: 8 }}>
                   <View
                     style={{
                       flexDirection: "row",
-                      alignItems: "center",
+                      alignItems: "flex-start",
                       justifyContent: "space-between",
-                      flexWrap: "wrap",
-                      gap: 6,
+                      gap: 10,
                     }}
                   >
-                    <View style={{ flexDirection: "row", gap: 6 }}>
-                      <StatusBadge label={txn.provider} variant="sapphire" compact />
-                      <StatusBadge label={`MCC ${txn.mccCode}`} variant="slate" compact />
-                    </View>
-                    <StatusBadge
-                      label={`${txn.erpSyncTarget} · ${txn.erpSyncStatus}`}
-                      variant="emerald"
-                      compact
-                    />
-                  </View>
-
-                  <Text
-                    style={{
-                      color: palette.foreground,
-                      fontSize: 13,
-                      fontWeight: "800",
-                    }}
-                  >
-                    {txn.itemsSummary}
-                  </Text>
-                  <View
-                    style={{
-                      flexDirection: "row",
-                      justifyContent: "space-between",
-                      alignItems: "center",
-                    }}
-                  >
-                    <Text style={{ color: palette.mutedForeground, fontSize: 11 }}>
-                      GST Inv: {txn.gstInvoiceNumber}
+                    <Text
+                      style={{
+                        color: palette.foreground,
+                        fontSize: 13.5,
+                        fontWeight: "800",
+                        flex: 1,
+                      }}
+                    >
+                      {txn.itemsSummary}
                     </Text>
                     <Text
                       style={{
                         color: palette.emerald,
                         fontSize: 14,
                         fontWeight: "800",
+                        fontVariant: ["tabular-nums"],
                       }}
                     >
                       {formatPaiseToINR(txn.amountPaise)}
                     </Text>
+                  </View>
+
+                  <View
+                    style={{
+                      flexDirection: "row",
+                      justifyContent: "space-between",
+                      alignItems: "center",
+                      flexWrap: "wrap",
+                      gap: 6,
+                    }}
+                  >
+                    <Text style={{ color: palette.mutedForeground, fontSize: 11.5 }}>
+                      {formatEnumLabel(txn.provider)} · MCC {txn.mccCode} · Inv{" "}
+                      {txn.gstInvoiceNumber}
+                    </Text>
+                    <View style={{ flexDirection: "row", alignItems: "center", gap: 5 }}>
+                      <View
+                        style={{
+                          width: 6,
+                          height: 6,
+                          borderRadius: 999,
+                          backgroundColor: palette.emerald,
+                        }}
+                      />
+                      <Text
+                        style={{
+                          color: palette.emerald,
+                          fontSize: 11,
+                          fontWeight: "700",
+                        }}
+                      >
+                        {formatEnumLabel(txn.erpSyncTarget)}{" "}
+                        {formatEnumLabel(txn.erpSyncStatus)}
+                      </Text>
+                    </View>
                   </View>
                 </ChamferCard>
               ))}
@@ -665,11 +708,11 @@ export default function AdminCommandCenterScreen() {
         {/* MODULE 3: ANALYTICS & HUBS */}
         {activeModule === "analytics" ? (
           !canViewAudit || isForbiddenError(analyticsQuery.error) ? (
-            <RbacBanner requiredLabel="IT_ADMIN or FINOPS_AUDITOR" />
+            <RbacBanner requiredLabel="IT Admin or FinOps Auditor" />
           ) : analyticsQuery.isLoading ? (
-            <ChamferCard style={{ flexDirection: "row", alignItems: "center", gap: 8 }}>
+            <ChamferCard style={{ flexDirection: "row", alignItems: "center", gap: 10 }}>
               <ActivityIndicator size="small" color={palette.primaryText} />
-              <Text style={{ color: palette.mutedForeground, fontSize: 12 }}>
+              <Text style={{ color: palette.mutedForeground, fontSize: 12.5 }}>
                 Computing 14-day shrinkage anomalies & floor telemetry...
               </Text>
             </ChamferCard>
@@ -678,7 +721,7 @@ export default function AdminCommandCenterScreen() {
               {/* Financial Summary */}
               <View style={{ flexDirection: "row", flexWrap: "wrap", gap: 8 }}>
                 <KpiTile
-                  title="INCIDENTS RESOLVED"
+                  title="Resolved"
                   value={String(
                     analyticsQuery.data.financialSummary.totalIncidentsResolved
                   )}
@@ -686,7 +729,7 @@ export default function AdminCommandCenterScreen() {
                   palette={palette}
                 />
                 <KpiTile
-                  title="RETAIL AVOIDED"
+                  title="Retail Avoided"
                   value={formatPaiseToINR(
                     analyticsQuery.data.financialSummary.totalRetailAvoidedPaise
                   )}
@@ -694,7 +737,7 @@ export default function AdminCommandCenterScreen() {
                   palette={palette}
                 />
                 <KpiTile
-                  title="NET SAVINGS"
+                  title="Net Savings"
                   value={formatPaiseToINR(
                     analyticsQuery.data.financialSummary.netSavingsPaise
                   )}
@@ -709,9 +752,11 @@ export default function AdminCommandCenterScreen() {
                   color: palette.foreground,
                   fontSize: 15,
                   fontWeight: "800",
+                  letterSpacing: -0.2,
+                  marginTop: 2,
                 }}
               >
-                14-Day Unreturned Shrinkage Anomalies
+                14-Day Shrinkage Anomalies
               </Text>
               {analyticsQuery.data.anomalyAlerts.length === 0 ? (
                 <ChamferCard tone="emerald">
@@ -722,7 +767,7 @@ export default function AdminCommandCenterScreen() {
                       fontWeight: "700",
                     }}
                   >
-                    No rooms exceed the &gt;= 4 unreturned adapter threshold in the 14-day window.
+                    All meeting rooms remain within threshold (&lt; 4 unreturned adapters in 14d).
                   </Text>
                 </ChamferCard>
               ) : (
@@ -747,7 +792,7 @@ export default function AdminCommandCenterScreen() {
                         {alert.roomName} (Floor {alert.floor})
                       </Text>
                       <StatusBadge
-                        label={`${alert.unreturnedCount14Days} UNRETURNED (14D)`}
+                        label={`${alert.unreturnedCount14Days} Unreturned (14d)`}
                         variant="crimson"
                         compact
                       />
@@ -771,12 +816,14 @@ export default function AdminCommandCenterScreen() {
                   color: palette.foreground,
                   fontSize: 15,
                   fontWeight: "800",
+                  letterSpacing: -0.2,
+                  marginTop: 2,
                 }}
               >
-                Floor Hub Occupancy & Thermal Health
+                Hub Occupancy & Thermal Health
               </Text>
               {analyticsQuery.data.floorMetrics.map((metric) => (
-                <ChamferCard key={metric.lockerId} style={{ gap: 8 }}>
+                <ChamferCard key={metric.lockerId} style={{ gap: 9 }}>
                   <View
                     style={{
                       flexDirection: "row",
@@ -797,7 +844,14 @@ export default function AdminCommandCenterScreen() {
                     </Text>
                     <View style={{ flexDirection: "row", alignItems: "center", gap: 4 }}>
                       <Thermometer size={13} color={palette.sky} />
-                      <Text style={{ color: palette.sky, fontSize: 12, fontWeight: "700" }}>
+                      <Text
+                        style={{
+                          color: palette.sky,
+                          fontSize: 12,
+                          fontWeight: "700",
+                          fontVariant: ["tabular-nums"],
+                        }}
+                      >
                         {(metric.temperatureC ?? 22.5).toFixed(1)}°C
                       </Text>
                     </View>
@@ -805,7 +859,7 @@ export default function AdminCommandCenterScreen() {
 
                   <View
                     style={{
-                      height: 8,
+                      height: 6,
                       borderRadius: 999,
                       backgroundColor: palette.muted,
                       overflow: "hidden",
@@ -813,30 +867,57 @@ export default function AdminCommandCenterScreen() {
                   >
                     <View
                       style={{
-                        width: `${Math.min(100, Math.max(0, metric.occupancyRatePercent))}%`,
+                        width: `${Math.min(
+                          100,
+                          Math.max(0, metric.occupancyRatePercent)
+                        )}%`,
                         height: "100%",
+                        borderRadius: 999,
                         backgroundColor: palette.primary,
                       }}
                     />
                   </View>
 
-                  <View style={{ flexDirection: "row", flexWrap: "wrap", gap: 8 }}>
-                    <StatusBadge
-                      label={`${metric.occupiedBays}/${metric.totalBays} IN BAY (${metric.occupancyRatePercent}%)`}
-                      variant="emerald"
-                      compact
-                    />
-                    <StatusBadge
-                      label={`${metric.checkedOutBays} OUT`}
-                      variant="sapphire"
-                      compact
-                    />
+                  <View
+                    style={{
+                      flexDirection: "row",
+                      justifyContent: "space-between",
+                      alignItems: "center",
+                      flexWrap: "wrap",
+                      gap: 6,
+                    }}
+                  >
+                    <Text
+                      style={{
+                        color: palette.mutedForeground,
+                        fontSize: 12,
+                        fontWeight: "600",
+                        fontVariant: ["tabular-nums"],
+                      }}
+                    >
+                      {metric.occupiedBays}/{metric.totalBays} in bay (
+                      {metric.occupancyRatePercent}%) · {metric.checkedOutBays} checked out
+                    </Text>
                     {metric.quarantinedBays > 0 ? (
-                      <StatusBadge
-                        label={`${metric.quarantinedBays} QUARANTINED`}
-                        variant="crimson"
-                        compact
-                      />
+                      <View style={{ flexDirection: "row", alignItems: "center", gap: 4 }}>
+                        <View
+                          style={{
+                            width: 6,
+                            height: 6,
+                            borderRadius: 999,
+                            backgroundColor: palette.destructive,
+                          }}
+                        />
+                        <Text
+                          style={{
+                            color: palette.destructive,
+                            fontSize: 11.5,
+                            fontWeight: "700",
+                          }}
+                        >
+                          {metric.quarantinedBays} Quarantined
+                        </Text>
+                      </View>
                     ) : null}
                   </View>
                 </ChamferCard>
@@ -852,7 +933,7 @@ export default function AdminCommandCenterScreen() {
         {/* MODULE 4: ITSM WEBHOOKS */}
         {activeModule === "webhooks" ? (
           !isItAdmin || isForbiddenError(webhooksQuery.error) ? (
-            <RbacBanner requiredLabel="IT_ADMIN" onlyItAdmin />
+            <RbacBanner requiredLabel="IT Admin" onlyItAdmin />
           ) : (
             <View style={{ gap: 12 }}>
               <View style={{ flexDirection: "row", flexWrap: "wrap", gap: 8 }}>
@@ -875,8 +956,8 @@ export default function AdminCommandCenterScreen() {
                   }}
                 >
                   <Send size={14} color="#FFFFFF" />
-                  <Text style={{ color: "#FFFFFF", fontSize: 12, fontWeight: "800" }}>
-                    + Mock ServiceNow
+                  <Text style={{ color: "#FFFFFF", fontSize: 12.5, fontWeight: "800" }}>
+                    Simulate ServiceNow
                   </Text>
                 </Pressable>
 
@@ -890,9 +971,9 @@ export default function AdminCommandCenterScreen() {
                     flex: 1,
                     minWidth: 145,
                     borderRadius: 12,
-                    backgroundColor: palette.muted,
+                    backgroundColor: palette.card,
                     borderWidth: 1,
-                    borderColor: palette.border,
+                    borderColor: palette.borderStrong,
                     flexDirection: "row",
                     alignItems: "center",
                     justifyContent: "center",
@@ -904,88 +985,149 @@ export default function AdminCommandCenterScreen() {
                   <Text
                     style={{
                       color: palette.foreground,
-                      fontSize: 12,
-                      fontWeight: "800",
+                      fontSize: 12.5,
+                      fontWeight: "700",
                     }}
                   >
-                    + Mock Zendesk
+                    Simulate Zendesk
                   </Text>
                 </Pressable>
               </View>
 
               {webhooksQuery.isLoading ? (
-                <ChamferCard style={{ flexDirection: "row", alignItems: "center", gap: 8 }}>
+                <ChamferCard style={{ flexDirection: "row", alignItems: "center", gap: 10 }}>
                   <ActivityIndicator size="small" color={palette.primaryText} />
-                  <Text style={{ color: palette.mutedForeground, fontSize: 12 }}>
+                  <Text style={{ color: palette.mutedForeground, fontSize: 12.5 }}>
                     Loading ITSM webhook audit stream...
                   </Text>
                 </ChamferCard>
               ) : webhooksQuery.data?.events ? (
-                <View style={{ gap: 10 }}>
-                  {webhooksQuery.data.events.map((evt) => (
-                    <Pressable
-                      key={evt.id}
-                      accessibilityRole="button"
-                      accessibilityLabel={`Inspect webhook event ${evt.externalEventId ?? evt.id}`}
-                      onPress={() => {
-                        void haptics.tap();
-                        setInspectedWebhook(evt);
-                      }}
-                    >
-                      <ChamferCard style={{ gap: 6 }}>
-                        <View
-                          style={{
-                            flexDirection: "row",
-                            alignItems: "center",
-                            justifyContent: "space-between",
-                            flexWrap: "wrap",
-                            gap: 6,
-                          }}
-                        >
-                          <View style={{ flexDirection: "row", gap: 6 }}>
-                            <StatusBadge label={evt.source} variant="sapphire" compact />
-                            <StatusBadge label={evt.direction} variant="slate" compact />
-                            <StatusBadge
-                              label={evt.status}
-                              variant={
-                                evt.status === "SUCCESS" || evt.status === "REPLAYED"
-                                  ? "emerald"
-                                  : "crimson"
-                              }
-                              compact
-                            />
+                <View style={{ gap: 9 }}>
+                  {webhooksQuery.data.events.map((evt) => {
+                    const delivered =
+                      evt.status === "SUCCESS" || evt.status === "REPLAYED";
+                    return (
+                      <Pressable
+                        key={evt.id}
+                        accessibilityRole="button"
+                        accessibilityLabel={`Inspect webhook event ${evt.externalEventId ?? evt.id}`}
+                        onPress={() => {
+                          void haptics.tap();
+                          setInspectedWebhook(evt);
+                        }}
+                      >
+                        <ChamferCard style={{ gap: 7 }}>
+                          <View
+                            style={{
+                              flexDirection: "row",
+                              alignItems: "center",
+                              justifyContent: "space-between",
+                              gap: 8,
+                            }}
+                          >
+                            <View
+                              style={{
+                                flexDirection: "row",
+                                alignItems: "center",
+                                gap: 8,
+                              }}
+                            >
+                              <StatusBadge
+                                label={formatEnumLabel(evt.source)}
+                                variant="sapphire"
+                                compact
+                              />
+                              <View
+                                style={{
+                                  flexDirection: "row",
+                                  alignItems: "center",
+                                  gap: 4,
+                                }}
+                              >
+                                <View
+                                  style={{
+                                    width: 6,
+                                    height: 6,
+                                    borderRadius: 999,
+                                    backgroundColor: delivered
+                                      ? palette.emerald
+                                      : palette.destructive,
+                                  }}
+                                />
+                                <Text
+                                  style={{
+                                    color: delivered
+                                      ? palette.emerald
+                                      : palette.destructive,
+                                    fontSize: 11.5,
+                                    fontWeight: "700",
+                                  }}
+                                >
+                                  {formatEnumLabel(evt.status)}
+                                </Text>
+                              </View>
+                            </View>
+
+                            <View
+                              style={{
+                                flexDirection: "row",
+                                alignItems: "center",
+                                gap: 4,
+                              }}
+                            >
+                              <Text
+                                style={{
+                                  color: evt.signatureValid
+                                    ? palette.emerald
+                                    : palette.destructive,
+                                  fontSize: 11,
+                                  fontWeight: "700",
+                                }}
+                              >
+                                {evt.signatureValid ? "HMAC Valid" : "Invalid Sig"}
+                              </Text>
+                              <ChevronRight
+                                size={15}
+                                color={palette.mutedForeground}
+                              />
+                            </View>
                           </View>
-                          <StatusBadge
-                            label={evt.signatureValid ? "HMAC VALID" : "INVALID"}
-                            variant={evt.signatureValid ? "emerald" : "crimson"}
-                            compact
-                          />
-                        </View>
-                        <Text
-                          style={{
-                            color: palette.foreground,
-                            fontSize: 13,
-                            fontWeight: "800",
-                          }}
-                        >
-                          {evt.externalEventId ?? evt.id}
-                        </Text>
-                        <View
-                          style={{
-                            flexDirection: "row",
-                            justifyContent: "space-between",
-                          }}
-                        >
-                          <Text style={{ color: palette.mutedForeground, fontSize: 11 }}>
-                            Latency: {evt.latencyMs}ms · Tap to inspect JSON
+
+                          <Text
+                            style={{
+                              color: palette.foreground,
+                              fontSize: 13.5,
+                              fontWeight: "800",
+                            }}
+                          >
+                            {evt.externalEventId ?? evt.id}
                           </Text>
-                          <Text style={{ color: palette.mutedForeground, fontSize: 11 }}>
-                            {formatShortTimestamp(evt.createdAt)}
-                          </Text>
-                        </View>
-                      </ChamferCard>
-                    </Pressable>
-                  ))}
+
+                          <View
+                            style={{
+                              flexDirection: "row",
+                              justifyContent: "space-between",
+                            }}
+                          >
+                            <Text
+                              style={{ color: palette.mutedForeground, fontSize: 11 }}
+                            >
+                              {formatEnumLabel(evt.direction)} · {evt.latencyMs}ms · Tap to inspect
+                            </Text>
+                            <Text
+                              style={{
+                                color: palette.mutedForeground,
+                                fontSize: 11,
+                                fontVariant: ["tabular-nums"],
+                              }}
+                            >
+                              {formatShortTimestamp(evt.createdAt)}
+                            </Text>
+                          </View>
+                        </ChamferCard>
+                      </Pressable>
+                    );
+                  })}
                 </View>
               ) : null}
             </View>
@@ -1036,13 +1178,13 @@ function KpiTile({
     <View
       style={{
         flex: 1,
-        minWidth: 105,
+        minWidth: 104,
         backgroundColor: palette.card,
-        borderRadius: 14,
+        borderRadius: 16,
         borderWidth: 1,
         borderColor: palette.border,
-        paddingHorizontal: 10,
-        paddingVertical: 12,
+        paddingHorizontal: 12,
+        paddingVertical: 13,
         justifyContent: "space-between",
         gap: 6,
       }}
@@ -1051,10 +1193,9 @@ function KpiTile({
         numberOfLines={2}
         style={{
           color: palette.mutedForeground,
-          fontSize: 10,
-          lineHeight: 13,
-          fontWeight: "800",
-          letterSpacing: 0.4,
+          fontSize: 11,
+          lineHeight: 14,
+          fontWeight: "700",
         }}
       >
         {title}
@@ -1064,8 +1205,10 @@ function KpiTile({
         adjustsFontSizeToFit
         style={{
           color: accentColor,
-          fontSize: 16,
+          fontSize: 17,
           fontWeight: "800",
+          letterSpacing: -0.3,
+          fontVariant: ["tabular-nums"],
         }}
       >
         {value}

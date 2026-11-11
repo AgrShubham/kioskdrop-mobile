@@ -1,15 +1,12 @@
 import React from "react";
-import { Pressable, Text, View } from "react-native";
+import { Platform, Pressable, Text, View } from "react-native";
 import {
-  BatteryCharging,
   CornerDownLeft,
   Lock,
-  Radio,
   ShieldAlert,
   Unlock,
   Zap,
 } from "lucide-react-native";
-import { StatusBadge } from "@/components/ui/StatusBadge";
 import { getBayLedVisual, getPalette } from "@/lib/theme";
 import { useAppStore } from "@/store/app-store";
 import type { LockerCompartment } from "@/types/domain";
@@ -38,9 +35,14 @@ export function LockerBayCard({
   const visual = getBayLedVisual(compartment.status, palette);
 
   const widthPercent =
-    columns === 2 ? "48.5%" : columns === 3 ? "31.8%" : "23.6%";
+    columns === 2 ? "48.4%" : columns === 3 ? "31.8%" : "23.6%";
 
   const activeTicket = compartment.tickets[0] ?? null;
+  const isAttentionState =
+    highlighted ||
+    compartment.status === "DOOR_OPEN_AWAITING_REMOVAL" ||
+    compartment.status === "RESERVED_FOR_PICKUP" ||
+    compartment.status === "MAINTENANCE_QUARANTINE";
 
   return (
     <View
@@ -48,15 +50,21 @@ export function LockerBayCard({
         width: widthPercent,
         minWidth: 136,
         flexGrow: 1,
-        backgroundColor: palette.card,
-        borderRadius: 14,
-        borderWidth: highlighted ? 2 : 1,
+        backgroundColor:
+          compartment.status === "MAINTENANCE_QUARANTINE"
+            ? palette.destructiveSoft
+            : compartment.status === "DOOR_OPEN_AWAITING_REMOVAL"
+            ? palette.skySoft
+            : palette.card,
+        borderRadius: 16,
+        borderWidth: highlighted ? 1.5 : 1,
         borderColor: highlighted ? palette.sky : visual.borderColor,
-        padding: 10,
-        gap: 8,
+        padding: 12,
+        gap: 7,
+        overflow: "hidden",
       }}
     >
-      {/* Top Bay Number & LED Indicator */}
+      {/* Top Status Strip */}
       <View
         style={{
           flexDirection: "row",
@@ -68,8 +76,8 @@ export function LockerBayCard({
         <View style={{ flexDirection: "row", alignItems: "center", gap: 6 }}>
           <View
             style={{
-              width: 9,
-              height: 9,
+              width: 8,
+              height: 8,
               borderRadius: 999,
               backgroundColor: visual.ledColor,
             }}
@@ -79,42 +87,52 @@ export function LockerBayCard({
               color: palette.foreground,
               fontSize: 13,
               fontWeight: "800",
+              fontVariant: ["tabular-nums"],
             }}
           >
-            Bay #{compartment.compartmentNumber}
+            Bay {String(compartment.compartmentNumber).padStart(2, "0")}
           </Text>
         </View>
-        {compartment.solenoidLocked ? (
-          <Lock size={13} color={palette.mutedForeground} />
-        ) : (
-          <Unlock size={13} color={palette.sky} />
-        )}
+
+        <View style={{ flexDirection: "row", alignItems: "center", gap: 4 }}>
+          <Text
+            style={{
+              color: visual.ledColor,
+              fontSize: 10,
+              fontWeight: "800",
+            }}
+          >
+            {visual.shortLabel}
+          </Text>
+          {compartment.solenoidLocked ? (
+            <Lock size={11} color={palette.mutedForeground} />
+          ) : (
+            <Unlock size={11} color={palette.sky} />
+          )}
+        </View>
       </View>
 
-      <StatusBadge
-        label={visual.shortLabel}
-        variant={visual.badgeVariant}
-        dotColor={visual.ledColor}
-        compact
-      />
-
       {/* Asset Summary */}
-      <View style={{ gap: 2, minHeight: 34 }}>
+      <View style={{ gap: 2, minHeight: 38 }}>
         <Text
           numberOfLines={2}
           style={{
             color: palette.foreground,
-            fontSize: 11,
+            fontSize: 12,
             fontWeight: "700",
-            lineHeight: 15,
+            lineHeight: 16,
           }}
         >
-          {compartment.asset?.sku?.name ?? "Unassigned / Empty"}
+          {compartment.asset?.sku?.name ?? "Empty Bay"}
         </Text>
         {compartment.asset ? (
           <Text
             numberOfLines={1}
-            style={{ color: palette.mutedForeground, fontSize: 10 }}
+            style={{
+              color: palette.mutedForeground,
+              fontSize: 10,
+              fontFamily: Platform.OS === "ios" ? "Menlo" : "monospace",
+            }}
           >
             {compartment.asset.serialNumber}
           </Text>
@@ -129,59 +147,64 @@ export function LockerBayCard({
         ) : null}
       </View>
 
-      {/* Hardware Telemetry Mini-Bar */}
+      {/* Subtle Sensor Status Line */}
       <View
         style={{
           flexDirection: "row",
-          flexWrap: "wrap",
-          gap: 6,
-          paddingTop: 4,
+          alignItems: "center",
+          justifyContent: "space-between",
+          paddingTop: 6,
           borderTopWidth: 1,
-          borderTopColor: palette.border,
+          borderTopColor: isAttentionState
+            ? visual.borderColor
+            : palette.border,
         }}
       >
-        <View style={{ flexDirection: "row", alignItems: "center", gap: 3 }}>
-          <Radio
-            size={10}
-            color={
-              compartment.irSensorBreakBeam
-                ? palette.emerald
-                : palette.mutedForeground
-            }
-          />
-          <Text
-            style={{
-              color: compartment.irSensorBreakBeam
-                ? palette.emerald
-                : palette.mutedForeground,
-              fontSize: 9,
-              fontWeight: "700",
-            }}
-          >
-            {compartment.irSensorBreakBeam ? "IR:IN" : "IR:OUT"}
-          </Text>
-        </View>
-
-        <View style={{ flexDirection: "row", alignItems: "center", gap: 3 }}>
-          <BatteryCharging
-            size={10}
-            color={
-              compartment.chargingConnected
-                ? palette.sky
-                : palette.destructive
-            }
-          />
-          <Text
-            style={{
-              color: compartment.chargingConnected
-                ? palette.sky
-                : palette.destructive,
-              fontSize: 9,
-              fontWeight: "700",
-            }}
-          >
-            {compartment.chargingConnected ? "5V:OK" : "5V:NO"}
-          </Text>
+        <View style={{ flexDirection: "row", alignItems: "center", gap: 8 }}>
+          <View style={{ flexDirection: "row", alignItems: "center", gap: 4 }}>
+            <View
+              style={{
+                width: 5,
+                height: 5,
+                borderRadius: 999,
+                backgroundColor: compartment.irSensorBreakBeam
+                  ? palette.emerald
+                  : palette.mutedForeground,
+              }}
+            />
+            <Text
+              style={{
+                color: palette.mutedForeground,
+                fontSize: 10,
+                fontWeight: "600",
+              }}
+            >
+              {compartment.irSensorBreakBeam ? "IR Seated" : "IR Clear"}
+            </Text>
+          </View>
+          <View style={{ flexDirection: "row", alignItems: "center", gap: 4 }}>
+            <View
+              style={{
+                width: 5,
+                height: 5,
+                borderRadius: 999,
+                backgroundColor: compartment.chargingConnected
+                  ? palette.sky
+                  : palette.destructive,
+              }}
+            />
+            <Text
+              style={{
+                color: compartment.chargingConnected
+                  ? palette.mutedForeground
+                  : palette.destructive,
+                fontSize: 10,
+                fontWeight: "600",
+              }}
+            >
+              {compartment.chargingConnected ? "5V" : "No 5V"}
+            </Text>
+          </View>
         </View>
       </View>
 
@@ -195,13 +218,13 @@ export function LockerBayCard({
             onPress={() => onTakeDevice(compartment.compartmentNumber)}
             style={{
               minHeight: 44,
-              borderRadius: 10,
+              borderRadius: 11,
               backgroundColor: palette.sky,
               flexDirection: "row",
               alignItems: "center",
               justifyContent: "center",
               gap: 5,
-              paddingHorizontal: 6,
+              paddingHorizontal: 8,
             }}
           >
             <Zap size={13} color="#0F172A" />
@@ -209,7 +232,12 @@ export function LockerBayCard({
               numberOfLines={1}
               adjustsFontSizeToFit
               minimumFontScale={0.82}
-              style={{ color: "#0F172A", fontSize: 11, fontWeight: "800", flexShrink: 1 }}
+              style={{
+                color: "#0F172A",
+                fontSize: 11,
+                fontWeight: "800",
+                flexShrink: 1,
+              }}
             >
               Take Device (IR Break)
             </Text>
@@ -222,15 +250,15 @@ export function LockerBayCard({
             onPress={() => onSimulateBadUsb(compartment.compartmentNumber)}
             style={{
               minHeight: 44,
-              borderRadius: 10,
-              backgroundColor: palette.destructiveSoft,
+              borderRadius: 11,
+              backgroundColor: palette.card,
               borderWidth: 1,
               borderColor: palette.destructive,
               flexDirection: "row",
               alignItems: "center",
               justifyContent: "center",
               gap: 5,
-              paddingHorizontal: 6,
+              paddingHorizontal: 8,
             }}
           >
             <ShieldAlert size={13} color={palette.destructive} />
@@ -259,7 +287,7 @@ export function LockerBayCard({
           onPress={() => onOpenReturnModal(compartment)}
           style={{
             minHeight: 44,
-            borderRadius: 10,
+            borderRadius: 11,
             backgroundColor: palette.primary,
             flexDirection: "row",
             alignItems: "center",
@@ -278,4 +306,3 @@ export function LockerBayCard({
     </View>
   );
 }
-

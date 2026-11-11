@@ -315,7 +315,7 @@ export default function SmartLockerKioskScreen() {
   const rfidLabel = `Tap RFID Badge (${session?.rfidBadgeId ?? "RFID-EMP-8821"})`;
 
   const keypadSection = (
-    <ChamferCard tone="default" style={{ gap: 12, flex: isTabletSplit ? 1 : undefined }}>
+    <ChamferCard tone="default" style={{ gap: 14, flex: isTabletSplit ? 1 : undefined }}>
       <View
         style={{
           flexDirection: "row",
@@ -323,17 +323,24 @@ export default function SmartLockerKioskScreen() {
           justifyContent: "space-between",
         }}
       >
-        <Text
-          style={{
-            color: palette.foreground,
-            fontSize: 15,
-            fontWeight: "800",
-          }}
-        >
-          Multi-Factor Terminal Unlock
-        </Text>
+        <View>
+          <Text
+            style={{
+              color: palette.foreground,
+              fontSize: 15,
+              fontWeight: "800",
+            }}
+          >
+            Terminal Unlock
+          </Text>
+          <Text style={{ color: palette.mutedForeground, fontSize: 11 }}>
+            {activeLocker
+              ? formatLockerHubLabel(activeLocker.floor, activeLocker.name)
+              : "Awaiting hub link"}
+          </Text>
+        </View>
         <StatusBadge
-          label={activeLocker ? `FL ${activeLocker.floor} PINPAD` : "STANDBY"}
+          label={activeLocker ? `FL ${activeLocker.floor} Pinpad` : "Standby"}
           variant="sky"
           compact
         />
@@ -344,10 +351,8 @@ export default function SmartLockerKioskScreen() {
           testID="kiosk-auth-error-banner"
           style={{
             backgroundColor: palette.destructiveSoft,
-            borderColor: palette.destructive,
-            borderWidth: 1,
-            borderRadius: 12,
-            padding: 10,
+            borderRadius: 13,
+            padding: 11,
             flexDirection: "row",
             alignItems: "center",
             gap: 8,
@@ -372,10 +377,8 @@ export default function SmartLockerKioskScreen() {
           testID="kiosk-auth-success-banner"
           style={{
             backgroundColor: palette.emeraldSoft,
-            borderColor: palette.emerald,
-            borderWidth: 1,
-            borderRadius: 12,
-            padding: 10,
+            borderRadius: 13,
+            padding: 11,
             flexDirection: "row",
             alignItems: "center",
             gap: 8,
@@ -417,8 +420,8 @@ export default function SmartLockerKioskScreen() {
           onPress={handleRfidTap}
           style={{
             minHeight: 48,
-            borderRadius: 12,
-            backgroundColor: palette.muted,
+            borderRadius: 13,
+            backgroundColor: palette.surfaceElevated,
             borderWidth: 1,
             borderColor: palette.border,
             flexDirection: "row",
@@ -451,10 +454,8 @@ export default function SmartLockerKioskScreen() {
           onPress={() => void handleBiometricUnlock()}
           style={{
             minHeight: 48,
-            borderRadius: 12,
+            borderRadius: 13,
             backgroundColor: palette.emeraldSoft,
-            borderWidth: 1,
-            borderColor: palette.emerald,
             flexDirection: "row",
             alignItems: "center",
             justifyContent: "center",
@@ -550,18 +551,17 @@ export default function SmartLockerKioskScreen() {
         </ChamferCard>
       ) : activeLocker ? (
         <View style={{ gap: 10 }}>
-          {/* Hub Telemetry Strip */}
-          <ChamferCard style={{ gap: 8 }}>
+          {/* Compact Hub Telemetry Strip */}
+          <ChamferCard style={{ gap: 6 }}>
             <View
               style={{
                 flexDirection: "row",
                 alignItems: "center",
                 justifyContent: "space-between",
-                flexWrap: "wrap",
-                gap: 6,
+                gap: 8,
               }}
             >
-              <View style={{ flexDirection: "row", alignItems: "center", gap: 6, flex: 1 }}>
+              <View style={{ flexDirection: "row", alignItems: "center", gap: 7, flex: 1 }}>
                 <Cpu size={15} color={palette.primaryText} />
                 <Text
                   style={{
@@ -574,34 +574,48 @@ export default function SmartLockerKioskScreen() {
                   {formatLockerHubLabel(activeLocker.floor, activeLocker.name)}
                 </Text>
               </View>
-              <StatusBadge
-                label={activeLocker.onlineStatus ? "ONLINE" : "OFFLINE"}
-                variant={activeLocker.onlineStatus ? "emerald" : "crimson"}
-                dotColor={
-                  activeLocker.onlineStatus ? palette.emerald : palette.destructive
-                }
-                compact
-              />
-            </View>
-            <View
-              style={{
-                flexDirection: "row",
-                alignItems: "center",
-                justifyContent: "space-between",
-                flexWrap: "wrap",
-                gap: 8,
-              }}
-            >
-              <Text style={{ color: palette.mutedForeground, fontSize: 12 }}>
-                {activeLocker.locationNote}
-              </Text>
-              <View style={{ flexDirection: "row", alignItems: "center", gap: 4 }}>
-                <Thermometer size={13} color={palette.sky} />
-                <Text style={{ color: palette.sky, fontSize: 12, fontWeight: "700" }}>
-                  {(activeLocker.temperatureC ?? 22.5).toFixed(1)}°C
-                </Text>
+              <View style={{ flexDirection: "row", alignItems: "center", gap: 10 }}>
+                <View style={{ flexDirection: "row", alignItems: "center", gap: 4 }}>
+                  <View
+                    style={{
+                      width: 6,
+                      height: 6,
+                      borderRadius: 999,
+                      backgroundColor: activeLocker.onlineStatus
+                        ? palette.emerald
+                        : palette.destructive,
+                    }}
+                  />
+                  <Text
+                    style={{
+                      color: activeLocker.onlineStatus
+                        ? palette.emerald
+                        : palette.destructive,
+                      fontSize: 11.5,
+                      fontWeight: "700",
+                    }}
+                  >
+                    {activeLocker.onlineStatus ? "Online" : "Offline"}
+                  </Text>
+                </View>
+                <View style={{ flexDirection: "row", alignItems: "center", gap: 3 }}>
+                  <Thermometer size={12} color={palette.sky} />
+                  <Text
+                    style={{
+                      color: palette.sky,
+                      fontSize: 11.5,
+                      fontWeight: "700",
+                      fontVariant: ["tabular-nums"],
+                    }}
+                  >
+                    {(activeLocker.temperatureC ?? 22.5).toFixed(1)}°C
+                  </Text>
+                </View>
               </View>
             </View>
+            <Text style={{ color: palette.mutedForeground, fontSize: 12 }}>
+              {activeLocker.locationNote}
+            </Text>
           </ChamferCard>
 
           {/* Responsive 12-Bay Matrix */}
@@ -653,15 +667,21 @@ export default function SmartLockerKioskScreen() {
         }
       >
         <ScreenHeader
-          badge="SMART LOCKER TERMINAL"
-          badgeVariant="emerald"
           title="IoT Solenoid Kiosk"
-          subtitle="Enter 6-digit pickup OTP, tap Corporate RFID, or authenticate via Face ID / Touch ID to unlock your bay."
+          subtitle="Unlock any reserved bay with your 6-digit PIN, RFID badge, or biometrics."
         />
 
-        {/* Hub Switcher Tabs */}
+        {/* Segmented Hub Switcher */}
         {lockers.length > 0 ? (
-          <View style={{ flexDirection: "row", flexWrap: "wrap", gap: 8 }}>
+          <View
+            style={{
+              flexDirection: "row",
+              backgroundColor: palette.muted,
+              borderRadius: 15,
+              padding: 4,
+              gap: 4,
+            }}
+          >
             {lockers.map((locker) => {
               const selected = activeLocker?.id === locker.id;
               return (
@@ -677,28 +697,31 @@ export default function SmartLockerKioskScreen() {
                     setAuthSuccess(null);
                   }}
                   style={{
+                    flex: 1,
                     minHeight: 44,
-                    paddingHorizontal: 14,
-                    borderRadius: 12,
-                    borderWidth: 1,
-                    borderColor: selected ? palette.primary : palette.border,
-                    backgroundColor: selected
-                      ? themeMode === "dark"
-                        ? "rgba(59, 130, 246, 0.16)"
-                        : "rgba(37, 99, 235, 0.10)"
-                      : palette.card,
+                    paddingHorizontal: 10,
+                    borderRadius: 11,
+                    backgroundColor: selected ? palette.card : "transparent",
+                    alignItems: "center",
                     justifyContent: "center",
+                    shadowColor: selected ? "#000000" : "transparent",
+                    shadowOffset: { width: 0, height: 1 },
+                    shadowOpacity: selected ? (themeMode === "dark" ? 0.25 : 0.08) : 0,
+                    shadowRadius: 4,
+                    elevation: selected ? 2 : 0,
                   }}
                 >
-                    <Text
-                      style={{
-                        color: selected ? palette.primaryText : palette.foreground,
-                        fontSize: 13,
-                        fontWeight: "700",
-                      }}
-                    >
-                      {formatLockerHubLabel(locker.floor, locker.name)}
-                    </Text>
+                  <Text
+                    numberOfLines={1}
+                    adjustsFontSizeToFit
+                    style={{
+                      color: selected ? palette.foreground : palette.mutedForeground,
+                      fontSize: 12,
+                      fontWeight: selected ? "800" : "600",
+                    }}
+                  >
+                    {formatLockerHubLabel(locker.floor, locker.name)}
+                  </Text>
                 </Pressable>
               );
             })}
@@ -713,8 +736,8 @@ export default function SmartLockerKioskScreen() {
           </View>
         ) : (
           <View style={{ gap: 14 }}>
-            {bayGridSection}
             {keypadSection}
+            {bayGridSection}
           </View>
         )}
       </ScrollView>

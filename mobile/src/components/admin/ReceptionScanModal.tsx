@@ -52,7 +52,9 @@ export function ReceptionScanModal({
   const [serialNumber, setSerialNumber] = useState("");
   const [usbVendorId, setUsbVendorId] = useState("0x046D");
   const [usbProductId, setUsbProductId] = useState("0xC53E");
-  const [targetLockerId, setTargetLockerId] = useState(lockers[0]?.id ?? "lkr_floor4");
+  const [targetLockerId, setTargetLockerId] = useState(
+    lockers[0]?.id ?? "lkr_floor4"
+  );
   const [targetBay, setTargetBay] = useState<number>(12);
 
   useEffect(() => {
@@ -75,7 +77,8 @@ export function ReceptionScanModal({
 
   if (!purchaseOrder || !firstItem) return null;
 
-  const activeLocker = lockers.find((l) => l.id === targetLockerId) ?? lockers[0];
+  const activeLocker =
+    lockers.find((l) => l.id === targetLockerId) ?? lockers[0];
 
   return (
     <Modal
@@ -89,42 +92,63 @@ export function ReceptionScanModal({
         style={{
           flex: 1,
           justifyContent: "flex-end",
-          backgroundColor: "rgba(2, 6, 23, 0.74)",
+          backgroundColor: "rgba(2, 6, 23, 0.72)",
         }}
       >
         <View
           style={{
             backgroundColor: palette.card,
-            borderTopLeftRadius: 24,
-            borderTopRightRadius: 24,
+            borderTopLeftRadius: 26,
+            borderTopRightRadius: 26,
             borderWidth: 1,
+            borderBottomWidth: 0,
             borderColor: palette.border,
             maxHeight: "90%",
             paddingHorizontal: 18,
-            paddingTop: 16,
+            paddingTop: 10,
             paddingBottom: 26,
           }}
         >
+          {/* Grabber Handle */}
+          <View style={{ alignItems: "center", paddingBottom: 10 }}>
+            <View
+              style={{
+                width: 38,
+                height: 4,
+                borderRadius: 999,
+                backgroundColor: palette.borderStrong,
+              }}
+            />
+          </View>
+
           <View
             style={{
               flexDirection: "row",
               alignItems: "center",
               justifyContent: "space-between",
-              marginBottom: 12,
+              paddingBottom: 12,
+              marginBottom: 14,
+              borderBottomWidth: 1,
+              borderBottomColor: palette.border,
               gap: 8,
             }}
           >
             <View style={{ flex: 1 }}>
-              <StatusBadge label={purchaseOrder.poNumber} variant="amber" compact />
+              <StatusBadge
+                label={purchaseOrder.poNumber}
+                variant="amber"
+                compact
+              />
               <Text
                 style={{
                   color: palette.foreground,
-                  fontSize: 17,
+                  fontSize: 16.5,
                   fontWeight: "800",
-                  marginTop: 4,
+                  letterSpacing: -0.2,
+                  marginTop: 5,
                 }}
               >
-                PO Reception Scan & Locker Intake
+                PO Reception & Locker Intake
               </Text>
             </View>
             <Pressable
@@ -134,13 +158,22 @@ export function ReceptionScanModal({
               style={{
                 minWidth: 44,
                 minHeight: 44,
-                borderRadius: 12,
-                backgroundColor: palette.muted,
                 alignItems: "center",
                 justifyContent: "center",
               }}
             >
-              <X size={18} color={palette.foreground} />
+              <View
+                style={{
+                  width: 32,
+                  height: 32,
+                  borderRadius: 999,
+                  backgroundColor: palette.muted,
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+              >
+                <X size={16} color={palette.foreground} />
+              </View>
             </Pressable>
           </View>
 
@@ -179,7 +212,9 @@ export function ReceptionScanModal({
                   accessibilityLabel="Generate scanned barcode serial"
                   onPress={() => {
                     void haptics.selection();
-                    setSerialNumber(`SN-INT-${Date.now().toString().slice(-6)}`);
+                    setSerialNumber(
+                      `SN-INT-${Date.now().toString().slice(-6)}`
+                    );
                   }}
                   style={{
                     minHeight: 36,
@@ -193,7 +228,7 @@ export function ReceptionScanModal({
                   <Text
                     style={{
                       color: palette.primaryText,
-                      fontSize: 11,
+                      fontSize: 11.5,
                       fontWeight: "700",
                     }}
                   >
@@ -210,7 +245,7 @@ export function ReceptionScanModal({
                   borderRadius: 12,
                   borderWidth: 1,
                   borderColor: palette.border,
-                  backgroundColor: palette.background,
+                  backgroundColor: palette.surfaceElevated,
                   color: palette.foreground,
                   paddingHorizontal: 12,
                   fontSize: 13,
@@ -219,7 +254,7 @@ export function ReceptionScanModal({
             </View>
 
             {/* USB VID/PID */}
-            <View style={{ flexDirection: "row", gap: 10, marginBottom: 12 }}>
+            <View style={{ flexDirection: "row", gap: 10, marginBottom: 14 }}>
               <View style={{ flex: 1, gap: 4 }}>
                 <Text
                   style={{
@@ -238,7 +273,7 @@ export function ReceptionScanModal({
                     borderRadius: 12,
                     borderWidth: 1,
                     borderColor: palette.border,
-                    backgroundColor: palette.background,
+                    backgroundColor: palette.surfaceElevated,
                     color: palette.foreground,
                     paddingHorizontal: 12,
                     fontSize: 13,
@@ -263,7 +298,7 @@ export function ReceptionScanModal({
                     borderRadius: 12,
                     borderWidth: 1,
                     borderColor: palette.border,
-                    backgroundColor: palette.background,
+                    backgroundColor: palette.surfaceElevated,
                     color: palette.foreground,
                     paddingHorizontal: 12,
                     fontSize: 13,
@@ -278,12 +313,20 @@ export function ReceptionScanModal({
                 color: palette.mutedForeground,
                 fontSize: 11,
                 fontWeight: "700",
-                marginBottom: 6,
+                letterSpacing: 0.6,
+                marginBottom: 8,
               }}
             >
               TARGET SMART LOCKER
             </Text>
-            <View style={{ flexDirection: "row", flexWrap: "wrap", gap: 8, marginBottom: 12 }}>
+            <View
+              style={{
+                flexDirection: "row",
+                flexWrap: "wrap",
+                gap: 8,
+                marginBottom: 14,
+              }}
+            >
               {lockers.map((lkr) => {
                 const active = lkr.id === targetLockerId;
                 return (
@@ -298,10 +341,12 @@ export function ReceptionScanModal({
                     style={{
                       minHeight: 44,
                       paddingHorizontal: 12,
-                      borderRadius: 10,
+                      borderRadius: 12,
                       borderWidth: 1,
                       borderColor: active ? palette.primary : palette.border,
-                      backgroundColor: active ? palette.accent : palette.muted,
+                      backgroundColor: active
+                        ? palette.primarySoft
+                        : palette.surfaceElevated,
                       justifyContent: "center",
                     }}
                   >
@@ -325,12 +370,20 @@ export function ReceptionScanModal({
                 color: palette.mutedForeground,
                 fontSize: 11,
                 fontWeight: "700",
-                marginBottom: 6,
+                letterSpacing: 0.6,
+                marginBottom: 8,
               }}
             >
-              TARGET BAY NUMBER (1 - 12)
+              TARGET BAY NUMBER (1–12)
             </Text>
-            <View style={{ flexDirection: "row", flexWrap: "wrap", gap: 6, marginBottom: 16 }}>
+            <View
+              style={{
+                flexDirection: "row",
+                flexWrap: "wrap",
+                gap: 7,
+                marginBottom: 16,
+              }}
+            >
               {Array.from({ length: 12 }, (_, idx) => idx + 1).map((num) => {
                 const comp = activeLocker?.compartments.find(
                   (c) => c.compartmentNumber === num
@@ -350,7 +403,7 @@ export function ReceptionScanModal({
                     style={{
                       minWidth: 48,
                       minHeight: 44,
-                      borderRadius: 10,
+                      borderRadius: 11,
                       borderWidth: 1,
                       borderColor: active
                         ? palette.primary
@@ -361,7 +414,7 @@ export function ReceptionScanModal({
                         ? palette.primary
                         : isEmpty
                         ? palette.emeraldSoft
-                        : palette.muted,
+                        : palette.surfaceElevated,
                       alignItems: "center",
                       justifyContent: "center",
                       paddingHorizontal: 6,
@@ -376,6 +429,7 @@ export function ReceptionScanModal({
                           : palette.foreground,
                         fontSize: 12,
                         fontWeight: "800",
+                        fontVariant: ["tabular-nums"],
                       }}
                     >
                       #{num}
@@ -442,4 +496,3 @@ export function ReceptionScanModal({
     </Modal>
   );
 }
-

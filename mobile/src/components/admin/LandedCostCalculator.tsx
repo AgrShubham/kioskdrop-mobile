@@ -9,7 +9,6 @@ import {
 import { useMutation } from "@tanstack/react-query";
 import { Calculator } from "lucide-react-native";
 import { ChamferCard } from "@/components/ui/ChamferCard";
-import { StatusBadge } from "@/components/ui/StatusBadge";
 import { HSN_CODE_PRESETS } from "@/constants/presets";
 import { kioskApi } from "@/lib/api";
 import { haptics } from "@/lib/haptics";
@@ -55,42 +54,39 @@ export function LandedCostCalculator() {
   });
 
   return (
-    <ChamferCard tone="sapphire" style={{ gap: 12 }}>
-      <View
-        style={{
-          flexDirection: "row",
-          alignItems: "center",
-          justifyContent: "space-between",
-          flexWrap: "wrap",
-          gap: 6,
-        }}
-      >
+    <ChamferCard style={{ gap: 14 }}>
+      <View style={{ flexDirection: "row", alignItems: "center", gap: 10 }}>
         <View
           style={{
-            flexDirection: "row",
+            width: 36,
+            height: 36,
+            borderRadius: 10,
+            backgroundColor: palette.primarySoft,
             alignItems: "center",
-            gap: 8,
-            flex: 1,
-            minWidth: 180,
+            justifyContent: "center",
           }}
         >
           <Calculator size={17} color={palette.primaryText} />
+        </View>
+        <View style={{ flex: 1 }}>
           <Text
             style={{
               color: palette.foreground,
               fontSize: 15,
               fontWeight: "800",
-              flexShrink: 1,
+              letterSpacing: -0.2,
             }}
           >
-            HSN Customs Duty & Landed Cost Engine
+            Customs Duty & Landed Cost
+          </Text>
+          <Text style={{ color: palette.mutedForeground, fontSize: 12 }}>
+            Integer-paise Indian tariff engine (net of ITC)
           </Text>
         </View>
-        <StatusBadge label="ADR D6 INTEGER PAISE" variant="sapphire" compact />
       </View>
 
       {/* CIF Value Input */}
-      <View style={{ gap: 4 }}>
+      <View style={{ gap: 6 }}>
         <Text
           style={{
             color: palette.mutedForeground,
@@ -98,31 +94,60 @@ export function LandedCostCalculator() {
             fontWeight: "700",
           }}
         >
-          CIF / Base Procurement Value (INR ₹)
+          CIF / Base Procurement Value
         </Text>
-        <TextInput
-          testID="landed-cost-cif-input"
-          value={cifInput}
-          onChangeText={(txt) => {
-            setCifInput(txt);
-            if (inputError) setInputError(null);
-          }}
-          keyboardType="numeric"
-          placeholder="1000"
-          placeholderTextColor={palette.mutedForeground}
-          accessibilityLabel="CIF Amount in INR"
+        <View
           style={{
+            flexDirection: "row",
+            alignItems: "center",
             minHeight: 46,
             borderRadius: 12,
             borderWidth: 1,
-            borderColor: palette.border,
-            backgroundColor: palette.background,
-            color: palette.foreground,
+            borderColor: inputError ? palette.destructive : palette.border,
+            backgroundColor: palette.surfaceElevated,
             paddingHorizontal: 12,
-            fontSize: 15,
-            fontWeight: "700",
+            gap: 6,
           }}
-        />
+        >
+          <Text
+            style={{
+              color: palette.mutedForeground,
+              fontSize: 15,
+              fontWeight: "800",
+            }}
+          >
+            ₹
+          </Text>
+          <TextInput
+            testID="landed-cost-cif-input"
+            value={cifInput}
+            onChangeText={(txt) => {
+              setCifInput(txt);
+              if (inputError) setInputError(null);
+            }}
+            keyboardType="numeric"
+            placeholder="1000"
+            placeholderTextColor={palette.mutedForeground}
+            accessibilityLabel="CIF Amount in INR"
+            style={{
+              flex: 1,
+              color: palette.foreground,
+              fontSize: 15,
+              fontWeight: "700",
+              fontVariant: ["tabular-nums"],
+              paddingVertical: 10,
+            }}
+          />
+          <Text
+            style={{
+              color: palette.mutedForeground,
+              fontSize: 11,
+              fontWeight: "700",
+            }}
+          >
+            INR
+          </Text>
+        </View>
       </View>
 
       {/* HSN Preset Chips */}
@@ -134,9 +159,9 @@ export function LandedCostCalculator() {
             fontWeight: "700",
           }}
         >
-          Statutory Union Customs HSN Classification
+          HSN Customs Classification
         </Text>
-        <View style={{ flexDirection: "row", flexWrap: "wrap", gap: 6 }}>
+        <View style={{ flexDirection: "row", flexWrap: "wrap", gap: 8 }}>
           {HSN_CODE_PRESETS.map((hsn) => {
             const active = selectedHsn === hsn.code;
             return (
@@ -151,16 +176,14 @@ export function LandedCostCalculator() {
                 }}
                 style={{
                   minHeight: 44,
-                  paddingHorizontal: 10,
+                  paddingHorizontal: 12,
                   paddingVertical: 6,
-                  borderRadius: 10,
+                  borderRadius: 11,
                   borderWidth: 1,
                   borderColor: active ? palette.primary : palette.border,
                   backgroundColor: active
-                    ? themeMode === "dark"
-                      ? "rgba(59, 130, 246, 0.16)"
-                      : "rgba(37, 99, 235, 0.10)"
-                    : palette.muted,
+                    ? palette.primarySoft
+                    : palette.surfaceElevated,
                   justifyContent: "center",
                 }}
               >
@@ -169,11 +192,12 @@ export function LandedCostCalculator() {
                     color: active ? palette.primaryText : palette.foreground,
                     fontSize: 12,
                     fontWeight: "800",
+                    fontVariant: ["tabular-nums"],
                   }}
                 >
                   {hsn.code}
                 </Text>
-                <Text style={{ color: palette.mutedForeground, fontSize: 10 }}>
+                <Text style={{ color: palette.mutedForeground, fontSize: 10.5 }}>
                   {hsn.label}
                 </Text>
               </Pressable>
@@ -182,8 +206,16 @@ export function LandedCostCalculator() {
         </View>
       </View>
 
-      {/* Mode Toggle */}
-      <View style={{ flexDirection: "row", gap: 8 }}>
+      {/* Joined Segmented Mode Toggle */}
+      <View
+        style={{
+          flexDirection: "row",
+          backgroundColor: palette.muted,
+          borderRadius: 12,
+          padding: 3,
+          gap: 3,
+        }}
+      >
         {(["DIRECT_IMPORT", "DOMESTIC_WHOLESALE"] as const).map((item) => {
           const active = mode === item;
           return (
@@ -198,26 +230,27 @@ export function LandedCostCalculator() {
               }}
               style={{
                 flex: 1,
-                minHeight: 44,
-                borderRadius: 10,
-                borderWidth: 1,
-                borderColor: active ? palette.primary : palette.border,
-                backgroundColor: active ? palette.accent : palette.muted,
+                minHeight: 42,
+                borderRadius: 9,
+                backgroundColor: active ? palette.card : "transparent",
                 alignItems: "center",
                 justifyContent: "center",
                 paddingHorizontal: 8,
+                shadowColor: active ? "#000000" : "transparent",
+                shadowOffset: { width: 0, height: 1 },
+                shadowOpacity: active ? (themeMode === "dark" ? 0.25 : 0.08) : 0,
+                shadowRadius: 3,
+                elevation: active ? 2 : 0,
               }}
             >
               <Text
                 style={{
-                  color: active ? palette.primaryText : palette.foreground,
-                  fontSize: 11,
-                  fontWeight: "800",
+                  color: active ? palette.foreground : palette.mutedForeground,
+                  fontSize: 12,
+                  fontWeight: active ? "800" : "600",
                 }}
               >
-                {item === "DIRECT_IMPORT"
-                  ? "DIRECT IMPORT"
-                  : "DOMESTIC WHOLESALE"}
+                {item === "DIRECT_IMPORT" ? "Direct Import" : "Domestic Wholesale"}
               </Text>
             </Pressable>
           );
@@ -238,7 +271,7 @@ export function LandedCostCalculator() {
         onPress={() => calcMutation.mutate()}
         style={{
           minHeight: 48,
-          borderRadius: 12,
+          borderRadius: 13,
           backgroundColor: palette.primary,
           flexDirection: "row",
           alignItems: "center",
@@ -249,22 +282,22 @@ export function LandedCostCalculator() {
         {calcMutation.isPending ? (
           <ActivityIndicator size="small" color="#FFFFFF" />
         ) : null}
-        <Text style={{ color: "#FFFFFF", fontSize: 13, fontWeight: "800" }}>
+        <Text style={{ color: "#FFFFFF", fontSize: 13.5, fontWeight: "800" }}>
           Compute Landed Cost
         </Text>
       </Pressable>
 
-      {/* Duty Stack Output */}
+      {/* Duty Stack Receipt */}
       {result ? (
         <View
           testID="landed-cost-result"
           style={{
-            backgroundColor: palette.background,
-            borderRadius: 12,
+            backgroundColor: palette.surfaceElevated,
+            borderRadius: 14,
             borderWidth: 1,
             borderColor: palette.border,
-            padding: 12,
-            gap: 6,
+            padding: 14,
+            gap: 8,
           }}
         >
           <Row label="CIF Value" value={result.formatted.cifINR} palette={palette} />
@@ -288,6 +321,15 @@ export function LandedCostCalculator() {
             value={result.formatted.igstINR}
             palette={palette}
           />
+
+          <View
+            style={{
+              height: 1,
+              backgroundColor: palette.border,
+              marginVertical: 2,
+            }}
+          />
+
           <Row
             label={`Total Duties (${result.effectiveDutyRatePercent.toFixed(2)}%)`}
             value={result.formatted.totalDutiesINR}
@@ -300,14 +342,14 @@ export function LandedCostCalculator() {
             palette={palette}
             bold
           />
+
           <View
             style={{
               marginTop: 4,
-              padding: 10,
-              borderRadius: 10,
+              paddingHorizontal: 12,
+              paddingVertical: 10,
+              borderRadius: 11,
               backgroundColor: palette.emeraldSoft,
-              borderWidth: 1,
-              borderColor: palette.emerald,
               flexDirection: "row",
               justifyContent: "space-between",
               alignItems: "center",
@@ -316,7 +358,14 @@ export function LandedCostCalculator() {
             <Text style={{ color: palette.emerald, fontSize: 12, fontWeight: "800" }}>
               Effective Net of ITC
             </Text>
-            <Text style={{ color: palette.emerald, fontSize: 15, fontWeight: "800" }}>
+            <Text
+              style={{
+                color: palette.emerald,
+                fontSize: 15,
+                fontWeight: "800",
+                fontVariant: ["tabular-nums"],
+              }}
+            >
               {result.formatted.netCostAfterItcINR}
             </Text>
           </View>
@@ -349,7 +398,7 @@ function Row({
       <Text
         style={{
           color: bold ? palette.foreground : palette.mutedForeground,
-          fontSize: 12,
+          fontSize: 12.5,
           fontWeight: bold ? "800" : "500",
           flex: 1,
         }}
@@ -359,8 +408,9 @@ function Row({
       <Text
         style={{
           color: palette.foreground,
-          fontSize: 12,
+          fontSize: 12.5,
           fontWeight: bold ? "800" : "700",
+          fontVariant: ["tabular-nums"],
         }}
       >
         {value}
@@ -368,4 +418,3 @@ function Row({
     </View>
   );
 }
-

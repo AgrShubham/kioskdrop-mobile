@@ -9,7 +9,7 @@ import {
   View,
 } from "react-native";
 import { RefreshCw, X } from "lucide-react-native";
-import { formatShortTimestamp } from "@/lib/format";
+import { formatEnumLabel, formatShortTimestamp } from "@/lib/format";
 import { getPalette } from "@/lib/theme";
 import { useAppStore } from "@/store/app-store";
 import type { WebhookEvent } from "@/types/domain";
@@ -51,35 +51,56 @@ export function WebhookInspectorModal({
         style={{
           flex: 1,
           justifyContent: "flex-end",
-          backgroundColor: "rgba(2, 6, 23, 0.74)",
+          backgroundColor: "rgba(2, 6, 23, 0.72)",
         }}
       >
         <View
           style={{
             backgroundColor: palette.card,
-            borderTopLeftRadius: 24,
-            borderTopRightRadius: 24,
+            borderTopLeftRadius: 26,
+            borderTopRightRadius: 26,
             borderWidth: 1,
+            borderBottomWidth: 0,
             borderColor: palette.border,
             maxHeight: "86%",
             paddingHorizontal: 18,
-            paddingTop: 16,
+            paddingTop: 10,
             paddingBottom: 26,
             gap: 12,
           }}
         >
+          {/* Grabber Handle */}
+          <View style={{ alignItems: "center" }}>
+            <View
+              style={{
+                width: 38,
+                height: 4,
+                borderRadius: 999,
+                backgroundColor: palette.borderStrong,
+              }}
+            />
+          </View>
+
           <View
             style={{
               flexDirection: "row",
               alignItems: "center",
               justifyContent: "space-between",
+              paddingBottom: 12,
+              borderBottomWidth: 1,
+              borderBottomColor: palette.border,
+              gap: 8,
             }}
           >
-            <View style={{ gap: 4 }}>
-              <View style={{ flexDirection: "row", gap: 6 }}>
-                <StatusBadge label={event.source} variant="sapphire" compact />
+            <View style={{ gap: 5, flex: 1 }}>
+              <View style={{ flexDirection: "row", gap: 6, flexWrap: "wrap" }}>
                 <StatusBadge
-                  label={event.signatureValid ? "HMAC VALID" : "HMAC INVALID"}
+                  label={formatEnumLabel(event.source)}
+                  variant="sapphire"
+                  compact
+                />
+                <StatusBadge
+                  label={event.signatureValid ? "HMAC Valid" : "HMAC Invalid"}
                   variant={event.signatureValid ? "emerald" : "crimson"}
                   compact
                 />
@@ -89,6 +110,7 @@ export function WebhookInspectorModal({
                   color: palette.foreground,
                   fontSize: 16,
                   fontWeight: "800",
+                  letterSpacing: -0.2,
                 }}
               >
                 {event.externalEventId ?? event.id}
@@ -102,25 +124,34 @@ export function WebhookInspectorModal({
               style={{
                 minWidth: 44,
                 minHeight: 44,
-                borderRadius: 12,
-                backgroundColor: palette.muted,
                 alignItems: "center",
                 justifyContent: "center",
               }}
             >
-              <X size={18} color={palette.foreground} />
+              <View
+                style={{
+                  width: 32,
+                  height: 32,
+                  borderRadius: 999,
+                  backgroundColor: palette.muted,
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+              >
+                <X size={16} color={palette.foreground} />
+              </View>
             </Pressable>
           </View>
 
           <Text style={{ color: palette.mutedForeground, fontSize: 12 }}>
-            {event.direction} · {event.status} · {event.latencyMs}ms ·{" "}
-            {formatShortTimestamp(event.createdAt)}
+            {formatEnumLabel(event.direction)} · {formatEnumLabel(event.status)} ·{" "}
+            {event.latencyMs}ms · {formatShortTimestamp(event.createdAt)}
           </Text>
 
           <ScrollView
             style={{
-              backgroundColor: palette.background,
-              borderRadius: 12,
+              backgroundColor: palette.surfaceElevated,
+              borderRadius: 14,
               borderWidth: 1,
               borderColor: palette.border,
               padding: 12,
@@ -131,7 +162,8 @@ export function WebhookInspectorModal({
               selectable
               style={{
                 color: palette.foreground,
-                fontSize: 11,
+                fontSize: 11.5,
+                lineHeight: 16,
                 fontFamily: Platform.OS === "ios" ? "Menlo" : "monospace",
               }}
             >
@@ -146,7 +178,7 @@ export function WebhookInspectorModal({
             onPress={() => onReplay(event.id)}
             style={{
               minHeight: 48,
-              borderRadius: 12,
+              borderRadius: 13,
               backgroundColor: palette.primary,
               flexDirection: "row",
               alignItems: "center",
@@ -160,7 +192,7 @@ export function WebhookInspectorModal({
             ) : (
               <RefreshCw size={15} color="#FFFFFF" />
             )}
-            <Text style={{ color: "#FFFFFF", fontSize: 13, fontWeight: "800" }}>
+            <Text style={{ color: "#FFFFFF", fontSize: 13.5, fontWeight: "800" }}>
               {replaying ? "Replaying..." : "Replay Webhook Event"}
             </Text>
           </Pressable>
@@ -169,4 +201,3 @@ export function WebhookInspectorModal({
     </Modal>
   );
 }
-

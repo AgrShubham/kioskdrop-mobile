@@ -35,32 +35,35 @@ export function NumericKeypad({
   const slots = Array.from({ length: 6 }, (_, i) => pin[i] ?? "");
 
   return (
-    <View style={{ gap: 12 }}>
-      {/* 6-Slot Backlit PIN Indicator */}
+    <View style={{ gap: 14 }}>
+      {/* 6-Slot Sleek PIN Indicator */}
       <View
         accessibilityLabel={`Entered PIN digits: ${pin.length} of 6`}
         style={{
           flexDirection: "row",
           justifyContent: "space-between",
-          gap: 6,
+          gap: 8,
         }}
       >
         {slots.map((char, index) => {
           const filled = char.length > 0;
+          const isCurrentCursor = !filled && index === pin.length;
           return (
             <View
               key={index}
               style={{
                 flex: 1,
-                height: 48,
-                borderRadius: 12,
-                borderWidth: 1,
-                borderColor: filled ? palette.sky : palette.border,
+                height: 52,
+                borderRadius: 14,
+                borderWidth: isCurrentCursor ? 1.5 : 1,
+                borderColor: filled
+                  ? palette.sky
+                  : isCurrentCursor
+                  ? palette.primary
+                  : palette.border,
                 backgroundColor: filled
-                  ? themeMode === "dark"
-                    ? "rgba(56, 189, 248, 0.14)"
-                    : "rgba(2, 132, 199, 0.08)"
-                  : palette.background,
+                  ? palette.skySoft
+                  : palette.surfaceElevated,
                 alignItems: "center",
                 justifyContent: "center",
               }}
@@ -68,7 +71,7 @@ export function NumericKeypad({
               <Text
                 style={{
                   color: filled ? palette.sky : palette.mutedForeground,
-                  fontSize: 20,
+                  fontSize: 22,
                   fontWeight: "800",
                   fontFamily: Platform.OS === "ios" ? "Menlo" : "monospace",
                 }}
@@ -80,10 +83,10 @@ export function NumericKeypad({
         })}
       </View>
 
-      {/* 3x4 Backlit Keypad Grid (>= 48pt target height) */}
-      <View style={{ gap: 8 }}>
+      {/* 3x4 Tactile Keypad Grid (>= 52pt height) */}
+      <View style={{ gap: 9 }}>
         {KEY_ROWS.map((row, rowIndex) => (
-          <View key={rowIndex} style={{ flexDirection: "row", gap: 8 }}>
+          <View key={rowIndex} style={{ flexDirection: "row", gap: 9 }}>
             {row.map((key) => {
               const isClear = key === "CLEAR";
               const isEnter = key === "ENTER";
@@ -93,7 +96,7 @@ export function NumericKeypad({
                 ? palette.primary
                 : isClear
                 ? palette.muted
-                : palette.card;
+                : palette.surfaceElevated;
               const border = isEnter ? palette.primary : palette.border;
               const textColor = isEnter
                 ? "#FFFFFF"
@@ -129,22 +132,23 @@ export function NumericKeypad({
                   }}
                   style={{
                     flex: 1,
-                    minHeight: 50,
-                    borderRadius: 12,
+                    minHeight: 54,
+                    borderRadius: 15,
                     borderWidth: 1,
                     borderColor: border,
                     backgroundColor: bg,
                     alignItems: "center",
                     justifyContent: "center",
-                    opacity: isDisabled ? 0.45 : pressedKey === key ? 0.78 : 1,
+                    opacity: isDisabled ? 0.42 : pressedKey === key ? 0.72 : 1,
+                    transform: [{ scale: pressedKey === key ? 0.97 : 1 }],
                   }}
                 >
                   <Text
                     style={{
                       color: textColor,
-                      fontSize: isClear || isEnter ? 13 : 19,
+                      fontSize: isClear || isEnter ? 12 : 20,
                       fontWeight: "800",
-                      letterSpacing: isClear || isEnter ? 0.5 : 0,
+                      letterSpacing: isClear || isEnter ? 0.7 : 0,
                     }}
                   >
                     {isEnter && submitting ? "..." : key}
@@ -158,4 +162,3 @@ export function NumericKeypad({
     </View>
   );
 }
-
