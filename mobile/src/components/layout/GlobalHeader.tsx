@@ -1,14 +1,14 @@
 import React, { useState } from "react";
 import { Pressable, Text, View, useWindowDimensions } from "react-native";
+import { LinearGradient } from "expo-linear-gradient";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import {
   ChevronDown,
   Moon,
-  Radio,
   ShieldCheck,
   Sun,
-  UserCheck,
 } from "lucide-react-native";
+import { formatRoleLabel } from "@/lib/format";
 import { haptics } from "@/lib/haptics";
 import { getPalette } from "@/lib/theme";
 import { useSession } from "@/hooks/useSession";
@@ -45,20 +45,22 @@ export function GlobalHeader() {
   const palette = getPalette(themeMode);
 
   const roleCode = shortRoleLabel(session?.role);
+  const activeName = session?.name ?? "Aarav Sharma";
+  const activeRoleFriendly = formatRoleLabel(session?.role ?? "EMPLOYEE");
 
   return (
     <View
       style={{
         paddingTop: Math.max(insets.top, 8) + 4,
         paddingBottom: 10,
-        paddingHorizontal: compactPhone ? 12 : 14,
-        backgroundColor: palette.card,
+        paddingHorizontal: compactPhone ? 14 : 16,
+        backgroundColor: palette.background,
         borderBottomWidth: 1,
         borderBottomColor: palette.border,
         flexDirection: "row",
         alignItems: "center",
         justifyContent: "space-between",
-        gap: compactPhone ? 6 : 8,
+        gap: 8,
       }}
     >
       {/* Left Brand Cluster */}
@@ -66,85 +68,56 @@ export function GlobalHeader() {
         style={{
           flexDirection: "row",
           alignItems: "center",
-          gap: compactPhone ? 7 : 8,
+          gap: 10,
           flex: 1,
           minWidth: 0,
         }}
       >
-        <View
+        <LinearGradient
+          colors={palette.heroGradient}
+          start={{ x: 0, y: 0 }}
+          end={{ x: 1, y: 1 }}
           style={{
-            width: compactPhone ? 32 : 34,
-            height: compactPhone ? 32 : 34,
-            borderRadius: 10,
-            backgroundColor: palette.primary,
+            width: 34,
+            height: 34,
+            borderRadius: 11,
             alignItems: "center",
             justifyContent: "center",
           }}
         >
-          <ShieldCheck size={compactPhone ? 18 : 19} color="#FFFFFF" />
-        </View>
+          <ShieldCheck size={18} color="#FFFFFF" strokeWidth={2.3} />
+        </LinearGradient>
         <View style={{ flex: 1, minWidth: 0 }}>
-          <View style={{ flexDirection: "row", alignItems: "center", gap: 6 }}>
-            <Text
-              numberOfLines={1}
-              style={{
-                color: palette.foreground,
-                fontSize: compactPhone ? 15 : 16,
-                fontWeight: "800",
-                letterSpacing: -0.3,
-              }}
-            >
-              KioskDrop
-            </Text>
-            {!compactPhone ? (
-              <View
-                style={{
-                  backgroundColor:
-                    themeMode === "dark"
-                      ? "rgba(59, 130, 246, 0.16)"
-                      : "rgba(37, 99, 235, 0.10)",
-                  borderColor:
-                    themeMode === "dark"
-                      ? "rgba(59, 130, 246, 0.4)"
-                      : "rgba(37, 99, 235, 0.28)",
-                  borderWidth: 1,
-                  paddingHorizontal: 6,
-                  paddingVertical: 1,
-                  borderRadius: 6,
-                }}
-              >
-                <Text
-                  style={{
-                    color: palette.primaryText,
-                    fontSize: 9,
-                    fontWeight: "800",
-                    letterSpacing: 0.7,
-                  }}
-                >
-                  ENT
-                </Text>
-              </View>
-            ) : null}
-          </View>
+          <Text
+            numberOfLines={1}
+            style={{
+              color: palette.foreground,
+              fontSize: 16,
+              fontWeight: "800",
+              letterSpacing: -0.4,
+            }}
+          >
+            KioskDrop
+          </Text>
           <Text
             numberOfLines={1}
             style={{
               color: palette.mutedForeground,
-              fontSize: 10,
+              fontSize: 11,
               fontWeight: "500",
             }}
           >
-            {compactPhone ? "Enterprise AV" : "Zero-Trust AV Logistics"}
+            {compactPhone ? activeRoleFriendly : `${activeName} · ${activeRoleFriendly}`}
           </Text>
         </View>
       </View>
 
-      {/* Right Control Cluster */}
+      {/* Right Control Cluster — >=44pt hit zones wrapping sleek low-chrome pills */}
       <View
         style={{
           flexDirection: "row",
           alignItems: "center",
-          gap: compactPhone ? 5 : 6,
+          gap: 4,
           flexShrink: 0,
         }}
       >
@@ -161,41 +134,44 @@ export function GlobalHeader() {
           style={{
             minHeight: 44,
             minWidth: 44,
-            paddingHorizontal: compactPhone ? 8 : 10,
-            borderRadius: 12,
-            borderWidth: 1,
-            borderColor: sseConnected
-              ? themeMode === "dark"
-                ? "rgba(16, 185, 129, 0.45)"
-                : "rgba(5, 150, 105, 0.35)"
-              : themeMode === "dark"
-              ? "rgba(245, 158, 11, 0.45)"
-              : "rgba(217, 119, 6, 0.35)",
-            backgroundColor: sseConnected
-              ? palette.emeraldSoft
-              : palette.amberSoft,
-            flexDirection: "row",
             alignItems: "center",
             justifyContent: "center",
-            gap: 5,
-            opacity: pressedId === "sse" ? 0.78 : 1,
+            opacity: pressedId === "sse" ? 0.72 : 1,
           }}
         >
-          <Radio
-            size={12}
-            color={sseConnected ? palette.emerald : palette.amber}
-          />
-          <Text
-            numberOfLines={1}
+          <View
             style={{
-              color: sseConnected ? palette.emerald : palette.amber,
-              fontSize: 11,
-              fontWeight: "800",
-              letterSpacing: 0.5,
+              height: 32,
+              paddingHorizontal: 10,
+              borderRadius: 999,
+              backgroundColor: sseConnected
+                ? palette.emeraldSoft
+                : palette.amberSoft,
+              flexDirection: "row",
+              alignItems: "center",
+              gap: 6,
             }}
           >
-            {sseConnected ? "LIVE" : "SYNC"}
-          </Text>
+            <View
+              style={{
+                width: 7,
+                height: 7,
+                borderRadius: 999,
+                backgroundColor: sseConnected ? palette.emerald : palette.amber,
+              }}
+            />
+            <Text
+              numberOfLines={1}
+              style={{
+                color: sseConnected ? palette.emerald : palette.amber,
+                fontSize: 11,
+                fontWeight: "800",
+                letterSpacing: 0.3,
+              }}
+            >
+              {sseConnected ? "LIVE" : "SYNC"}
+            </Text>
+          </View>
         </Pressable>
 
         {/* Theme Switcher */}
@@ -211,20 +187,27 @@ export function GlobalHeader() {
           style={{
             minWidth: 44,
             minHeight: 44,
-            borderRadius: 12,
-            borderWidth: 1,
-            borderColor: palette.border,
-            backgroundColor: palette.muted,
             alignItems: "center",
             justifyContent: "center",
-            opacity: pressedId === "theme" ? 0.78 : 1,
+            opacity: pressedId === "theme" ? 0.72 : 1,
           }}
         >
-          {themeMode === "dark" ? (
-            <Sun size={17} color={palette.amber} />
-          ) : (
-            <Moon size={17} color={palette.primary} />
-          )}
+          <View
+            style={{
+              width: 34,
+              height: 34,
+              borderRadius: 999,
+              backgroundColor: palette.muted,
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
+            {themeMode === "dark" ? (
+              <Sun size={16} color={palette.amber} />
+            ) : (
+              <Moon size={16} color={palette.primaryText} />
+            )}
+          </View>
         </Pressable>
 
         {/* Persona & Server Sheet Trigger */}
@@ -240,36 +223,34 @@ export function GlobalHeader() {
           style={{
             minHeight: 44,
             minWidth: 44,
-            paddingHorizontal: compactPhone ? 8 : 10,
-            borderRadius: 12,
-            borderWidth: 1,
-            borderColor:
-              themeMode === "dark"
-                ? "rgba(59, 130, 246, 0.42)"
-                : "rgba(37, 99, 235, 0.30)",
-            backgroundColor:
-              themeMode === "dark"
-                ? "rgba(59, 130, 246, 0.14)"
-                : "rgba(37, 99, 235, 0.08)",
-            flexDirection: "row",
             alignItems: "center",
             justifyContent: "center",
-            gap: 4,
-            opacity: pressedId === "persona" ? 0.78 : 1,
+            opacity: pressedId === "persona" ? 0.72 : 1,
           }}
         >
-          <UserCheck size={14} color={palette.primaryText} />
-          <Text
-            numberOfLines={1}
+          <View
             style={{
-              color: palette.primaryText,
-              fontSize: 12,
-              fontWeight: "800",
+              height: 32,
+              paddingHorizontal: 10,
+              borderRadius: 999,
+              backgroundColor: palette.primarySoft,
+              flexDirection: "row",
+              alignItems: "center",
+              gap: 4,
             }}
           >
-            {roleCode}
-          </Text>
-          <ChevronDown size={13} color={palette.primaryText} />
+            <Text
+              numberOfLines={1}
+              style={{
+                color: palette.primaryText,
+                fontSize: 12,
+                fontWeight: "800",
+              }}
+            >
+              {roleCode}
+            </Text>
+            <ChevronDown size={13} color={palette.primaryText} />
+          </View>
         </Pressable>
       </View>
     </View>

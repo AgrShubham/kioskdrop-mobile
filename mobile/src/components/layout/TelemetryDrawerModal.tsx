@@ -9,7 +9,7 @@ import {
 } from "react-native";
 import { Radio, Trash2, X } from "lucide-react-native";
 import { getActiveApiBaseUrl } from "@/lib/api";
-import { formatShortTimestamp } from "@/lib/format";
+import { formatEnumLabel, formatShortTimestamp } from "@/lib/format";
 import { haptics } from "@/lib/haptics";
 import { getPalette } from "@/lib/theme";
 import { useAppStore } from "@/store/app-store";
@@ -62,16 +62,27 @@ export function TelemetryDrawerModal() {
         <View
           style={{
             backgroundColor: palette.card,
-            borderTopLeftRadius: 24,
-            borderTopRightRadius: 24,
-            borderWidth: 1,
-            borderColor: palette.border,
+            borderTopLeftRadius: 28,
+            borderTopRightRadius: 28,
+            borderTopWidth: 1,
+            borderColor: palette.borderStrong,
             maxHeight: "86%",
             paddingHorizontal: 18,
-            paddingTop: 16,
+            paddingTop: 10,
             paddingBottom: 24,
           }}
         >
+          {/* Sheet Grabber */}
+          <View
+            style={{
+              width: 38,
+              height: 4,
+              borderRadius: 999,
+              backgroundColor: palette.borderStrong,
+              alignSelf: "center",
+              marginBottom: 12,
+            }}
+          />
           {/* Header */}
           <View
             style={{
@@ -82,20 +93,32 @@ export function TelemetryDrawerModal() {
               gap: 8,
             }}
           >
-            <View style={{ flexDirection: "row", alignItems: "center", gap: 8, flex: 1 }}>
-              <Radio
-                size={18}
-                color={sseConnected ? palette.emerald : palette.amber}
-              />
+            <View style={{ flexDirection: "row", alignItems: "center", gap: 10, flex: 1 }}>
+              <View
+                style={{
+                  width: 34,
+                  height: 34,
+                  borderRadius: 10,
+                  backgroundColor: sseConnected ? palette.emeraldSoft : palette.amberSoft,
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+              >
+                <Radio
+                  size={17}
+                  color={sseConnected ? palette.emerald : palette.amber}
+                />
+              </View>
               <View style={{ flex: 1 }}>
                 <Text
                   style={{
                     color: palette.foreground,
                     fontSize: 16,
                     fontWeight: "800",
+                    letterSpacing: -0.3,
                   }}
                 >
-                  Real-Time SSE Telemetry Feed
+                  Live Telemetry Feed
                 </Text>
                 <Text
                   numberOfLines={1}
@@ -116,13 +139,22 @@ export function TelemetryDrawerModal() {
               style={{
                 minWidth: 44,
                 minHeight: 44,
-                borderRadius: 12,
-                backgroundColor: palette.muted,
                 alignItems: "center",
                 justifyContent: "center",
               }}
             >
-              <Trash2 size={16} color={palette.mutedForeground} />
+              <View
+                style={{
+                  width: 32,
+                  height: 32,
+                  borderRadius: 999,
+                  backgroundColor: palette.muted,
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+              >
+                <Trash2 size={15} color={palette.mutedForeground} />
+              </View>
             </Pressable>
 
             <Pressable
@@ -132,13 +164,22 @@ export function TelemetryDrawerModal() {
               style={{
                 minWidth: 44,
                 minHeight: 44,
-                borderRadius: 12,
-                backgroundColor: palette.muted,
                 alignItems: "center",
                 justifyContent: "center",
               }}
             >
-              <X size={18} color={palette.foreground} />
+              <View
+                style={{
+                  width: 32,
+                  height: 32,
+                  borderRadius: 999,
+                  backgroundColor: palette.muted,
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+              >
+                <X size={16} color={palette.foreground} />
+              </View>
             </Pressable>
           </View>
 
@@ -148,7 +189,7 @@ export function TelemetryDrawerModal() {
               flexDirection: "row",
               alignItems: "center",
               justifyContent: "space-between",
-              backgroundColor: palette.muted,
+              backgroundColor: palette.surfaceElevated,
               borderRadius: 12,
               borderWidth: 1,
               borderColor: palette.border,
@@ -158,13 +199,13 @@ export function TelemetryDrawerModal() {
             }}
           >
             <StatusBadge
-              label={sseConnected ? "STREAM CONNECTED" : "RECONNECTING / IDLE"}
+              label={sseConnected ? "Connected" : "Reconnecting"}
               variant={sseConnected ? "emerald" : "amber"}
               dotColor={sseConnected ? palette.emerald : palette.amber}
               compact
             />
             <Text style={{ color: palette.mutedForeground, fontSize: 11, fontWeight: "700" }}>
-              {telemetryEvents.length} / 50 buffered
+              {telemetryEvents.length} / 50 events
             </Text>
           </View>
 
@@ -232,7 +273,7 @@ export function TelemetryDrawerModal() {
                       }}
                     >
                       <StatusBadge
-                        label={evt.type}
+                        label={formatEnumLabel(evt.type)}
                         variant={badgeVariantForEvent(evt.type)}
                         compact
                       />

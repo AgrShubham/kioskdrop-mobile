@@ -26,18 +26,21 @@ export default function TabsLayout() {
             backgroundColor: palette.card,
             borderTopColor: palette.border,
             borderTopWidth: 1,
-            height: 66 + insets.bottom,
-            paddingTop: 4,
+            height: 64 + insets.bottom,
+            paddingTop: 6,
             paddingBottom: Math.max(insets.bottom, 6),
+            elevation: 0,
+            shadowOpacity: 0,
           },
           tabBarIconStyle: {
-            height: 24,
-            marginBottom: 2,
+            height: 28,
+            marginBottom: 1,
           },
           tabBarLabelStyle: {
             fontSize: 11,
             lineHeight: 14,
             fontWeight: "700",
+            letterSpacing: 0.15,
           },
           tabBarItemStyle: {
             minHeight: 44,
@@ -50,7 +53,22 @@ export default function TabsLayout() {
           options={{
             title: "Home",
             tabBarAccessibilityLabel: "Home Gateway tab",
-            tabBarIcon: ({ color }) => <ShieldCheck size={20} color={color} />,
+            tabBarIcon: ({ color, focused }) => (
+              <View
+                style={{
+                  paddingHorizontal: 14,
+                  paddingVertical: 4,
+                  borderRadius: 999,
+                  backgroundColor: focused ? palette.primarySoft : "transparent",
+                }}
+              >
+                <ShieldCheck
+                  size={19}
+                  color={color}
+                  strokeWidth={focused ? 2.3 : 1.8}
+                />
+              </View>
+            ),
           }}
         />
         <Tabs.Screen
@@ -58,7 +76,22 @@ export default function TabsLayout() {
           options={{
             title: "Drop",
             tabBarAccessibilityLabel: "Rapid-Drop AV Request tab",
-            tabBarIcon: ({ color }) => <Smartphone size={20} color={color} />,
+            tabBarIcon: ({ color, focused }) => (
+              <View
+                style={{
+                  paddingHorizontal: 14,
+                  paddingVertical: 4,
+                  borderRadius: 999,
+                  backgroundColor: focused ? palette.primarySoft : "transparent",
+                }}
+              >
+                <Smartphone
+                  size={19}
+                  color={color}
+                  strokeWidth={focused ? 2.3 : 1.8}
+                />
+              </View>
+            ),
           }}
         />
         <Tabs.Screen
@@ -66,7 +99,22 @@ export default function TabsLayout() {
           options={{
             title: "Kiosk",
             tabBarAccessibilityLabel: "Smart Locker Kiosk tab",
-            tabBarIcon: ({ color }) => <Cpu size={20} color={color} />,
+            tabBarIcon: ({ color, focused }) => (
+              <View
+                style={{
+                  paddingHorizontal: 14,
+                  paddingVertical: 4,
+                  borderRadius: 999,
+                  backgroundColor: focused ? palette.primarySoft : "transparent",
+                }}
+              >
+                <Cpu
+                  size={19}
+                  color={color}
+                  strokeWidth={focused ? 2.3 : 1.8}
+                />
+              </View>
+            ),
           }}
         />
         <Tabs.Screen
@@ -74,7 +122,22 @@ export default function TabsLayout() {
           options={{
             title: "Command",
             tabBarAccessibilityLabel: "Enterprise Admin Command tab",
-            tabBarIcon: ({ color }) => <BarChart3 size={20} color={color} />,
+            tabBarIcon: ({ color, focused }) => (
+              <View
+                style={{
+                  paddingHorizontal: 14,
+                  paddingVertical: 4,
+                  borderRadius: 999,
+                  backgroundColor: focused ? palette.primarySoft : "transparent",
+                }}
+              >
+                <BarChart3
+                  size={19}
+                  color={color}
+                  strokeWidth={focused ? 2.3 : 1.8}
+                />
+              </View>
+            ),
           }}
         />
       </Tabs>

@@ -27,6 +27,7 @@ import {
   type PingResult,
 } from "@/lib/api";
 import { normalizeApiBaseUrl } from "@/lib/env";
+import { formatRoleLabel } from "@/lib/format";
 import { haptics } from "@/lib/haptics";
 import { getPalette } from "@/lib/theme";
 import { useAppStore } from "@/store/app-store";
@@ -167,16 +168,27 @@ export function PersonaServerSheet() {
         <View
           style={{
             backgroundColor: palette.card,
-            borderTopLeftRadius: 24,
-            borderTopRightRadius: 24,
-            borderWidth: 1,
-            borderColor: palette.border,
+            borderTopLeftRadius: 28,
+            borderTopRightRadius: 28,
+            borderTopWidth: 1,
+            borderColor: palette.borderStrong,
             maxHeight: "88%",
             paddingHorizontal: 18,
-            paddingTop: 16,
+            paddingTop: 10,
             paddingBottom: 24,
           }}
         >
+          {/* Sheet Grabber */}
+          <View
+            style={{
+              width: 38,
+              height: 4,
+              borderRadius: 999,
+              backgroundColor: palette.borderStrong,
+              alignSelf: "center",
+              marginBottom: 12,
+            }}
+          />
           {/* Header Row */}
           <View
             style={{
@@ -184,19 +196,39 @@ export function PersonaServerSheet() {
               alignItems: "center",
               justifyContent: "space-between",
               marginBottom: 14,
+              paddingBottom: 12,
+              borderBottomWidth: 1,
+              borderBottomColor: palette.border,
             }}
           >
-            <View style={{ flexDirection: "row", alignItems: "center", gap: 8 }}>
-              <Shield size={18} color={palette.primaryText} />
-              <Text
+            <View style={{ flexDirection: "row", alignItems: "center", gap: 10 }}>
+              <View
                 style={{
-                  color: palette.foreground,
-                  fontSize: 17,
-                  fontWeight: "800",
+                  width: 34,
+                  height: 34,
+                  borderRadius: 10,
+                  backgroundColor: palette.primarySoft,
+                  alignItems: "center",
+                  justifyContent: "center",
                 }}
               >
-                Persona & API Connection
-              </Text>
+                <Shield size={17} color={palette.primaryText} />
+              </View>
+              <View>
+                <Text
+                  style={{
+                    color: palette.foreground,
+                    fontSize: 17,
+                    fontWeight: "800",
+                    letterSpacing: -0.3,
+                  }}
+                >
+                  Identity & Server Target
+                </Text>
+                <Text style={{ color: palette.mutedForeground, fontSize: 11 }}>
+                  Switch RBAC persona or API host
+                </Text>
+              </View>
             </View>
             <Pressable
               accessibilityRole="button"
@@ -207,11 +239,20 @@ export function PersonaServerSheet() {
                 minHeight: 44,
                 alignItems: "center",
                 justifyContent: "center",
-                borderRadius: 12,
-                backgroundColor: palette.muted,
               }}
             >
-              <X size={18} color={palette.foreground} />
+              <View
+                style={{
+                  width: 32,
+                  height: 32,
+                  borderRadius: 999,
+                  backgroundColor: palette.muted,
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+              >
+                <X size={16} color={palette.foreground} />
+              </View>
             </Pressable>
           </View>
 
@@ -220,16 +261,16 @@ export function PersonaServerSheet() {
             <Text
               style={{
                 color: palette.mutedForeground,
-                fontSize: 11,
-                fontWeight: "700",
-                letterSpacing: 0.8,
+                fontSize: 10,
+                fontWeight: "800",
+                letterSpacing: 1,
                 marginBottom: 8,
               }}
             >
-              ACTIVE IDENTITY (BEARER + SECURE STORE)
+              ACTIVE PERSONA
             </Text>
 
-            <View style={{ gap: 8, marginBottom: 14 }}>
+            <View style={{ gap: 8, marginBottom: 16 }}>
               {DEFAULT_PERSONAS.map((persona) => {
                 const matchedUser = availableUsers.find(
                   (u) => u.role === persona.role
@@ -250,28 +291,26 @@ export function PersonaServerSheet() {
                     disabled={isSwitchingRole}
                     onPress={() => void handleSelectRole(persona.role)}
                     style={{
-                      minHeight: 56,
-                      borderRadius: 14,
-                      padding: 12,
+                      minHeight: 58,
+                      borderRadius: 16,
+                      padding: 13,
                       borderWidth: 1,
                       borderColor: isActive ? palette.primary : palette.border,
                       backgroundColor: isActive
-                        ? themeMode === "dark"
-                          ? "rgba(59, 130, 246, 0.14)"
-                          : "rgba(37, 99, 235, 0.08)"
-                        : palette.muted,
+                        ? palette.primarySoft
+                        : palette.surfaceElevated,
                       flexDirection: "row",
                       alignItems: "center",
                       justifyContent: "space-between",
                       gap: 10,
                     }}
                   >
-                    <View style={{ flex: 1, gap: 3 }}>
+                    <View style={{ flex: 1, gap: 4 }}>
                       <View
                         style={{
                           flexDirection: "row",
                           alignItems: "center",
-                          gap: 6,
+                          gap: 8,
                           flexWrap: "wrap",
                         }}
                       >
@@ -287,13 +326,13 @@ export function PersonaServerSheet() {
                           style={{
                             color: palette.foreground,
                             fontSize: 14,
-                            fontWeight: "700",
+                            fontWeight: "800",
                           }}
                         >
                           {displayName}
                         </Text>
                         <StatusBadge
-                          label={persona.role}
+                          label={formatRoleLabel(persona.role)}
                           variant={
                             persona.role === "IT_ADMIN"
                               ? "emerald"
@@ -391,51 +430,53 @@ export function PersonaServerSheet() {
                     accessibilityRole="button"
                     accessibilityLabel={`Select server preset ${preset.label}`}
                     onPress={() => handleApplyPreset(preset.url)}
-                    style={{
-                      minHeight: 44,
-                      paddingHorizontal: 12,
-                      paddingVertical: 8,
-                      borderRadius: 12,
-                      borderWidth: 1,
-                      borderColor: selected ? palette.primary : palette.border,
-                      backgroundColor: selected ? palette.accent : palette.muted,
-                      justifyContent: "center",
-                    }}
-                  >
-                    <Text
                       style={{
-                        color: palette.foreground,
-                        fontSize: 12,
-                        fontWeight: "700",
+                        minHeight: 44,
+                        paddingHorizontal: 12,
+                        paddingVertical: 8,
+                        borderRadius: 12,
+                        borderWidth: 1,
+                        borderColor: selected ? palette.primary : palette.border,
+                        backgroundColor: selected
+                          ? palette.primarySoft
+                          : palette.surfaceElevated,
+                        justifyContent: "center",
                       }}
                     >
-                      {preset.label}
-                    </Text>
-                    <Text
-                      style={{
-                        color: palette.mutedForeground,
-                        fontSize: 10,
-                      }}
-                    >
-                      {preset.url}
-                    </Text>
-                  </Pressable>
-                );
-              })}
-            </View>
+                      <Text
+                        style={{
+                          color: selected ? palette.primaryText : palette.foreground,
+                          fontSize: 12,
+                          fontWeight: "700",
+                        }}
+                      >
+                        {preset.label}
+                      </Text>
+                      <Text
+                        style={{
+                          color: palette.mutedForeground,
+                          fontSize: 10,
+                        }}
+                      >
+                        {preset.url}
+                      </Text>
+                    </Pressable>
+                  );
+                })}
+              </View>
 
-            <View
-              style={{
-                flexDirection: "row",
-                alignItems: "center",
-                borderWidth: 1,
-                borderColor: urlError ? palette.destructive : palette.border,
-                borderRadius: 12,
-                backgroundColor: palette.background,
-                paddingHorizontal: 12,
-                minHeight: 48,
-                gap: 8,
-              }}
+              <View
+                style={{
+                  flexDirection: "row",
+                  alignItems: "center",
+                  borderWidth: 1,
+                  borderColor: urlError ? palette.destructive : palette.border,
+                  borderRadius: 12,
+                  backgroundColor: palette.surfaceElevated,
+                  paddingHorizontal: 12,
+                  minHeight: 48,
+                  gap: 8,
+                }}
             >
               <Server size={16} color={palette.mutedForeground} />
               <TextInput
