@@ -2,6 +2,7 @@ import {
   calculateLandedCostPreview,
   formatCompactINR,
   formatCountdown,
+  formatLockerHubLabel,
   formatPaiseToINR,
 } from "@/lib/format";
 import { normalizeApiBaseUrl, resolveApiBaseUrl } from "@/lib/env";
@@ -67,6 +68,22 @@ describe("format utilities", () => {
       isExpired: true,
       remainingSeconds: 0,
     });
+  });
+
+  it("formats locker hub labels without duplicating Floor N prefixes", () => {
+    expect(formatLockerHubLabel(4, "Floor 4 Boardroom Hub")).toBe(
+      "Floor 4 Boardroom Hub"
+    );
+    expect(formatLockerHubLabel(2, "Floor 2 Townhall Hub")).toBe(
+      "Floor 2 Townhall Hub"
+    );
+    expect(formatLockerHubLabel(4, "Floor 4 Boardroom Hub", "FL")).toBe(
+      "FL 4: Boardroom Hub"
+    );
+    expect(formatLockerHubLabel(4, "Floor 4 Boardroom Hub", "Arrow", 3)).toBe(
+      "Floor 3 -> Floor 4 Boardroom Hub"
+    );
+    expect(formatLockerHubLabel(1, "Lobby Annex")).toBe("Floor 1 Lobby Annex");
   });
 });
 

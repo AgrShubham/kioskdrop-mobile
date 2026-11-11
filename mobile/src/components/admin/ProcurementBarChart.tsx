@@ -72,7 +72,7 @@ export function ProcurementBarChart({ trends }: ProcurementBarChartProps) {
     return Math.max(10000, Math.ceil((highest * 1.15) / 10000) * 10000);
   }, [trends]);
 
-  const chartWidth = Math.max(240, Math.min(width - 96, 540));
+  const chartWidth = Math.max(200, Math.min(width - 140, 480));
 
   return (
     <ChamferCard style={{ gap: 12 }}>
@@ -98,7 +98,7 @@ export function ProcurementBarChart({ trends }: ProcurementBarChartProps) {
         <LegendItem color={palette.indigo} label="Net Savings" textColor={palette.foreground} />
       </View>
 
-      <View style={{ paddingVertical: 6 }}>
+      <View style={{ paddingVertical: 6, overflow: "hidden" }}>
         <BarChart
           data={chartData}
           width={chartWidth}

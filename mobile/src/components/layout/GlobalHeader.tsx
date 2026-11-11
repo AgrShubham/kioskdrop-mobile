@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Pressable, Text, View, useWindowDimensions } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import {
@@ -36,6 +36,10 @@ export function GlobalHeader() {
   const toggleThemeMode = useAppStore((s) => s.toggleThemeMode);
   const setPersonaSheetOpen = useAppStore((s) => s.setPersonaSheetOpen);
   const setTelemetryDrawerOpen = useAppStore((s) => s.setTelemetryDrawerOpen);
+
+  const [pressedId, setPressedId] = useState<"sse" | "theme" | "persona" | null>(
+    null
+  );
 
   const { session } = useSession();
   const palette = getPalette(themeMode);
@@ -148,11 +152,13 @@ export function GlobalHeader() {
         <Pressable
           accessibilityRole="button"
           accessibilityLabel={`Telemetry stream ${sseConnected ? "live" : "syncing"}. Open event log`}
+          onPressIn={() => setPressedId("sse")}
+          onPressOut={() => setPressedId(null)}
           onPress={() => {
             void haptics.tap();
             setTelemetryDrawerOpen(true);
           }}
-          style={({ pressed }) => ({
+          style={{
             minHeight: 44,
             minWidth: 44,
             paddingHorizontal: compactPhone ? 8 : 10,
@@ -172,14 +178,15 @@ export function GlobalHeader() {
             alignItems: "center",
             justifyContent: "center",
             gap: 5,
-            opacity: pressed ? 0.78 : 1,
-          })}
+            opacity: pressedId === "sse" ? 0.78 : 1,
+          }}
         >
           <Radio
             size={12}
             color={sseConnected ? palette.emerald : palette.amber}
           />
           <Text
+            numberOfLines={1}
             style={{
               color: sseConnected ? palette.emerald : palette.amber,
               fontSize: 11,
@@ -195,11 +202,13 @@ export function GlobalHeader() {
         <Pressable
           accessibilityRole="button"
           accessibilityLabel={`Switch to ${themeMode === "dark" ? "light" : "dark"} theme`}
+          onPressIn={() => setPressedId("theme")}
+          onPressOut={() => setPressedId(null)}
           onPress={() => {
             void haptics.selection();
             toggleThemeMode();
           }}
-          style={({ pressed }) => ({
+          style={{
             minWidth: 44,
             minHeight: 44,
             borderRadius: 12,
@@ -208,8 +217,8 @@ export function GlobalHeader() {
             backgroundColor: palette.muted,
             alignItems: "center",
             justifyContent: "center",
-            opacity: pressed ? 0.78 : 1,
-          })}
+            opacity: pressedId === "theme" ? 0.78 : 1,
+          }}
         >
           {themeMode === "dark" ? (
             <Sun size={17} color={palette.amber} />
@@ -222,12 +231,15 @@ export function GlobalHeader() {
         <Pressable
           accessibilityRole="button"
           accessibilityLabel={`Active role ${session?.role ?? "EMPLOYEE"}. Open persona and server settings`}
+          onPressIn={() => setPressedId("persona")}
+          onPressOut={() => setPressedId(null)}
           onPress={() => {
             void haptics.tap();
             setPersonaSheetOpen(true);
           }}
-          style={({ pressed }) => ({
+          style={{
             minHeight: 44,
+            minWidth: 44,
             paddingHorizontal: compactPhone ? 8 : 10,
             borderRadius: 12,
             borderWidth: 1,
@@ -243,11 +255,12 @@ export function GlobalHeader() {
             alignItems: "center",
             justifyContent: "center",
             gap: 4,
-            opacity: pressed ? 0.78 : 1,
-          })}
+            opacity: pressedId === "persona" ? 0.78 : 1,
+          }}
         >
           <UserCheck size={14} color={palette.primaryText} />
           <Text
+            numberOfLines={1}
             style={{
               color: palette.primaryText,
               fontSize: 12,

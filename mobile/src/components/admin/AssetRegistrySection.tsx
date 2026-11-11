@@ -70,6 +70,7 @@ export function AssetRegistrySection({
             color: palette.foreground,
             fontSize: 15,
             fontWeight: "800",
+            flex: 1,
           }}
         >
           Zero-Trust USB Asset Registry ({filtered.length})

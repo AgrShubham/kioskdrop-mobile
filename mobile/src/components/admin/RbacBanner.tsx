@@ -32,13 +32,22 @@ export function RbacBanner({
           gap: 6,
         }}
       >
-        <View style={{ flexDirection: "row", alignItems: "center", gap: 8 }}>
+        <View
+          style={{
+            flexDirection: "row",
+            alignItems: "center",
+            gap: 8,
+            flex: 1,
+            minWidth: 180,
+          }}
+        >
           <ShieldAlert size={18} color={palette.amber} />
           <Text
             style={{
               color: palette.foreground,
               fontSize: 15,
               fontWeight: "800",
+              flexShrink: 1,
             }}
           >
             Role Access Restricted ({session?.role ?? "EMPLOYEE"})

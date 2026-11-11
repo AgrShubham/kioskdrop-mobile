@@ -201,11 +201,16 @@ export function LockerBayCard({
               alignItems: "center",
               justifyContent: "center",
               gap: 5,
-              paddingHorizontal: 8,
+              paddingHorizontal: 6,
             }}
           >
             <Zap size={13} color="#0F172A" />
-            <Text style={{ color: "#0F172A", fontSize: 11, fontWeight: "800" }}>
+            <Text
+              numberOfLines={1}
+              adjustsFontSizeToFit
+              minimumFontScale={0.82}
+              style={{ color: "#0F172A", fontSize: 11, fontWeight: "800", flexShrink: 1 }}
+            >
               Take Device (IR Break)
             </Text>
           </Pressable>
@@ -225,15 +230,19 @@ export function LockerBayCard({
               alignItems: "center",
               justifyContent: "center",
               gap: 5,
-              paddingHorizontal: 8,
+              paddingHorizontal: 6,
             }}
           >
             <ShieldAlert size={13} color={palette.destructive} />
             <Text
+              numberOfLines={1}
+              adjustsFontSizeToFit
+              minimumFontScale={0.82}
               style={{
                 color: palette.destructive,
                 fontSize: 11,
                 fontWeight: "800",
+                flexShrink: 1,
               }}
             >
               Simulate Foreign BadUSB

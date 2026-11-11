@@ -25,6 +25,7 @@ import { DIAGNOSTIC_SYMPTOMS, type SymptomOption } from "@/constants/symptoms";
 import { QUERY_KEYS } from "@/hooks/useSession";
 import { generateIdempotencyKey, kioskApi } from "@/lib/api";
 import { haptics } from "@/lib/haptics";
+import { formatLockerHubLabel } from "@/lib/format";
 import { getPalette } from "@/lib/theme";
 import { useAppStore } from "@/store/app-store";
 import type { DiagnoseReserveResult } from "@/types/domain";
@@ -124,7 +125,12 @@ export default function RapidDropRequestScreen() {
     )[0];
 
     if (!nearest) return null;
-    return `Nearest Hub Routing: Floor ${selectedRoom.floor} -> Floor ${nearest.floor} ${nearest.name}`;
+    return `Nearest Hub Routing: ${formatLockerHubLabel(
+      nearest.floor,
+      nearest.name,
+      "Arrow",
+      selectedRoom.floor
+    )}`;
   }, [selectedRoom, lockers]);
 
   const previewSkuName = useMemo(() => {

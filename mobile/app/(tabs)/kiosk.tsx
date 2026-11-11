@@ -33,6 +33,7 @@ import { BADUSB_SIMULATION_VECTOR } from "@/constants/presets";
 import { QUERY_KEYS, useSession } from "@/hooks/useSession";
 import { ApiClientError, kioskApi } from "@/lib/api";
 import { haptics } from "@/lib/haptics";
+import { formatLockerHubLabel } from "@/lib/format";
 import { sanitizePin } from "@/lib/qr-parser";
 import { getPalette } from "@/lib/theme";
 import { useAppStore } from "@/store/app-store";
@@ -62,7 +63,7 @@ export default function SmartLockerKioskScreen() {
     pin?: string | string[];
   }>();
 
-  const columns = width >= 768 ? 4 : width >= 375 ? 3 : 2;
+  const columns = width >= 900 ? 4 : width >= 600 ? 3 : 2;
   const isTabletSplit = width >= 768;
 
   const themeMode = useAppStore((s) => s.themeMode);
@@ -560,16 +561,17 @@ export default function SmartLockerKioskScreen() {
                 gap: 6,
               }}
             >
-              <View style={{ flexDirection: "row", alignItems: "center", gap: 6 }}>
+              <View style={{ flexDirection: "row", alignItems: "center", gap: 6, flex: 1 }}>
                 <Cpu size={15} color={palette.primaryText} />
                 <Text
                   style={{
                     color: palette.foreground,
                     fontSize: 14,
                     fontWeight: "800",
+                    flexShrink: 1,
                   }}
                 >
-                  {activeLocker.name}
+                  {formatLockerHubLabel(activeLocker.floor, activeLocker.name)}
                 </Text>
               </View>
               <StatusBadge
@@ -688,15 +690,15 @@ export default function SmartLockerKioskScreen() {
                     justifyContent: "center",
                   }}
                 >
-                  <Text
-                    style={{
-                      color: selected ? palette.primaryText : palette.foreground,
-                      fontSize: 13,
-                      fontWeight: "700",
-                    }}
-                  >
-                    Floor {locker.floor}: {locker.name}
-                  </Text>
+                    <Text
+                      style={{
+                        color: selected ? palette.primaryText : palette.foreground,
+                        fontSize: 13,
+                        fontWeight: "700",
+                      }}
+                    >
+                      {formatLockerHubLabel(locker.floor, locker.name)}
+                    </Text>
                 </Pressable>
               );
             })}

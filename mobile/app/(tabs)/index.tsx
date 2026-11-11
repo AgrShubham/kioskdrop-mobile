@@ -452,48 +452,41 @@ export default function HomeGatewayScreen() {
             ...(isTablet ? { flexBasis: "100%", flexGrow: 1 } : {}),
           }}
         >
-          <View
-            style={{
-              flexDirection: "row",
-              alignItems: "center",
-              justifyContent: "space-between",
-              flexWrap: "wrap",
-              gap: 8,
-            }}
-          >
-            <View style={{ flexDirection: "row", alignItems: "center", gap: 10, flex: 1 }}>
-              <View
+          <View style={{ flexDirection: "row", alignItems: "center", gap: 10 }}>
+            <View
+              style={{
+                width: 38,
+                height: 38,
+                borderRadius: 11,
+                backgroundColor: isPrivilegedRole
+                  ? palette.skySoft
+                  : palette.amberSoft,
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
+              <BarChart3
+                size={20}
+                color={isPrivilegedRole ? palette.sky : palette.amber}
+              />
+            </View>
+            <View style={{ flex: 1, minWidth: 0 }}>
+              <Text
                 style={{
-                  width: 38,
-                  height: 38,
-                  borderRadius: 11,
-                  backgroundColor: isPrivilegedRole
-                    ? palette.skySoft
-                    : palette.amberSoft,
-                  alignItems: "center",
-                  justifyContent: "center",
+                  color: palette.foreground,
+                  fontSize: 16,
+                  fontWeight: "800",
                 }}
               >
-                <BarChart3
-                  size={20}
-                  color={isPrivilegedRole ? palette.sky : palette.amber}
-                />
-              </View>
-              <View style={{ flex: 1 }}>
-                <Text
-                  style={{
-                    color: palette.foreground,
-                    fontSize: 16,
-                    fontWeight: "800",
-                  }}
-                >
-                  ITAM & FinOps Command Center
-                </Text>
-                <Text style={{ color: palette.mutedForeground, fontSize: 12 }}>
-                  USB HID Zero-Trust, Customs Duty Calculator, PO Intake & Analytics
-                </Text>
-              </View>
+                ITAM & FinOps Command Center
+              </Text>
+              <Text style={{ color: palette.mutedForeground, fontSize: 12 }}>
+                USB HID Zero-Trust, Customs Duty Calculator, PO Intake & Analytics
+              </Text>
             </View>
+          </View>
+
+          <View style={{ flexDirection: "row", flexWrap: "wrap", gap: 6 }}>
             <StatusBadge
               label={
                 isPrivilegedRole

@@ -87,7 +87,7 @@ export function TelemetryDrawerModal() {
                 size={18}
                 color={sseConnected ? palette.emerald : palette.amber}
               />
-              <View>
+              <View style={{ flex: 1 }}>
                 <Text
                   style={{
                     color: palette.foreground,

@@ -90,7 +90,7 @@ export function ReturnInspectionModal({
       setUsbProductId(expectedPid);
       setChargingConnected(false);
     } else {
-      setSerialNumber(BADUSB_SIMULATION_VECTOR.counterfeitSerial);
+      setSerialNumber(expectedSerial || BADUSB_SIMULATION_VECTOR.counterfeitSerial);
       setUsbVendorId(BADUSB_SIMULATION_VECTOR.foreignVendorId);
       setUsbProductId(BADUSB_SIMULATION_VECTOR.foreignProductId);
       setChargingConnected(true);
@@ -134,9 +134,10 @@ export function ReturnInspectionModal({
               alignItems: "center",
               justifyContent: "space-between",
               marginBottom: 12,
+              gap: 8,
             }}
           >
-            <View>
+            <View style={{ flex: 1 }}>
               <StatusBadge
                 label={`BAY #${compartment.compartmentNumber} RETURN SENSOR CHECK`}
                 variant="sapphire"
@@ -297,7 +298,9 @@ export function ReturnInspectionModal({
                     Counterfeit / BadUSB Swap
                   </Text>
                   <Text style={{ color: palette.mutedForeground, fontSize: 11 }}>
-                    SN-FAKE-USB-999 · 0x16C0/0x05DF -&gt; Triggers 409 Alarm
+                    {expectedSerial || BADUSB_SIMULATION_VECTOR.counterfeitSerial} ·{" "}
+                    {BADUSB_SIMULATION_VECTOR.foreignVendorId}/
+                    {BADUSB_SIMULATION_VECTOR.foreignProductId} -&gt; Triggers 409 Alarm
                   </Text>
                 </View>
               </Pressable>

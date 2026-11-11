@@ -180,3 +180,30 @@ export function formatShortTimestamp(isoString: string): string {
   return `${hh}:${mm}:${ss}`;
 }
 
+/**
+ * Formats Smart Locker Hub names without duplicating leading "Floor N" prefixes
+ * (e.g., (4, "Floor 4 Boardroom Hub") -> "Floor 4 Boardroom Hub").
+ */
+export function formatLockerHubLabel(
+  floor: number,
+  name: string,
+  style: "Floor" | "FL" | "Arrow" = "Floor",
+  sourceFloor?: number
+): string {
+  const trimmed = name.trim();
+  const floorPrefixRegex = new RegExp(
+    `^(?:floor|fl)\\s*${floor}\\s*[:\\-–]?\\s*`,
+    "i"
+  );
+  const suffix = trimmed.replace(floorPrefixRegex, "").trim();
+  const canonical = suffix ? `Floor ${floor} ${suffix}` : `Floor ${floor} Hub`;
+
+  if (style === "Arrow" && typeof sourceFloor === "number") {
+    return `Floor ${sourceFloor} -> ${canonical}`;
+  }
+  if (style === "FL") {
+    return `FL ${floor}: ${suffix || trimmed}`;
+  }
+  return canonical;
+}
+

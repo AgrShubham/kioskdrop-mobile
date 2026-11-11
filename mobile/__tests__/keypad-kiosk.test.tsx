@@ -173,7 +173,7 @@ describe("SmartLockerKioskScreen & NumericKeypad integration", () => {
     await renderWithQueryClient();
 
     await waitFor(() => {
-      expect(screen.getByText("Floor 4 Boardroom Hub")).toBeTruthy();
+      expect(screen.getAllByText("Floor 4 Boardroom Hub").length).toBeGreaterThanOrEqual(1);
     });
 
     await fireEvent.press(screen.getByTestId("keypad-key-1"));
@@ -236,7 +236,7 @@ describe("SmartLockerKioskScreen & NumericKeypad integration", () => {
     await renderWithQueryClient();
 
     await waitFor(() => {
-      expect(screen.getByText("Floor 4 Boardroom Hub")).toBeTruthy();
+      expect(screen.getAllByText("Floor 4 Boardroom Hub").length).toBeGreaterThanOrEqual(1);
     });
 
     for (const digit of ["1", "1", "1", "1", "1", "1"]) {
@@ -280,7 +280,7 @@ describe("SmartLockerKioskScreen & NumericKeypad integration", () => {
     await renderWithQueryClient();
 
     await waitFor(() => {
-      expect(screen.getByText("Floor 4 Boardroom Hub")).toBeTruthy();
+      expect(screen.getAllByText("Floor 4 Boardroom Hub").length).toBeGreaterThanOrEqual(1);
     });
 
     await fireEvent.press(screen.getByTestId("kiosk-rfid-button"));

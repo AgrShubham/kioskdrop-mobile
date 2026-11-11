@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Platform, Pressable, Text, View } from "react-native";
 import { haptics } from "@/lib/haptics";
 import { getPalette } from "@/lib/theme";
@@ -30,6 +30,7 @@ export function NumericKeypad({
 }: NumericKeypadProps) {
   const themeMode = useAppStore((s) => s.themeMode);
   const palette = getPalette(themeMode);
+  const [pressedKey, setPressedKey] = useState<string | null>(null);
 
   const slots = Array.from({ length: 6 }, (_, i) => pin[i] ?? "");
 
@@ -114,6 +115,8 @@ export function NumericKeypad({
                   }
                   accessibilityState={{ disabled: isDisabled }}
                   disabled={isDisabled}
+                  onPressIn={() => setPressedKey(key)}
+                  onPressOut={() => setPressedKey(null)}
                   onPress={() => {
                     void haptics.tap();
                     if (isClear) {
@@ -124,7 +127,7 @@ export function NumericKeypad({
                       onDigit(key);
                     }
                   }}
-                  style={({ pressed }) => ({
+                  style={{
                     flex: 1,
                     minHeight: 50,
                     borderRadius: 12,
@@ -133,8 +136,8 @@ export function NumericKeypad({
                     backgroundColor: bg,
                     alignItems: "center",
                     justifyContent: "center",
-                    opacity: isDisabled ? 0.45 : pressed ? 0.78 : 1,
-                  })}
+                    opacity: isDisabled ? 0.45 : pressedKey === key ? 0.78 : 1,
+                  }}
                 >
                   <Text
                     style={{

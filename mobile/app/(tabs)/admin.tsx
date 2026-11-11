@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   ActivityIndicator,
   Pressable,
@@ -36,7 +36,11 @@ import { ScreenHeader } from "@/components/ui/ScreenHeader";
 import { StatusBadge } from "@/components/ui/StatusBadge";
 import { QUERY_KEYS, useSession } from "@/hooks/useSession";
 import { ApiClientError, kioskApi } from "@/lib/api";
-import { formatPaiseToINR, formatShortTimestamp } from "@/lib/format";
+import {
+  formatLockerHubLabel,
+  formatPaiseToINR,
+  formatShortTimestamp,
+} from "@/lib/format";
 import { haptics } from "@/lib/haptics";
 import { getPalette } from "@/lib/theme";
 import { useAppStore } from "@/store/app-store";
@@ -73,6 +77,10 @@ export default function AdminCommandCenterScreen() {
   const [receptionError, setReceptionError] = useState<string | null>(null);
   const [inspectedWebhook, setInspectedWebhook] =
     useState<WebhookEvent | null>(null);
+
+  useEffect(() => {
+    setActionBanner(null);
+  }, [role]);
 
   const lockersQuery = useQuery({
     queryKey: QUERY_KEYS.lockers,
@@ -774,6 +782,7 @@ export default function AdminCommandCenterScreen() {
                       flexDirection: "row",
                       alignItems: "center",
                       justifyContent: "space-between",
+                      gap: 8,
                     }}
                   >
                     <Text
@@ -781,9 +790,10 @@ export default function AdminCommandCenterScreen() {
                         color: palette.foreground,
                         fontSize: 14,
                         fontWeight: "800",
+                        flex: 1,
                       }}
                     >
-                      Floor {metric.floor}: {metric.lockerName}
+                      {formatLockerHubLabel(metric.floor, metric.lockerName)}
                     </Text>
                     <View style={{ flexDirection: "row", alignItems: "center", gap: 4 }}>
                       <Thermometer size={13} color={palette.sky} />
@@ -1031,17 +1041,20 @@ function KpiTile({
         borderRadius: 14,
         borderWidth: 1,
         borderColor: palette.border,
-        padding: 12,
-        gap: 4,
+        paddingHorizontal: 10,
+        paddingVertical: 12,
+        justifyContent: "space-between",
+        gap: 6,
       }}
     >
       <Text
-        numberOfLines={1}
+        numberOfLines={2}
         style={{
           color: palette.mutedForeground,
           fontSize: 10,
+          lineHeight: 13,
           fontWeight: "800",
-          letterSpacing: 0.6,
+          letterSpacing: 0.4,
         }}
       >
         {title}

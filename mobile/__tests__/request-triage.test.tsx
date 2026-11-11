@@ -141,7 +141,7 @@ describe("RapidDropRequestScreen & PinPassCard integration", () => {
     await fireEvent.press(screen.getByText("Client-Pitch-3C"));
     await waitFor(() => {
       expect(
-        screen.getByText("Nearest Hub Routing: Floor 3 -> Floor 4 Floor 4 Boardroom Hub")
+        screen.getByText("Nearest Hub Routing: Floor 3 -> Floor 4 Boardroom Hub")
       ).toBeTruthy();
     });
 

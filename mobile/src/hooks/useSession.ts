@@ -32,9 +32,28 @@ export function useSession() {
       await setStoredSessionToken(result.token);
       return result;
     },
-    onSuccess: async () => {
+    onSuccess: async (result) => {
       await haptics.success();
-      await queryClient.invalidateQueries();
+      queryClient.setQueryData(
+        [...QUERY_KEYS.session, apiBaseUrlOverride ?? "auto"],
+        (
+          prev:
+            | Awaited<ReturnType<typeof kioskApi.getSessionCurrent>>
+            | undefined
+        ) =>
+          prev
+            ? { ...prev, session: result.session }
+            : { success: true, session: result.session, availableUsers: [] }
+      );
+      await Promise.all([
+        queryClient.invalidateQueries({ queryKey: QUERY_KEYS.session }),
+        queryClient.invalidateQueries({ queryKey: QUERY_KEYS.lockers }),
+        queryClient.invalidateQueries({ queryKey: QUERY_KEYS.rooms }),
+        queryClient.removeQueries({ queryKey: QUERY_KEYS.compliance }),
+        queryClient.removeQueries({ queryKey: QUERY_KEYS.finops }),
+        queryClient.removeQueries({ queryKey: QUERY_KEYS.analytics }),
+        queryClient.removeQueries({ queryKey: QUERY_KEYS.webhooks }),
+      ]);
     },
     onError: async () => {
       await haptics.error();

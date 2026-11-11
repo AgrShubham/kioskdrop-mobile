@@ -122,8 +122,9 @@ export default function QrScannerModalScreen() {
           <AlertTriangle size={20} color={palette.amber} />
           <Text
             style={{
+              flex: 1,
               color: palette.foreground,
-              fontSize: 17,
+              fontSize: 16,
               fontWeight: "800",
             }}
           >

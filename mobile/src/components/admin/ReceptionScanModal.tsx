@@ -11,6 +11,7 @@ import {
   View,
 } from "react-native";
 import { PackageCheck, ScanLine, X } from "lucide-react-native";
+import { formatLockerHubLabel } from "@/lib/format";
 import { haptics } from "@/lib/haptics";
 import { getPalette } from "@/lib/theme";
 import { useAppStore } from "@/store/app-store";
@@ -110,9 +111,10 @@ export function ReceptionScanModal({
               alignItems: "center",
               justifyContent: "space-between",
               marginBottom: 12,
+              gap: 8,
             }}
           >
-            <View>
+            <View style={{ flex: 1 }}>
               <StatusBadge label={purchaseOrder.poNumber} variant="amber" compact />
               <Text
                 style={{
@@ -310,7 +312,7 @@ export function ReceptionScanModal({
                         fontWeight: "700",
                       }}
                     >
-                      FL {lkr.floor}: {lkr.name}
+                      {formatLockerHubLabel(lkr.floor, lkr.name, "FL")}
                     </Text>
                   </Pressable>
                 );

@@ -93,15 +93,24 @@ export function FinOpsReplenishSheet({
               alignItems: "center",
               justifyContent: "space-between",
               marginBottom: 12,
+              gap: 8,
             }}
           >
-            <View style={{ flexDirection: "row", alignItems: "center", gap: 8 }}>
+            <View
+              style={{
+                flexDirection: "row",
+                alignItems: "center",
+                gap: 8,
+                flex: 1,
+              }}
+            >
               <ShoppingCart size={18} color={palette.primaryText} />
               <Text
                 style={{
                   color: palette.foreground,
                   fontSize: 17,
                   fontWeight: "800",
+                  flex: 1,
                 }}
               >
                 Authorize B2B Replenishment PO
