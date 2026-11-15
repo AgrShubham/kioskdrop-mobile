@@ -622,6 +622,7 @@ Because SSE streams and local SQLite require a persistent stateful Node server (
 - [`mobile/README.md`](mobile/README.md) — Mobile-specific architecture, URL precedence & EAS build quick reference
 - [`docs/DECISIONS.md`](docs/DECISIONS.md) — Architecture Decision Records (`D1`–`D6`)
 - [`docs/DEPLOYMENT_GUIDE.md`](docs/DEPLOYMENT_GUIDE.md) — Full VPS, Docker, Railway, Render, Vercel, Nginx & Certbot SSL instructions
+- [`docs/PUBLIC_DEPLOYMENT_AND_APK_GUIDE.md`](docs/PUBLIC_DEPLOYMENT_AND_APK_GUIDE.md) — Public multi-location hosting & standalone APK (v1.0.1) deployment guide
 - [`docs/SECURITY_AUDIT_EXCEPTIONS.md`](docs/SECURITY_AUDIT_EXCEPTIONS.md) — Security audit posture & exception register
 - [`docs/BUSINESS_DECK.md`](docs/BUSINESS_DECK.md) — Business & ROI overview
 

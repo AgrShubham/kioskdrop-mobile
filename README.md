@@ -4,7 +4,7 @@
 
 ### Automated Conference & Presentation Kit Smart-Locker, Zero-Trust IoT & FinOps Platform (Web + Native Mobile)
 
-[![Next.js 14](https://img.shields.io/badge/Next.js-14.2.24-000000?style=for-the-badge&logo=next.js)](https://nextjs.org/)
+[![Next.js 14](https://img.shields.io/badge/Next.js-14.2.35-000000?style=for-the-badge&logo=next.js)](https://nextjs.org/)
 [![Expo SDK 58](https://img.shields.io/badge/Expo-SDK_58-000020?style=for-the-badge&logo=expo)](https://expo.dev/)
 [![React Native](https://img.shields.io/badge/React_Native-0.88.1-61DAFB?style=for-the-badge&logo=react)](https://reactnative.dev/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-Strict-3178C6?style=for-the-badge&logo=typescript)](https://www.typescriptlang.org/)
@@ -514,6 +514,7 @@ Full design rationale is documented in [`docs/DECISIONS.md`](docs/DECISIONS.md):
 - **[docs/MOBILE_APP_USER_GUIDE.md](docs/MOBILE_APP_USER_GUIDE.md):** End-user walkthrough for Employee, IT Admin, and FinOps mobile personas.
 - **[docs/BUSINESS_DECK.md](docs/BUSINESS_DECK.md):** 12-page executive business presentation ([DOCX](docs/KioskDrop_Enterprise_12_Page_Business_Deck.docx) · [PDF](docs/KioskDrop_Enterprise_12_Page_Business_Deck.pdf)).
 - **[docs/DEPLOYMENT_GUIDE.md](docs/DEPLOYMENT_GUIDE.md):** Docker, Railway, Render, VPS, Nginx, and Vercel Serverless deployment guides.
+- **[docs/PUBLIC_DEPLOYMENT_AND_APK_GUIDE.md](docs/PUBLIC_DEPLOYMENT_AND_APK_GUIDE.md):** Public multi-location hosting & standalone APK (v1.0.1) deployment guide.
 - **[docs/DEMO_VIDEO_GUIDE_AND_SCRIPT.md](docs/DEMO_VIDEO_GUIDE_AND_SCRIPT.md):** Automated Playwright screen recording (`npm run record:video` / `npm run record:synced`) & AI voiceover (`npm run demo:voiceover`) guide.
 - **[docs/SECURITY_AUDIT_EXCEPTIONS.md](docs/SECURITY_AUDIT_EXCEPTIONS.md):** Documented simulator security scope & mitigations.
 
