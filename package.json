@@ -21,6 +21,8 @@
     "record:synced": "node scripts/record-synced-video.js"
   },
   "dependencies": {
+    "@emnapi/core": "^1.11.3",
+    "@emnapi/runtime": "^1.11.3",
     "@neon/config": "^1.10.0",
     "@neon/env": "^1.6.8",
     "@neon/realtime": "^0.1.2",
