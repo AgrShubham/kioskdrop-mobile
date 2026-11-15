@@ -1,31 +1,17 @@
 #!/bin/sh
-set -e
 
-echo "==> Running Prisma Database Migrations..."
-npx prisma migrate deploy
+# Ensure prisma directory exists
+mkdir -p /app/prisma 2>/dev/null || true
 
-# Seed if database does not contain SKUs yet
-echo "==> Ensuring initial seed data..."
-node -e "
-const { PrismaClient } = require('@prisma/client');
-const prisma = new PrismaClient();
-async function check() {
-  try {
-    const count = await prisma.hardwareSKU.count();
-    if (count === 0) {
-      console.log('Seeding initial data...');
-      require('child_process').execSync('npx tsx prisma/seed.ts', { stdio: 'inherit' });
-    } else {
-      console.log('Database already initialized with ' + count + ' SKUs.');
-    }
-  } catch (err) {
-    console.log('Seed check skipped:', err.message);
-  } finally {
-    await prisma.\$disconnect();
-  }
-}
-check();
-" || true
+# If dev.db is missing (e.g. fresh empty persistent volume mounted by Railway), restore from pre-seeded template
+if [ ! -f /app/prisma/dev.db ] && [ -f /app/prisma/dev-seed.db ]; then
+  echo "==> Initializing /app/prisma/dev.db from pre-seeded template..."
+  cp /app/prisma/dev-seed.db /app/prisma/dev.db 2>/dev/null || true
+fi
 
-echo "==> Starting KioskDrop Enterprise Server on port 3000..."
+# Ensure read-write permissions for the database and WAL lock files
+chmod 666 /app/prisma/dev.db 2>/dev/null || true
+chmod 777 /app/prisma 2>/dev/null || true
+
+echo "==> Starting KioskDrop Enterprise Server on port ${PORT:-3000}..."
 exec "$@"
