@@ -7,6 +7,12 @@ export interface ApiPreset {
 
 export const API_URL_PRESETS: ApiPreset[] = [
   {
+    id: "railway-cloud",
+    label: "Railway Cloud (Live)",
+    subtitle: "KioskDrop Public Cloud",
+    url: "https://kioskdrop-mobile-production.up.railway.app",
+  },
+  {
     id: "android-emulator",
     label: "Android Emulator",
     subtitle: "Host loopback via AVD bridge",

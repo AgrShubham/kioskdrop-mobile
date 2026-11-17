@@ -10,14 +10,14 @@
 [![TypeScript](https://img.shields.io/badge/TypeScript-Strict-3178C6?style=for-the-badge&logo=typescript)](https://www.typescriptlang.org/)
 [![Prisma 6](https://img.shields.io/badge/Prisma-6.4.1_WAL-2D3748?style=for-the-badge&logo=prisma)](https://www.prisma.io/)
 [![Tests](https://img.shields.io/badge/Tests-63%2F63_Passing-16A34A?style=for-the-badge&logo=vitest)](https://vitest.dev/)
-[![Android APK](https://img.shields.io/badge/Release-v1.0.0_APK-3DDC84?style=for-the-badge&logo=android)](https://github.com/AgrShubham/kioskdrop-mobile/releases/tag/v1.0.0)
+[![Android APK](https://img.shields.io/badge/Release-v1.0.1_APK-3DDC84?style=for-the-badge&logo=android)](https://github.com/AgrShubham/kioskdrop-mobile/releases/tag/v1.0.1)
 [![License](https://img.shields.io/badge/License-MIT-7C3AED?style=for-the-badge)](mobile/LICENSE)
 
 <br/>
 
 **Eliminating "last-meter" corporate boardroom Audio/Visual (AV) failures through sub-60-second autonomous hardware triage, distributed IoT smart lockers, Zero-Trust USB whitelisting, real-time SSE telemetry, and statutory FinOps micro-logistics — across Next.js Web and React Native (iOS, Android & Expo Web).**
 
-[Download Android APK (v1.0.0)](https://github.com/AgrShubham/kioskdrop-mobile/releases/tag/v1.0.0) •
+[Download Android APK (v1.0.1)](https://github.com/AgrShubham/kioskdrop-mobile/releases/tag/v1.0.1) •
 [System Architecture](#system-architecture) •
 [Mobile App](#mobile-companion-app-expo-sdk-58) •
 [Quick Start](#quick-start) •
@@ -41,7 +41,7 @@
 - [System Architecture](#system-architecture)
 - [Web & Mobile Operational Surfaces](#web--mobile-operational-surfaces)
 - [Mobile Companion App (Expo SDK 58)](#mobile-companion-app-expo-sdk-58)
-- [Standalone Android Release APK (v1.0.0)](#standalone-android-release-apk-v100)
+- [Standalone Android Release APK (v1.0.1)](#standalone-android-release-apk-v101)
 - [Engineering & Mathematical Rigor](#engineering--mathematical-rigor)
   - [1. Statutory Customs Duty Engine (Integer Paise)](#1-statutory-customs-duty-engine-integer-paise)
   - [2. Concurrency & Race-Condition Resistance](#2-concurrency--race-condition-resistance)
@@ -156,17 +156,18 @@ Located under [`mobile/`](mobile/README.md), the React Native companion app deli
 
 ---
 
-## Standalone Android Release APK (v1.0.0)
+## Standalone Android Release APK (v1.0.1)
 
-A verified, standalone release APK is published on GitHub Releases — no Expo Go client required:
+A verified, standalone release APK is published on GitHub Releases — no Expo Go client required, pre-configured out-of-the-box for the live Railway cloud backend:
 
-- **GitHub Release:** [KioskDrop Enterprise v1.0.0 (Android APK)](https://github.com/AgrShubham/kioskdrop-mobile/releases/tag/v1.0.0)
-- **Direct Download:** [kioskdrop-enterprise.apk](https://github.com/AgrShubham/kioskdrop-mobile/releases/download/v1.0.0/kioskdrop-enterprise.apk) (`72,996,393` bytes / `69.6 MB`)
-- **Application ID / Version:** `com.kioskdrop.enterprise` (`versionName 1.0.0`, `versionCode 1`, `minSdkVersion 24`, `targetSdkVersion 36`)
+- **GitHub Release:** [KioskDrop Enterprise v1.0.1 (Android APK)](https://github.com/AgrShubham/kioskdrop-mobile/releases/tag/v1.0.1)
+- **Direct Download:** [kioskdrop-enterprise.apk](https://github.com/AgrShubham/kioskdrop-mobile/releases/download/v1.0.1/kioskdrop-enterprise.apk) (`72,996,421` bytes / `69.6 MB`)
+- **Application ID / Version:** `com.kioskdrop.enterprise` (`versionName 1.0.1`, `versionCode 2`, `minSdkVersion 24`, `targetSdkVersion 36`)
+- **Pre-Paired Cloud Backend:** `https://kioskdrop-mobile-production.up.railway.app` (connects immediately over 5G/4G or any external Wi-Fi with zero setup)
 - **Supported ABIs:** `arm64-v8a` (modern physical Android devices) + `x86_64` (Windows/macOS Android Emulators)
-- **Cleartext Local Network Pairing:** Built with [`mobile/plugins/withCleartextTraffic.js`](mobile/plugins/withCleartextTraffic.js) (`android:usesCleartextTraffic="true"`) so installed APKs can pair seamlessly with both local `http://10.0.2.2:3000` / LAN `http://<PC-IP>:3000` backends and HTTPS deployments.
-- **SHA-256 Checksum:** `ac5e2c7bc2893009346ddd6d39f68ac458c22a9c2fd249bc75cd07b4b1a4736b`
-- **Signing Note:** V2-signed with Android Debug keystore for direct sideloading and `adb install -r` evaluation (configure a production upload keystore or EAS Build credentials prior to Play Store distribution).
+- **Cleartext & HTTPS Network Pairing:** Built with [`mobile/plugins/withCleartextTraffic.js`](mobile/plugins/withCleartextTraffic.js) (`android:usesCleartextTraffic="true"`) supporting live Railway HTTPS as well as local `http://10.0.2.2:3000` / LAN backends.
+- **SHA-256 Checksum:** `86d168a85228e23ad536b23e4541dd2abf50f040f8acef746fb5d8eeca7d7e23`
+- **Signing Note:** V2-signed with Android Debug keystore for direct sideloading and `adb install -r` evaluation anywhere worldwide.
 
 ---
 
