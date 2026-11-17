@@ -237,57 +237,20 @@ export const API_URL_PRESETS: ApiPreset[] = [
   {
     id: "production-cloud",
     label: "Production Cloud",
-    subtitle: "KioskDrop Live Server",
-    url: "https://YOUR_PUBLIC_URL",
+    subtitle: "KioskDrop Public Cloud",
+    url: "https://kioskdrop-mobile-production.up.railway.app",
   },
   // ...
 ];
 ```
 In `mobile/.env`:
 ```env
-EXPO_PUBLIC_API_URL=https://YOUR_PUBLIC_URL
+EXPO_PUBLIC_API_URL=https://kioskdrop-mobile-production.up.railway.app
 ```
 
-### 2. Build the Standalone APK
-- **Locally via Gradle:**
-  ```powershell
-  cd mobile
-  $env:CI = "1"
-  npx expo prebuild --platform android --clean
-  cd android
-  .\gradlew.bat assembleRelease "-PreactNativeArchitectures=arm64-v8a,x86_64" --max-workers=2 --no-daemon
-  ```
-  *(Output: `mobile/android/app/build/outputs/apk/release/app-release.apk`)*
-
-- **Or via EAS Cloud:**
-  ```powershell
-  cd mobile
-  npx eas-cli build --platform android --profile preview
-  ```
-
-### 3. Verification & GitHub Release
-- Verify APK signatures and capabilities:
-  ```powershell
-  apksigner verify --verbose app-release.apk
-  aapt2 dump badging app-release.apk
-  ```
-- Publish new GitHub Release `v1.0.1`:
-  ```powershell
-  gh release create v1.0.1 ./app-release.apk --title "v1.0.1 - Public Cloud Paired Standalone APK" --notes "Pre-configured for live HTTPS backend pairing."
-  ```
-
----
-
-## Summary Checklist: What to Provide Next
-
-To proceed with building `v1.0.1`:
-
-1. [ ] **Deploy the backend** using **Railway (Option A)**, **Render (Option B)**, **VPS (Option C)**, or **Cloudflare Tunnel (Option D)**.
-2. [ ] **Verify the URL:** Open `https://YOUR_URL/api/rooms` in a browser and confirm it returns JSON.
-3. [ ] **Share the URL:** Provide the `https://...` URL in chat.
-4. [ ] **Confirm Auth Preference:** Confirm whether you want to:
-   - **Keep 1-Click Role Switcher** (Ready immediately for multi-user demo evaluation), OR
-   - **Add Real Login/Auth** (Requires adding login UI & auth tables first).
-
-Once you share the URL and choice, the agent will update the mobile app configuration, build the `v1.0.1` APK, and publish it directly to GitHub Releases.
+### 2. Standalone Release APK Built & Published (v1.0.1)
+- **Status:** Built and verified locally using Android SDK build-tools (minSdk 24, targetSdk 36, arm64-v8a + x86_64, V2 signature).
+- **Direct Download:** [kioskdrop-enterprise.apk (v1.0.1)](https://github.com/AgrShubham/kioskdrop-mobile/releases/download/v1.0.1/kioskdrop-enterprise.apk)
+- **SHA-256:** `86d168a85228e23ad536b23e4541dd2abf50f040f8acef746fb5d8eeca7d7e23`
+- **Pre-Configured Target:** Points to `https://kioskdrop-mobile-production.up.railway.app` by default. Any user installing the APK connects immediately with zero IP configuration.
 

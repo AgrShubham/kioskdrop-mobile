@@ -2,7 +2,7 @@
   "expo": {
     "name": "KioskDrop Enterprise",
     "slug": "kioskdrop-enterprise",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "scheme": "kioskdrop",
@@ -21,6 +21,7 @@
     },
     "android": {
       "package": "com.kioskdrop.enterprise",
+      "versionCode": 2,
       "adaptiveIcon": {
         "backgroundColor": "#0B0F17",
         "foregroundImage": "./assets/android-icon-foreground.png",
