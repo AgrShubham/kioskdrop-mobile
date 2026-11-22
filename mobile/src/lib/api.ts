@@ -2,6 +2,8 @@ import { z } from "zod";
 import {
   analyticsResponseSchema,
   apiErrorPayloadSchema,
+  authLoginResponseSchema,
+  authLogoutResponseSchema,
   complianceGetResponseSchema,
   complianceToggleResponseSchema,
   diagnoseReserveResponseSchema,
@@ -213,6 +215,27 @@ export async function pingServerLatency(baseUrl?: string): Promise<PingResult> {
 }
 
 export const kioskApi = {
+  login: (payload: {
+    email?: string;
+    password?: string;
+    rfidBadgeId?: string;
+    userId?: string;
+    role?: UserRole;
+  }) =>
+    apiRequest({
+      path: "/api/auth/login",
+      method: "POST",
+      body: payload,
+      schema: authLoginResponseSchema,
+    }),
+
+  logout: () =>
+    apiRequest({
+      path: "/api/auth/logout",
+      method: "POST",
+      schema: authLogoutResponseSchema,
+    }),
+
   getSessionCurrent: () =>
     apiRequest({
       path: "/api/session/current",

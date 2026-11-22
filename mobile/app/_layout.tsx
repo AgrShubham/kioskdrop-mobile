@@ -12,6 +12,9 @@ import { useTelemetrySSE } from "@/hooks/useTelemetrySSE";
 import { getPalette } from "@/lib/theme";
 import { useAppStore } from "@/store/app-store";
 import { AppSplashScreen } from "@/components/ui/AppSplashScreen";
+import { LoginScreen } from "@/components/auth/LoginScreen";
+import { PersonaServerSheet } from "@/components/layout/PersonaServerSheet";
+import { TelemetryDrawerModal } from "@/components/layout/TelemetryDrawerModal";
 
 function AppShellContent() {
   const [splashFinished, setSplashFinished] = useState(false);
@@ -40,22 +43,30 @@ function AppShellContent() {
       {Platform.OS === "android" ? (
         <NavigationBar style={themeMode === "dark" ? "light" : "dark"} />
       ) : null}
-      <Stack
-        screenOptions={{
-          headerShown: false,
-          contentStyle: { backgroundColor: palette.background },
-        }}
-      >
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        <Stack.Screen
-          name="scanner"
-          options={{
-            presentation: "modal",
+      {!session ? (
+        <LoginScreen />
+      ) : (
+        <Stack
+          screenOptions={{
             headerShown: false,
+            contentStyle: { backgroundColor: palette.background },
           }}
-        />
-        <Stack.Screen name="+not-found" options={{ headerShown: false }} />
-      </Stack>
+        >
+          <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+          <Stack.Screen
+            name="scanner"
+            options={{
+              presentation: "modal",
+              headerShown: false,
+            }}
+          />
+          <Stack.Screen name="+not-found" options={{ headerShown: false }} />
+        </Stack>
+      )}
+
+      <PersonaServerSheet />
+      <TelemetryDrawerModal />
+
       {!splashFinished ? (
         <AppSplashScreen onFinish={() => setSplashFinished(true)} />
       ) : null}
