@@ -40,7 +40,7 @@ Before modifying a single file, establish a clean baseline on the current worksp
 | **-1.3** | Ensure Prisma client matches active schema & DB is seeded | On `experimental` (SQLite): `$env:DATABASE_URL="file:./dev.db"; npx prisma generate; npx prisma db push` (if `prisma/dev.db` missing, run `npm run db:seed`). | Prisma Client generated without error. | [ ] |
 | **-1.4** | Run baseline root quality checks | `$env:DATABASE_URL="file:./dev.db"; npm run typecheck; npm run lint; npm run test` | `0` TS errors, `0` ESLint errors, **39/39** Vitest tests pass. | [ ] |
 
----
+--- 
 
 ## 3. Phase 0: Backend Mobile-Compatibility & Monorepo Isolation
 

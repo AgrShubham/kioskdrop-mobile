@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { ShieldCheck, Cpu, Smartphone, BarChart3, ArrowRight } from "lucide-react";
+import { KioskDropLogo } from "@/components/KioskDropLogo";
 
 export default function HomePage() {
   return (
@@ -12,7 +13,7 @@ export default function HomePage() {
 
       <div className="relative z-10 max-w-5xl text-center space-y-6">
         <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-primary/30 bg-primary/10 text-primary text-xs font-semibold tracking-wide uppercase shadow-sm dark:shadow-[0_0_15px_rgba(59,130,246,0.2)]">
-          <ShieldCheck className="w-4 h-4" /> Zero-Trust AV Micro-Logistics Platform
+          <KioskDropLogo variant="icon" className="w-4 h-4" /> Zero-Trust AV Micro-Logistics Platform
         </div>
         <h1 className="text-4xl sm:text-6xl font-extrabold tracking-tight">
           KioskDrop <span className="text-primary bg-gradient-to-r from-blue-500 via-sky-400 to-indigo-500 bg-clip-text text-transparent">Enterprise</span>

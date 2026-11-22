@@ -13,6 +13,7 @@ import {
   ChevronDown,
 } from "lucide-react";
 import { ThemeToggle } from "./ThemeToggle";
+import { KioskDropLogo } from "./KioskDropLogo";
 
 interface UserPersona {
   userId: string;
@@ -82,11 +83,11 @@ export function Navbar() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 flex h-16 items-center justify-between gap-4">
         {/* Brand */}
         <Link href="/" className="flex items-center gap-2.5 font-bold text-lg tracking-tight group">
-          <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-tr from-blue-600 to-indigo-500 text-white shadow-md shadow-blue-500/25 ring-1 ring-white/20 group-hover:scale-105 transition-transform">
-            <ShieldCheck className="h-5 w-5" />
+          <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-slate-900 border border-slate-700/60 dark:bg-slate-950 dark:border-slate-800 shadow-md shadow-blue-500/10 group-hover:scale-105 transition-transform overflow-hidden p-1.5">
+            <KioskDropLogo variant="icon" className="h-full w-full" />
           </div>
-          <span className="hidden sm:inline">
-            KioskDrop <span className="text-primary font-normal text-sm border border-primary/30 bg-primary/10 px-1.5 py-0.5 rounded-md ml-1">Enterprise</span>
+          <span className="hidden sm:inline font-extrabold text-foreground">
+            Kiosk<span className="text-primary font-bold">Drop</span> <span className="text-primary font-semibold text-xs border border-primary/30 bg-primary/10 px-1.5 py-0.5 rounded-md ml-1">Enterprise</span>
           </span>
         </Link>
 

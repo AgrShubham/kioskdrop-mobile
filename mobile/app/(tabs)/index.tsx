@@ -24,6 +24,7 @@ import {
   Smartphone,
 } from "lucide-react-native";
 import { ChamferCard } from "@/components/ui/ChamferCard";
+import { StatCardSkeleton, LockerBaySkeleton } from "@/components/ui/Skeleton";
 import { QUERY_KEYS, useSession } from "@/hooks/useSession";
 import { kioskApi } from "@/lib/api";
 import { formatLockerHubLabel, formatRoleLabel } from "@/lib/format";
@@ -309,18 +310,13 @@ export default function HomeGatewayScreen() {
         </View>
 
         {lockersQuery.isLoading ? (
-          <View
-            style={{
-              flexDirection: "row",
-              alignItems: "center",
-              gap: 8,
-              paddingVertical: 10,
-            }}
-          >
-            <ActivityIndicator size="small" color={palette.primaryText} />
-            <Text style={{ color: palette.mutedForeground, fontSize: 12 }}>
-              Syncing live hub telemetry...
-            </Text>
+          <View style={{ gap: 12, paddingVertical: 6 }}>
+            <View style={{ flexDirection: "row", gap: 12 }}>
+              <StatCardSkeleton themeMode={themeMode} />
+              <StatCardSkeleton themeMode={themeMode} />
+            </View>
+            <LockerBaySkeleton themeMode={themeMode} />
+            <LockerBaySkeleton themeMode={themeMode} />
           </View>
         ) : lockersQuery.isError ? (
           <View
