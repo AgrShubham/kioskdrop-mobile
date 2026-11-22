@@ -142,7 +142,7 @@ describe("Admin RBAC, Bearer persistence & Landed Cost calculator", () => {
       .mockResolvedValue({
         success: true,
         message: "Switched active persona to Priya Patel (IT_ADMIN)",
-        session: IT_ADMIN_SESSION.session,
+        session: IT_ADMIN_SESSION.session!,
         token: "signed_it_admin_jwt_token_test",
       });
 

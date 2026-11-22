@@ -31,8 +31,23 @@ export const directoryUserSchema = z.object({
 
 export const sessionCurrentResponseSchema = z.object({
   success: z.literal(true),
-  session: userSessionSchema,
+  authenticated: z.boolean().optional(),
+  session: userSessionSchema.nullable(),
   availableUsers: z.array(directoryUserSchema),
+});
+
+export const authLoginResponseSchema = z.object({
+  success: z.literal(true),
+  message: z.string(),
+  session: userSessionSchema,
+  token: z.string().min(1),
+  requestId: z.string().optional(),
+});
+
+export const authLogoutResponseSchema = z.object({
+  success: z.literal(true),
+  message: z.string(),
+  requestId: z.string().optional(),
 });
 
 export const switchRoleResponseSchema = z.object({

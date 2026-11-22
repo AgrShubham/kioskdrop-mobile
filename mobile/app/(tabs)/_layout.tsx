@@ -4,8 +4,7 @@ import { Tabs } from "expo-router";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { BarChart3, Cpu, ShieldCheck, Smartphone } from "lucide-react-native";
 import { GlobalHeader } from "@/components/layout/GlobalHeader";
-import { PersonaServerSheet } from "@/components/layout/PersonaServerSheet";
-import { TelemetryDrawerModal } from "@/components/layout/TelemetryDrawerModal";
+import { useSession } from "@/hooks/useSession";
 import { getPalette } from "@/lib/theme";
 import { useAppStore } from "@/store/app-store";
 
@@ -13,6 +12,8 @@ export default function TabsLayout() {
   const themeMode = useAppStore((s) => s.themeMode);
   const palette = getPalette(themeMode);
   const insets = useSafeAreaInsets();
+  const { session } = useSession();
+  const isEmployee = session?.role === "EMPLOYEE";
 
   return (
     <View style={{ flex: 1, backgroundColor: palette.background }}>
@@ -120,8 +121,12 @@ export default function TabsLayout() {
         <Tabs.Screen
           name="admin"
           options={{
-            title: "Command",
-            tabBarAccessibilityLabel: "Enterprise Admin Command tab",
+            title: session?.role === "FINOPS_AUDITOR" ? "Audit" : "Command",
+            href: isEmployee ? null : undefined,
+            tabBarAccessibilityLabel:
+              session?.role === "FINOPS_AUDITOR"
+                ? "Enterprise FinOps Audit tab"
+                : "Enterprise Admin Command tab",
             tabBarIcon: ({ color, focused }) => (
               <View
                 style={{
@@ -141,9 +146,6 @@ export default function TabsLayout() {
           }}
         />
       </Tabs>
-
-      <PersonaServerSheet />
-      <TelemetryDrawerModal />
     </View>
   );
 }

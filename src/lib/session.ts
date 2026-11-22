@@ -78,10 +78,10 @@ export function verifySession(token: string): UserSession | null {
 }
 
 /**
- * Retrieves the active session from Bearer Authorization header (mobile/API) or server cookies (web),
- * defaulting to Aarav Sharma (EMPLOYEE).
+ * Retrieves the verified session from Bearer Authorization header or cookies,
+ * or returns null if no valid authenticated session is present.
  */
-export async function getSession(): Promise<UserSession> {
+export async function getSessionOrNull(): Promise<UserSession | null> {
   // 1. Mobile / API Bearer Token Precedence
   try {
     const headerStore = headers();
@@ -95,10 +95,10 @@ export async function getSession(): Promise<UserSession> {
       }
     }
   } catch {
-    // Outside request context (e.g., Vitest direct service calls)
+    // Outside request context
   }
 
-  // 2. Web Cookie Fallback (100% preserved)
+  // 2. Web Cookie Fallback
   try {
     const cookieStore = cookies();
     const token = cookieStore.get(SESSION_COOKIE_NAME)?.value;
@@ -107,15 +107,26 @@ export async function getSession(): Promise<UserSession> {
       if (decoded) return decoded;
     }
   } catch {
-    // In Route Handlers or test environments where cookies() might not be populated
+    // In Route Handlers or test environments
   }
-  return DEFAULT_EMPLOYEE_SESSION;
+  return null;
+}
+
+/**
+ * Retrieves the active session, falling back to default employee for backward-compatibility
+ * with test suites and standalone offline services.
+ */
+export async function getSession(): Promise<UserSession> {
+  const session = await getSessionOrNull();
+  return session || DEFAULT_EMPLOYEE_SESSION;
 }
 
 /**
  * Enforces role-based access control (RBAC) on the server.
  */
-export async function requireRole(allowedRoles: ("EMPLOYEE" | "IT_ADMIN" | "FINOPS_AUDITOR")[]): Promise<UserSession> {
+export async function requireRole(
+  allowedRoles: ("EMPLOYEE" | "IT_ADMIN" | "FINOPS_AUDITOR")[]
+): Promise<UserSession> {
   const session = await getSession();
   if (!allowedRoles.includes(session.role)) {
     throw new ForbiddenError(

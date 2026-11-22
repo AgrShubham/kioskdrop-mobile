@@ -12,6 +12,7 @@ import {
 } from "react-native";
 import {
   CheckCircle2,
+  LogOut,
   RotateCcw,
   Server,
   Shield,
@@ -72,7 +73,14 @@ export function PersonaServerSheet() {
   const setApiBaseUrlOverride = useAppStore((s) => s.setApiBaseUrlOverride);
 
   const palette = getPalette(themeMode);
-  const { session, availableUsers, switchRole, isSwitchingRole } = useSession();
+  const {
+    session,
+    availableUsers,
+    switchRole,
+    isSwitchingRole,
+    logout,
+    isLoggingOut,
+  } = useSession();
 
   const [urlDraft, setUrlDraft] = useState<string>(getActiveApiBaseUrl());
   const [urlError, setUrlError] = useState<string | null>(null);
@@ -398,6 +406,43 @@ export function PersonaServerSheet() {
                   {roleError}
                 </Text>
               </View>
+            ) : null}
+
+            {/* Sign Out Button */}
+            {session ? (
+              <Pressable
+                accessibilityRole="button"
+                accessibilityLabel="Sign out of current enterprise session"
+                disabled={isLoggingOut}
+                onPress={async () => {
+                  void haptics.selection();
+                  await logout();
+                  setOpen(false);
+                }}
+                style={{
+                  minHeight: 46,
+                  borderRadius: 12,
+                  backgroundColor: palette.destructiveSoft,
+                  borderWidth: 1,
+                  borderColor: palette.destructive,
+                  flexDirection: "row",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  gap: 8,
+                  marginBottom: 16,
+                }}
+              >
+                <LogOut size={16} color={palette.destructive} />
+                <Text
+                  style={{
+                    color: palette.destructive,
+                    fontSize: 13,
+                    fontWeight: "800",
+                  }}
+                >
+                  Sign Out ({session.name.split(" ")[0]})
+                </Text>
+              </Pressable>
             ) : null}
 
             {/* Section 2: Server URL Resolver */}
