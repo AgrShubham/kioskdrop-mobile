@@ -11,8 +11,10 @@ import { useSession } from "@/hooks/useSession";
 import { useTelemetrySSE } from "@/hooks/useTelemetrySSE";
 import { getPalette } from "@/lib/theme";
 import { useAppStore } from "@/store/app-store";
+import { AppSplashScreen } from "@/components/ui/AppSplashScreen";
 
 function AppShellContent() {
+  const [splashFinished, setSplashFinished] = useState(false);
   const themeMode = useAppStore((s) => s.themeMode);
   const palette = getPalette(themeMode);
   const { session } = useSession();
@@ -54,6 +56,9 @@ function AppShellContent() {
         />
         <Stack.Screen name="+not-found" options={{ headerShown: false }} />
       </Stack>
+      {!splashFinished ? (
+        <AppSplashScreen onFinish={() => setSplashFinished(true)} />
+      ) : null}
     </View>
   );
 }

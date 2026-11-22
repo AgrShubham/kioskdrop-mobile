@@ -1,6 +1,6 @@
-# 🌐 Public Multi-Location Deployment & Standalone APK (v1.0.1) Guide
+# 🌐 Public Multi-Location Deployment & Standalone APK (v1.0.2) Guide
 
-> **Goal:** Deploy the KioskDrop Enterprise backend to a secure public HTTPS endpoint so distributed users can run the app anywhere over 5G/4G or external Wi-Fi, and bake that public URL into a zero-configuration Android APK (`v1.0.1`).
+> **Goal:** Deploy the KioskDrop Enterprise backend to a secure public HTTPS endpoint so distributed users can run the app anywhere over 5G/4G or external Wi-Fi, and bake that public URL into a zero-configuration Android APK (`v1.0.2`).
 
 ---
 
@@ -14,7 +14,7 @@
 3. [Step 2: Choose Your Mobile Access & Auth Model](#step-2-choose-your-mobile-access--auth-model)
    - [Model A: 1-Click Persona Switcher (Ideal for Demos & Testing)](#model-a-1-click-persona-switcher-ideal-for-demos--testing)
    - [Model B: Production Authentication (Email/Password & RBAC)](#model-b-production-authentication-emailpassword--rbac)
-4. [Step 3: Baking the Live URL into Standalone APK (v1.0.1)](#step-3-baking-the-live-url-into-standalone-apk-v101)
+4. [Step 3: Baking the Live URL into Standalone APK (v1.0.2)](#step-3-baking-the-live-url-into-standalone-apk-v102)
 5. [Summary Checklist: What to Provide Next](#summary-checklist-what-to-provide-next)
 
 ---
@@ -201,7 +201,7 @@ If you want to immediately test multi-location access from real phones worldwide
 
 ## Step 2: Choose Your Mobile Access & Auth Model
 
-Before generating the `v1.0.1` APK, decide which access model fits your current objective:
+Before generating the `v1.0.2` APK, decide which access model fits your current objective:
 
 ### Model A: 1-Click Persona Switcher (Ideal for Demos & Testing)
 * **How it works:**
@@ -226,7 +226,7 @@ Before generating the `v1.0.1` APK, decide which access model fits your current 
 
 ---
 
-## Step 3: Baking the Live URL into Standalone APK (v1.0.1)
+## Step 3: Baking the Live URL into Standalone APK (v1.0.2)
 
 Once you provide the public HTTPS URL (e.g., `https://kioskdrop-mobile-production.up.railway.app`), the following steps will be executed to build and publish the new APK:
 
@@ -248,9 +248,9 @@ In `mobile/.env`:
 EXPO_PUBLIC_API_URL=https://kioskdrop-mobile-production.up.railway.app
 ```
 
-### 2. Standalone Release APK Built & Published (v1.0.1)
+### 2. Standalone Release APK Built & Published (v1.0.2)
 - **Status:** Built and verified locally using Android SDK build-tools (minSdk 24, targetSdk 36, arm64-v8a + x86_64, V2 signature).
-- **Direct Download:** [kioskdrop-enterprise.apk (v1.0.1)](https://github.com/AgrShubham/kioskdrop-mobile/releases/download/v1.0.1/kioskdrop-enterprise.apk)
-- **SHA-256:** `86d168a85228e23ad536b23e4541dd2abf50f040f8acef746fb5d8eeca7d7e23`
+- **Direct Download:** [kioskdrop-enterprise.apk (v1.0.2)](https://github.com/AgrShubham/kioskdrop-mobile/releases/download/v1.0.2/kioskdrop-enterprise.apk)
+- **SHA-256:** `836df73ac7d31c550627931e70ee2760aef306e8d07155606fda5ead374b3c6a`
 - **Pre-Configured Target:** Points to `https://kioskdrop-mobile-production.up.railway.app` by default. Any user installing the APK connects immediately with zero IP configuration.
 

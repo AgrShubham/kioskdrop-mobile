@@ -5,9 +5,9 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 import {
   ChevronDown,
   Moon,
-  ShieldCheck,
   Sun,
 } from "lucide-react-native";
+import { KioskDropLogo } from "@/components/ui/KioskDropLogo";
 import { formatRoleLabel } from "@/lib/format";
 import { haptics } from "@/lib/haptics";
 import { getPalette } from "@/lib/theme";
@@ -73,20 +73,25 @@ export function GlobalHeader() {
           minWidth: 0,
         }}
       >
-        <LinearGradient
-          colors={palette.heroGradient}
-          start={{ x: 0, y: 0 }}
-          end={{ x: 1, y: 1 }}
+        <View
           style={{
             width: 34,
             height: 34,
-            borderRadius: 11,
+            borderRadius: 10,
             alignItems: "center",
             justifyContent: "center",
+            backgroundColor: themeMode === "dark" ? "#0F1521" : "#FFFFFF",
+            borderWidth: 1,
+            borderColor: palette.borderStrong,
+            shadowColor: "#000",
+            shadowOffset: { width: 0, height: 1 },
+            shadowOpacity: 0.1,
+            shadowRadius: 2,
+            elevation: 2,
           }}
         >
-          <ShieldCheck size={18} color="#FFFFFF" strokeWidth={2.3} />
-        </LinearGradient>
+          <KioskDropLogo size={19} variant="icon" />
+        </View>
         <View style={{ flex: 1, minWidth: 0 }}>
           <Text
             numberOfLines={1}

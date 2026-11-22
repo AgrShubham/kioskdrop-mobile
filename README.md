@@ -10,14 +10,14 @@
 [![TypeScript](https://img.shields.io/badge/TypeScript-Strict-3178C6?style=for-the-badge&logo=typescript)](https://www.typescriptlang.org/)
 [![Prisma 6](https://img.shields.io/badge/Prisma-6.4.1_WAL-2D3748?style=for-the-badge&logo=prisma)](https://www.prisma.io/)
 [![Tests](https://img.shields.io/badge/Tests-63%2F63_Passing-16A34A?style=for-the-badge&logo=vitest)](https://vitest.dev/)
-[![Android APK](https://img.shields.io/badge/Release-v1.0.1_APK-3DDC84?style=for-the-badge&logo=android)](https://github.com/AgrShubham/kioskdrop-mobile/releases/tag/v1.0.1)
+[![Android APK](https://img.shields.io/badge/Release-v1.0.2_APK-3DDC84?style=for-the-badge&logo=android)](https://github.com/AgrShubham/kioskdrop-mobile/releases/tag/v1.0.2)
 [![License](https://img.shields.io/badge/License-MIT-7C3AED?style=for-the-badge)](mobile/LICENSE)
 
 <br/>
 
 **Eliminating "last-meter" corporate boardroom Audio/Visual (AV) failures through sub-60-second autonomous hardware triage, distributed IoT smart lockers, Zero-Trust USB whitelisting, real-time SSE telemetry, and statutory FinOps micro-logistics — across Next.js Web and React Native (iOS, Android & Expo Web).**
 
-[Download Android APK (v1.0.1)](https://github.com/AgrShubham/kioskdrop-mobile/releases/tag/v1.0.1) •
+[Download Android APK (v1.0.2)](https://github.com/AgrShubham/kioskdrop-mobile/releases/tag/v1.0.2) •
 [System Architecture](#system-architecture) •
 [Mobile App](#mobile-companion-app-expo-sdk-58) •
 [Quick Start](#quick-start) •
@@ -41,7 +41,7 @@
 - [System Architecture](#system-architecture)
 - [Web & Mobile Operational Surfaces](#web--mobile-operational-surfaces)
 - [Mobile Companion App (Expo SDK 58)](#mobile-companion-app-expo-sdk-58)
-- [Standalone Android Release APK (v1.0.1)](#standalone-android-release-apk-v101)
+- [Standalone Android Release APK (v1.0.2)](#standalone-android-release-apk-v102)
 - [Engineering & Mathematical Rigor](#engineering--mathematical-rigor)
   - [1. Statutory Customs Duty Engine (Integer Paise)](#1-statutory-customs-duty-engine-integer-paise)
   - [2. Concurrency & Race-Condition Resistance](#2-concurrency--race-condition-resistance)
@@ -156,17 +156,17 @@ Located under [`mobile/`](mobile/README.md), the React Native companion app deli
 
 ---
 
-## Standalone Android Release APK (v1.0.1)
+## Standalone Android Release APK (v1.0.2)
 
 A verified, standalone release APK is published on GitHub Releases — no Expo Go client required, pre-configured out-of-the-box for the live Railway cloud backend:
 
-- **GitHub Release:** [KioskDrop Enterprise v1.0.1 (Android APK)](https://github.com/AgrShubham/kioskdrop-mobile/releases/tag/v1.0.1)
-- **Direct Download:** [kioskdrop-enterprise.apk](https://github.com/AgrShubham/kioskdrop-mobile/releases/download/v1.0.1/kioskdrop-enterprise.apk) (`72,996,421` bytes / `69.6 MB`)
-- **Application ID / Version:** `com.kioskdrop.enterprise` (`versionName 1.0.1`, `versionCode 2`, `minSdkVersion 24`, `targetSdkVersion 36`)
+- **GitHub Release:** [KioskDrop Enterprise v1.0.2 (KD Identity & Kinetic Opening Animation)](https://github.com/AgrShubham/kioskdrop-mobile/releases/tag/v1.0.2)
+- **Direct Download:** [kioskdrop-enterprise.apk](https://github.com/AgrShubham/kioskdrop-mobile/releases/download/v1.0.2/kioskdrop-enterprise.apk) (`72,764,193` bytes / `69.39 MB`)
+- **Application ID / Version:** `com.kioskdrop.enterprise` (`versionName 1.0.2`, `versionCode 3`, `minSdkVersion 24`, `targetSdkVersion 36`)
 - **Pre-Paired Cloud Backend:** `https://kioskdrop-mobile-production.up.railway.app` (connects immediately over 5G/4G or any external Wi-Fi with zero setup)
 - **Supported ABIs:** `arm64-v8a` (modern physical Android devices) + `x86_64` (Windows/macOS Android Emulators)
 - **Cleartext & HTTPS Network Pairing:** Built with [`mobile/plugins/withCleartextTraffic.js`](mobile/plugins/withCleartextTraffic.js) (`android:usesCleartextTraffic="true"`) supporting live Railway HTTPS as well as local `http://10.0.2.2:3000` / LAN backends.
-- **SHA-256 Checksum:** `86d168a85228e23ad536b23e4541dd2abf50f040f8acef746fb5d8eeca7d7e23`
+- **SHA-256 Checksum:** `836df73ac7d31c550627931e70ee2760aef306e8d07155606fda5ead374b3c6a`
 - **Signing Note:** V2-signed with Android Debug keystore for direct sideloading and `adb install -r` evaluation anywhere worldwide.
 
 ---
@@ -515,7 +515,7 @@ Full design rationale is documented in [`docs/DECISIONS.md`](docs/DECISIONS.md):
 - **[docs/MOBILE_APP_USER_GUIDE.md](docs/MOBILE_APP_USER_GUIDE.md):** End-user walkthrough for Employee, IT Admin, and FinOps mobile personas.
 - **[docs/BUSINESS_DECK.md](docs/BUSINESS_DECK.md):** 12-page executive business presentation ([DOCX](docs/KioskDrop_Enterprise_12_Page_Business_Deck.docx) · [PDF](docs/KioskDrop_Enterprise_12_Page_Business_Deck.pdf)).
 - **[docs/DEPLOYMENT_GUIDE.md](docs/DEPLOYMENT_GUIDE.md):** Docker, Railway, Render, VPS, Nginx, and Vercel Serverless deployment guides.
-- **[docs/PUBLIC_DEPLOYMENT_AND_APK_GUIDE.md](docs/PUBLIC_DEPLOYMENT_AND_APK_GUIDE.md):** Public multi-location hosting & standalone APK (v1.0.1) deployment guide.
+- **[docs/PUBLIC_DEPLOYMENT_AND_APK_GUIDE.md](docs/PUBLIC_DEPLOYMENT_AND_APK_GUIDE.md):** Public multi-location hosting & standalone APK (v1.0.2) deployment guide.
 - **[docs/DEMO_VIDEO_GUIDE_AND_SCRIPT.md](docs/DEMO_VIDEO_GUIDE_AND_SCRIPT.md):** Automated Playwright screen recording (`npm run record:video` / `npm run record:synced`) & AI voiceover (`npm run demo:voiceover`) guide.
 - **[docs/SECURITY_AUDIT_EXCEPTIONS.md](docs/SECURITY_AUDIT_EXCEPTIONS.md):** Documented simulator security scope & mitigations.
 
