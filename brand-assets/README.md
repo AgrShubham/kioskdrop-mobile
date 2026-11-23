@@ -124,3 +124,4 @@ The KioskDrop emblem is a modern typographic monogram combining the characters *
 - **React Native Mobile Component:** [`mobile/src/components/ui/KioskDropLogo.tsx`](../mobile/src/components/ui/KioskDropLogo.tsx)
 - **Kinetic Opening Animation:** [`mobile/src/components/ui/AppSplashScreen.tsx`](../mobile/src/components/ui/AppSplashScreen.tsx)
 - **Full Architecture Plan:** [`brand-assets/specifications/kioskdrop_logo_specification.md`](./specifications/kioskdrop_logo_specification.md)
+

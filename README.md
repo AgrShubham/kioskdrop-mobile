@@ -1,88 +1,84 @@
 <div align="center">
 
+<p align="center">
+  <img src="public/icon-1024.png" width="112" height="112" alt="KioskDrop Enterprise Monogram Logo" style="border-radius: 24px; box-shadow: 0 8px 32px rgba(37, 99, 235, 0.25);" />
+</p>
+
 # KioskDrop Enterprise
 
-### Automated Conference & Presentation Kit Smart-Locker, Zero-Trust IoT & FinOps Platform (Web + Native Mobile)
+### Zero-Trust AV Micro-Logistics, Smart-Locker Fleet Gateway & Statutory FinOps Platform
+**Next.js 14 Web • React Native Mobile (Android / iOS) • IoT Solenoid Hardware Simulator**
 
-[![Next.js 14](https://img.shields.io/badge/Next.js-14.2.35-000000?style=for-the-badge&logo=next.js)](https://nextjs.org/)
-[![Expo SDK 58](https://img.shields.io/badge/Expo-SDK_58-000020?style=for-the-badge&logo=expo)](https://expo.dev/)
-[![React Native](https://img.shields.io/badge/React_Native-0.88.1-61DAFB?style=for-the-badge&logo=react)](https://reactnative.dev/)
-[![TypeScript](https://img.shields.io/badge/TypeScript-Strict-3178C6?style=for-the-badge&logo=typescript)](https://www.typescriptlang.org/)
-[![Prisma 6](https://img.shields.io/badge/Prisma-6.4.1_WAL-2D3748?style=for-the-badge&logo=prisma)](https://www.prisma.io/)
-[![Tests](https://img.shields.io/badge/Tests-63%2F63_Passing-16A34A?style=for-the-badge&logo=vitest)](https://vitest.dev/)
-[![Android APK](https://img.shields.io/badge/Release-v1.0.2_APK-3DDC84?style=for-the-badge&logo=android)](https://github.com/AgrShubham/kioskdrop-mobile/releases/tag/v1.0.2)
+[![Release](https://img.shields.io/badge/Release-v1.0.3_Production_APK-2563EB?style=for-the-badge&logo=android&logoColor=white)](https://github.com/AgrShubham/kioskdrop-mobile/releases/tag/v1.0.3)
+[![Next.js 14](https://img.shields.io/badge/Next.js-14.2.35-000000?style=for-the-badge&logo=next.js&logoColor=white)](https://nextjs.org/)
+[![React Native](https://img.shields.io/badge/React_Native-0.76.7-61DAFB?style=for-the-badge&logo=react&logoColor=black)](https://reactnative.dev/)
+[![Expo SDK 52](https://img.shields.io/badge/Expo-SDK_52-000020?style=for-the-badge&logo=expo&logoColor=white)](https://expo.dev/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-Strict_5.5-3178C6?style=for-the-badge&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
+[![Prisma ORM](https://img.shields.io/badge/Prisma-6.4.1_WAL-2D3748?style=for-the-badge&logo=prisma&logoColor=white)](https://www.prisma.io/)
+[![Quality Gate](https://img.shields.io/badge/Tests-63%2F63_Passing-10B981?style=for-the-badge&logo=vitest&logoColor=white)](test/)
+[![Security Posture](https://img.shields.io/badge/Zero--Trust-Hardware_Isolation-38BDF8?style=for-the-badge&logo=shield&logoColor=black)](#zero-trust-hardware-security)
 [![License](https://img.shields.io/badge/License-MIT-7C3AED?style=for-the-badge)](mobile/LICENSE)
 
 <br/>
 
-**Eliminating "last-meter" corporate boardroom Audio/Visual (AV) failures through sub-60-second autonomous hardware triage, distributed IoT smart lockers, Zero-Trust USB whitelisting, real-time SSE telemetry, and statutory FinOps micro-logistics — across Next.js Web and React Native (iOS, Android & Expo Web).**
+**Eliminating "last-meter" corporate boardroom Audio/Visual (AV) failures through sub-60-second autonomous hardware triage, distributed IoT smart lockers, Zero-Trust USB whitelisting, real-time SSE telemetry, and statutory FinOps micro-logistics across responsive Web and native Android/iOS mobile applications.**
 
-[Download Android APK (v1.0.2)](https://github.com/AgrShubham/kioskdrop-mobile/releases/tag/v1.0.2) •
+[Download Android APK (v1.0.3)](https://github.com/AgrShubham/kioskdrop-mobile/releases/tag/v1.0.3) •
 [System Architecture](#system-architecture) •
-[Mobile App](#mobile-companion-app-expo-sdk-58) •
+[Mobile App v1.0.3](#mobile-companion-app-v103) •
+[Brand Assets](brand-assets/README.md) •
 [Quick Start](#quick-start) •
 [Engineering Rigor](#engineering--mathematical-rigor) •
-[API Reference](#api-specification) •
-[Project Guide](PROJECT_GUIDE.md)
+[API Specification](#api-specification) •
+[Website Upgrade Plan](KIOSKDROP_WEBSITE_UPGRADE_PLAN.md)
 
 </div>
 
 ---
 
 > [!NOTE]
-> **Operational Posture Notice ([ADR D1](docs/DECISIONS.md)):** KioskDrop Enterprise is architected as a **Production-Quality Enterprise Simulator & Reference Architecture**. Core domain state machines, atomic SQLite WAL reservations, cryptographic OTP generation/verification, SHA-256 hash-chained custody logs, SSE telemetry streaming, and statutory Indian customs duty paise arithmetic are fully implemented and verified by automated tests. External third-party enterprise systems (ServiceNow/Zendesk webhooks, Zaggle/Happay corporate prepaid cards, SAP/Oracle/Zoho ERPs, and WPC ETA / BIS CRS regulatory portals) operate through clean, contract-validated mock adapter boundaries.
+> **Operational Posture Notice ([ADR D1](docs/DECISIONS.md)):** KioskDrop Enterprise is architected as an **industrial-grade Enterprise Simulator & Production Reference Architecture**. Core domain state machines, atomic SQLite WAL reservations, cryptographic OTP generation/verification, SHA-256 hash-chained custody logs, real-time Server-Sent Events (SSE) telemetry, and statutory Indian customs duty integer-paise arithmetic are fully implemented and verified by automated quality gates. External enterprise endpoints (ServiceNow/Zendesk webhooks, Zaggle/Happay corporate prepaid cards, SAP/Oracle/Zoho ERPs, and WPC ETA / BIS CRS regulatory registries) execute through contract-validated mock adapter boundaries.
 
 ---
 
 ## Table of Contents
 
-- [Repository Branch Matrix](#repository-branch-matrix)
-- [Executive Problem Statement](#executive-problem-statement)
+- [Executive Summary & Problem Statement](#executive-summary--problem-statement)
 - [System Architecture](#system-architecture)
-- [Web & Mobile Operational Surfaces](#web--mobile-operational-surfaces)
-- [Mobile Companion App (Expo SDK 58)](#mobile-companion-app-expo-sdk-58)
-- [Standalone Android Release APK (v1.0.2)](#standalone-android-release-apk-v102)
+- [Operational Surfaces (Web + Native Mobile)](#operational-surfaces-web--native-mobile)
+- [Mobile Companion App (v1.0.3)](#mobile-companion-app-v103)
+- [Brand Identity & Design System](#brand-identity--design-system)
+- [Zero-Trust Hardware Security](#zero-trust-hardware-security)
+- [Statutory Customs & FinOps Engine](#statutory-customs--finops-engine)
 - [Engineering & Mathematical Rigor](#engineering--mathematical-rigor)
   - [1. Statutory Customs Duty Engine (Integer Paise)](#1-statutory-customs-duty-engine-integer-paise)
-  - [2. Concurrency & Race-Condition Resistance](#2-concurrency--race-condition-resistance)
-  - [3. Cryptographic PIN & Timing-Safe Session Security](#3-cryptographic-pin--timing-safe-session-security)
+  - [2. Atomic Concurrency & Race-Condition Resistance](#2-atomic-concurrency--race-condition-resistance)
+  - [3. Cryptographic PIN & Timing-Safe Verification](#3-cryptographic-pin--timing-safe-verification)
   - [4. Tamper-Evident SHA-256 Custody Chain](#4-tamper-evident-sha-256-custody-chain)
 - [Repository Structure](#repository-structure)
-- [Quick Start](#quick-start)
-  - [1. Backend & Web App (Repository Root)](#1-backend--web-app-repository-root)
-  - [2. Mobile App (Expo Go, Emulator, Web)](#2-mobile-app-expo-go-emulator-web)
-  - [3. Building a Standalone Android APK Locally or via EAS](#3-building-a-standalone-android-apk-locally-or-via-eas)
+- [Quick Start Guide](#quick-start-guide)
+  - [1. Backend & Web App (Root Workspace)](#1-backend--web-app-root-workspace)
+  - [2. Native Mobile App (Expo SDK 52)](#2-native-mobile-app-expo-sdk-52)
+  - [3. Standalone Android APK Sideload & Local Build](#3-standalone-android-apk-sideload--local-build)
 - [Pre-Seeded Personas, Rooms & Hardware Fleet](#pre-seeded-personas-rooms--hardware-fleet)
-- [Deployment Options](#deployment-options)
-- [Quality Gates & Verification](#quality-gates--verification)
+- [Enterprise Quality Gates & Verification](#enterprise-quality-gates--verification)
 - [API Specification](#api-specification)
 - [Architecture Decision Records (ADRs)](#architecture-decision-records-adrs)
 - [Documentation & Media Tooling](#documentation--media-tooling)
 
 ---
 
-## Repository Branch Matrix
+## Executive Summary & Problem Statement
 
-| Branch | Purpose | Database Driver | Highlights |
-| :--- | :--- | :--- | :--- |
-| **`main`** | Primary unified production codebase | SQLite WAL (`file:./dev.db`) | Next.js 14 backend + Web UI, Expo SDK 58 Mobile app (`mobile/`), Android APK release plugin, [PROJECT_GUIDE.md](PROJECT_GUIDE.md) |
-| **`experimental`** | Active feature & mobile integration branch | SQLite WAL (`file:./dev.db`) | Synced cleanly with `main` (default repo branch on GitHub) |
-| **`docker`** | Containerized standalone deployment target | SQLite WAL (Docker volume) | Multi-stage `Dockerfile` + `docker-compose.yml` entrypoint automation |
-| **`vercel-serverless`** | Ephemeral cloud web demo target | Neon PostgreSQL (`@neon/*`) | Serverless-adapted config + executive presentation artifacts |
+Corporate meeting spaces and high-stakes executive boardrooms routinely suffer productivity losses averaging **12 to 18 minutes per incident** due to five compounding hardware and logistical bottlenecks:
 
----
+1. **The "Last-Meter" Dongle Crisis:** Missing USB-C DisplayPort Alt Mode adapters, incompatible display converters, HDCP 2.2 encryption handshake drops on 4K LED video walls, or depleted wireless presentation clickers.
+2. **IT Helpdesk Dispatch Latency:** Traditional manual ticketing and floor technician dispatch takes 15–30 minutes—longer than most short executive huddles.
+3. **BadUSB & Peripheral Tampering:** Unmanaged personal dongles or unauthorized rogue USB microcontrollers introduce keystroke-injection firmware payloads (`0x16C0 / 0x05DF`) directly into boardroom compute hubs.
+4. **Inventory Shrinkage & Zero Custody Accountability:** Shared conference room adapters vanish without serialized chain-of-custody tracking or room-level anomaly detection.
+5. **Cross-Border Customs & FinOps Invoicing Friction:** Procuring enterprise AV gear involves complex Indian customs duties (HSN 85437099 tariffs: `BCD`, `SWS`, `IGST` with Input Tax Credit recovery) and corporate expense card reconciliation (Zaggle, Happay).
 
-## Executive Problem Statement
-
-Enterprise meeting rooms routinely lose critical minutes—and expose corporate networks—due to five compounding failures:
-
-1. **The "Last-Meter" Dongle Crisis:** Missing USB-C DP Alt Mode adapters, incompatible display cables, HDCP 2.2 handshakes failing on 4K LED walls, or dead wireless clickers stall executive presentations.
-2. **IT Helpdesk Dispatch Latency:** Manual desk-side dispatch routinely costs 15–30 minutes of high-value conference room time.
-3. **BadUSB & Counterfeit Hardware Risks:** Unmanaged personal or uncertified USB peripherals introduce keystroke-injection payloads (`0x16C0 / 0x05DF`) and unapproved wireless transmitters.
-4. **Inventory Shrinkage & Zero Accountability:** Adapters vanish from shared boardrooms without room-level anomaly detection or serialized chain-of-custody tracking.
-5. **Cross-Border Customs & FinOps Friction:** Direct-import AV procurement across HSN tariffs (`BCD`, `SWS`, `IGST` + ITC recovery) and corporate expense card reconciliation require audit-grade precision.
-
-**KioskDrop Enterprise resolves these in under 60 seconds** via self-service QR triage, atomic smart-locker bay locking, Zero-Trust hardware probes, and real-time ITAM/FinOps synchronization.
+**KioskDrop Enterprise resolves these challenges in under 60 seconds** through instant QR-code room triage, atomic smart-locker reservations, hardware-level USB whitelisting, and real-time ITAM/FinOps synchronization.
 
 ---
 
@@ -91,30 +87,31 @@ Enterprise meeting rooms routinely lose critical minutes—and expose corporate 
 ```mermaid
 flowchart TD
     subgraph Clients["Multi-Platform Clients (Web + Native Mobile)"]
-        WebUI["Next.js 14 App Router Web UI<br/>/request · /kiosk-simulator · /admin"]
-        MobileUI["Expo SDK 58 / React Native App<br/>Home · Drop · Kiosk · Command · QR Scanner<br/>Obsidian Dark & Porcelain Light Themes"]
-        AuthBridge["Dual Auth Layer<br/>HttpOnly Session Cookie (Web)<br/>SecureStore Bearer HMAC Token (Mobile)"]
+        WebUI["Next.js 14 App Router Web Portal<br/>/request · /kiosk-simulator · /admin · /login"]
+        MobileUI["React Native / Expo SDK 52 App (v1.0.3)<br/>4-Stage Kinetic Splash · 3-Mode Auth · QR Scanner<br/>Rapid-Drop Triage · 12-Bay Matrix · ITAM Command"]
+        AuthBridge["Dual Authentication Gateway<br/>HttpOnly Session Cookie (Web)<br/>HMAC-SHA256 Bearer Token (Mobile)"]
         WebUI --> AuthBridge
-        MobileUI -->|"4-Tier URL Resolver<br/>Override -> Env -> LAN Host -> Emulator"| AuthBridge
+        MobileUI -->|"4-Tier URL Resolver<br/>Override ➔ Env ➔ Host LAN ➔ Emulator"| AuthBridge
     end
 
     subgraph CoreEngine["Core Domain & Backend Services (Node.js Runtime)"]
         AuthBridge --> Triage["Room-Aware Triage Engine<br/>src/services/triage.ts"]
         Triage --> Reservation["Atomic Reservation & Proximity Fallback<br/>src/services/reservation.ts + withSqliteRetry"]
-        Reservation --> PinSvc["Cryptographic OTP Service<br/>src/services/pin.ts (HMAC-SHA256 + timingSafeEqual)"]
+        Reservation --> PinSvc["Cryptographic OTP Engine<br/>src/services/pin.ts (HMAC-SHA256 + timingSafeEqual)"]
         Reservation --> DB[("Prisma ORM 6.4.1<br/>SQLite WAL + busy_timeout=10000")]
     end
 
-    subgraph KioskHardware["IoT Smart Locker Controller"]
+    subgraph KioskHardware["12-Bay IoT Smart Locker Hub"]
         KioskCtrl["Kiosk Controller<br/>src/services/kiosk.ts"]
-        Solenoid["Solenoid Latch + IR Break-Beam Checkout"]
-        USBProbe["USB VID/PID Whitelist & 5V/3A Loopback"]
-        BadUSB["BadUSB Foreign-Device Quarantine Alarm"]
-        KioskCtrl --> Solenoid --> USBProbe --> BadUSB
+        Solenoid["12V Solenoid Latch + Web Audio Clack"]
+        IRSensor["Optoelectronic IR Break-Beam Sensor"]
+        USBProbe["USB VID/PID Whitelist & 5V/3A Continuity"]
+        BadUSB["BadUSB Quarantine & Tamper Alarm"]
+        KioskCtrl --> Solenoid --> IRSensor --> USBProbe --> BadUSB
     end
 
     subgraph CommandCenter["Real-Time Telemetry, ITAM & FinOps"]
-        SSEBus["Stateful SSE Event Bus<br/>/api/telemetry/stream (15s heartbeat + Last-Event-ID)"]
+        SSEBus["Stateful SSE Event Bus<br/>/api/telemetry/stream (15s Heartbeat + Last-Event-ID)"]
         DutyEngine["Statutory Indian Customs Duty Engine<br/>src/services/landed-cost.ts (Integer Paise)"]
         FinOps["Zaggle / Happay Card Ledger & Reception Scan"]
         ERPWebhooks["SAP / Oracle / Zoho ERP & ServiceNow / Zendesk Replay"]
@@ -126,74 +123,108 @@ flowchart TD
 
 ---
 
-## Web & Mobile Operational Surfaces
+## Operational Surfaces (Web + Native Mobile)
 
-| Workflow | Web Route | Mobile Screen | Capabilities |
+| Operational Workflow | Web Route | Mobile Screen (`mobile/app/`) | Core Capabilities |
 | :--- | :--- | :--- | :--- |
-| **Gateway & Live Hub Overview** | `/` | `Home` (`mobile/app/(tabs)/index.tsx`) | Live fleet capacity snapshot (`Ready`, `Reserved`, `In Use`, `Quarantine`), quick role switcher trigger, QR scanner launch |
-| **Camera QR Scanner** | URL query (`?room=...`) | `Scanner` (`mobile/app/scanner.tsx`) | `expo-camera` barcode scanner parsing `kioskdrop://` URLs & JSON room/locker slugs with manual fallback |
-| **Rapid-Drop AV Triage** | `/request` | `Drop` (`mobile/app/(tabs)/request.tsx`) | Room selector, 5 failure-mode diagnostics, `Port Damaged` wireless override toggle, tear-off 6-digit OTP ticket with countdown |
-| **IoT Smart Locker Terminal** | `/kiosk-simulator` | `Kiosk` (`mobile/app/(tabs)/kiosk.tsx`) | 12-bay hub selector & live LED grid, tactile keypad with 5-attempt 15-min lockout, NFC/RFID tap, biometric MFA, break-beam checkout & BadUSB return simulation |
-| **Command Center (ITAM & FinOps)** | `/admin` | `Command` (`mobile/app/(tabs)/admin.tsx`) | RBAC-guarded Zero-Trust USB whitelist (`VID/PID`, `WPC ETA`, `BIS CRS`), Customs Duty calculator, Zaggle/Happay PO replenishment, reception intake scan, anomaly chart, webhook replay |
+| **Gateway & Telemetry Hub** | `/` | `index.tsx` (`Home`) | Live fleet capacity snapshot (`Ready`, `Reserved`, `In Use`, `Quarantine`), real-time SSE heartbeat, quick persona trigger. |
+| **Enterprise Authentication** | `/login` & `LoginModal` | `LoginScreen.tsx` | 3 Modes: Corporate credentials, 1-tap quick demo personas, physical RFID badge tap simulation, biometric prompt, server latency ping. |
+| **Camera QR Scanner** | URL query (`?room=...`) | `scanner.tsx` (`Scanner`) | Native camera barcode reader parsing `kioskdrop://` URLs & JSON slugs with manual room selection fallback. |
+| **Rapid-Drop AV Triage** | `/request` | `request.tsx` (`Drop`) | 5 failure-mode diagnostic matrix, `Port Damaged` wireless override, instant 6-digit locker pickup PIN with countdown timer. |
+| **12-Bay IoT Locker Bank** | `/kiosk-simulator` | `kiosk.tsx` (`Kiosk`) | 12-bay floor locker bank, mechanical solenoid clack (Web Audio API), optoelectronic IR beam break, 5-attempt brute-force lockout, IT Admin emergency override. |
+| **Command Center (ITAM & FinOps)** | `/admin` | `admin.tsx` (`Command`) | Strict RBAC (hidden for `EMPLOYEE`; 403 Forbidden Access Violation card), USB VID/PID whitelist, statutory HSN tariff calculator, PO replenishment, webhook replay. |
 
 ---
 
-## Mobile Companion App (Expo SDK 58)
+## Mobile Companion App (v1.0.3)
 
-Located under [`mobile/`](mobile/README.md), the React Native companion app delivers full functional parity across **Android**, **iOS**, and **Expo Web**:
+The production Android application is compiled and available on GitHub Releases:
 
-- **Stateless Bearer Authentication (`mobile/src/lib/storage.ts`, `src/lib/session.ts`):** Switching personas calls `POST /api/session/role`, returning an HMAC-signed token stored encrypted inside `expo-secure-store` (with AsyncStorage fallback on web) and attached via `Authorization: Bearer <token>` on every API and SSE request.
-- **4-Tier Server URL Resolver (`mobile/src/lib/env.ts`):** Automatically resolves backend targets without rebuilding:
-  1. Live user override saved in Zustand (`Persona & Server` sheet)
-  2. `EXPO_PUBLIC_API_URL` build/env variable
-  3. Automatic Expo Go LAN IP extraction (`Constants.expoConfig.hostUri` -> `http://<LAN-IP>:3000`)
-  4. Platform default (`http://10.0.2.2:3000` on Android, `http://localhost:3000` on iOS/Web)
-- **Hermes-Safe SSE Telemetry (`mobile/src/hooks/useTelemetrySSE.ts`):** Uses `react-native-sse` with `Last-Event-ID` support, `AppState` background pausing, exponential reconnect backoff (`2s -> 15s`), targeted React Query cache invalidation, and error haptics on `SECURITY_MISMATCH_ALARM`.
-- **Dual-Theme Design System (`mobile/src/lib/theme.ts`, `mobile/app/_layout.tsx`):** Redesigned **Obsidian Studio Dark** (`#070A10` canvas, `#0F1521` elevated bar) and **Porcelain Crisp Light** (`#F3F5F9` / `#FFFFFF`) palettes with dynamic Android `SystemUI` and `expo-navigation-bar` edge-to-edge synchronization so system gesture bars always match the active app theme.
-- **Deep Linking (`kioskdrop://`):**
-  - `kioskdrop://request?room=Boardroom-4B&floor=4`
-  - `kioskdrop://kiosk?locker=lkr_floor4&bay=1&pin=123456`
+- **Official Release:** [KioskDrop Enterprise Mobile v1.0.3](https://github.com/AgrShubham/kioskdrop-mobile/releases/tag/v1.0.3)
+- **Direct Download:** [`kioskdrop-enterprise-v1.0.3.apk`](https://github.com/AgrShubham/kioskdrop-mobile/releases/download/v1.0.3/kioskdrop-enterprise-v1.0.3.apk) (`123,942,109` bytes / `118.2 MB`)
+- **Package ID / Version:** `com.kioskdrop.enterprise` (`versionName 1.0.3`, `versionCode 4`)
+- **Target OS:** Android 9.0+ (`minSdkVersion 24`, `targetSdkVersion 36`)
+- **Supported ABIs:** `arm64-v8a` (modern physical hardware) and `x86_64` (emulators)
+- **Verified Cryptographic Checksum (SHA-256):**
+  ```text
+  2C9E9944DE63E72D7A5206B3FCB7573631355BB7CB30771870C407D262C8D076
+  ```
+
+### Key v1.0.3 Architecture Features:
+1. **4-Stage Aerospace Kinetic Boot Sequence:** Staggered entrance of the KD Monogram, chevron drop flash, typography reveal, aperture zoom-through portal, live hardware telemetry logs, and `sessionStorage` single-run memory gate.
+2. **Concentric Hardware Loading Radar:** Pulsing radar waves with rotating indicator and subsystem status codes (`[IOT_SOLENOID_DISPATCH]`, `[RFID_AUTHENTICATING]`).
+3. **3-Mode Enterprise Authentication:** Corporate credentials with show/hide password, 1-tap quick demo persona switcher, RFID badge reader simulation with auto-tap chips, and live server latency ping.
+4. **Strict Role-Based Access Control (RBAC):** Navigation bar dynamically hides administrative tooling for `EMPLOYEE` users. Deep-linking to unauthorized administrative routes displays a cyber-industrial **403 Forbidden Access Violation** screen.
 
 ---
 
-## Standalone Android Release APK (v1.0.2)
+## Brand Identity & Design System
 
-A verified, standalone release APK is published on GitHub Releases — no Expo Go client required, pre-configured out-of-the-box for the live Railway cloud backend:
+The platform is styled according to the specifications in [`brand-assets/brand-guide.json`](brand-assets/brand-guide.json):
 
-- **GitHub Release:** [KioskDrop Enterprise v1.0.2 (KD Identity & Kinetic Opening Animation)](https://github.com/AgrShubham/kioskdrop-mobile/releases/tag/v1.0.2)
-- **Direct Download:** [kioskdrop-enterprise.apk](https://github.com/AgrShubham/kioskdrop-mobile/releases/download/v1.0.2/kioskdrop-enterprise.apk) (`72,764,193` bytes / `69.39 MB`)
-- **Application ID / Version:** `com.kioskdrop.enterprise` (`versionName 1.0.2`, `versionCode 3`, `minSdkVersion 24`, `targetSdkVersion 36`)
-- **Pre-Paired Cloud Backend:** `https://kioskdrop-mobile-production.up.railway.app` (connects immediately over 5G/4G or any external Wi-Fi with zero setup)
-- **Supported ABIs:** `arm64-v8a` (modern physical Android devices) + `x86_64` (Windows/macOS Android Emulators)
-- **Cleartext & HTTPS Network Pairing:** Built with [`mobile/plugins/withCleartextTraffic.js`](mobile/plugins/withCleartextTraffic.js) (`android:usesCleartextTraffic="true"`) supporting live Railway HTTPS as well as local `http://10.0.2.2:3000` / LAN backends.
-- **SHA-256 Checksum:** `836df73ac7d31c550627931e70ee2760aef306e8d07155606fda5ead374b3c6a`
-- **Signing Note:** V2-signed with Android Debug keystore for direct sideloading and `adb install -r` evaluation anywhere worldwide.
+<p align="center">
+  <img src="brand-assets/preview/brand-identity-banner.png" width="850" alt="KioskDrop Enterprise Brand Preview" style="border-radius: 12px; border: 1px solid rgba(255,255,255,0.1);" />
+</p>
+
+### Official Color Tokens
+
+| Token Name | Hex Code | HSL Representation | Design System Usage |
+| :--- | :--- | :--- | :--- |
+| **Obsidian Dark** | `#070A10` | `hsl(220, 39%, 5%)` | Master background for dark theme, splash screen, and terminal displays. |
+| **Slate Elevated Card**| `#0F172A` | `hsl(222, 47%, 11%)`| Elevated bento cards, modal sheets, and locker bay housing. |
+| **Pure White** | `#FFFFFF` | `hsl(0, 0%, 100%)` | Light mode surface and high-contrast dark mode typography. |
+| **Sapphire Blue** | `#2563EB` | `hsl(221, 83%, 53%)`| Primary brand accent, interactive buttons, and `EMPLOYEE` persona tone. |
+| **Cyber Sky** | `#38BDF8` | `hsl(199, 95%, 64%)`| Kinetic chevron flash, glowing pulse rings, and telemetry sync indicator. |
+| **Emerald Zero-Trust** | `#10B981` | `hsl(160, 84%, 39%)`| Solenoid unlocked status, stock availability, and `IT_ADMIN` persona tone. |
+| **Amber Quarantine** | `#F59E0B` | `hsl(38, 92%, 50%)` | Pending reception, active reservation countdown, and `FINOPS_AUDITOR` tone. |
+| **Crimson Alarm** | `#EF4444` | `hsl(0, 84%, 60%)` | Hardware tamper alarm, BadUSB rogue device quarantine, and 403 access denial. |
+
+Full brand specifications, typography scales (`Inter`, `JetBrains Mono`), vector SVGs, and high-resolution icons are cataloged in [`brand-assets/README.md`](brand-assets/README.md).
+
+---
+
+## Zero-Trust Hardware Security
+
+```
+[ Boardroom AV Port ] ──▶ [ Optical Isolation ] ──▶ [ USB VID/PID Probe ] ──▶ [ Solenoid Matrix ]
+                                                            │
+                                                     Mismatch / Rogue
+                                                            ▼
+                                                [ TAMPER / QUARANTINE ]
+```
+
+1. **Hardware Whitelist Verification:** Peripherals must match approved enterprise Vendor ID (VID) and Product ID (PID) pairings (e.g., Anker `0x29EA`, Barco `0x0600`, Kramer `0x0001`).
+2. **BadUSB Mitigation:** Unrecognized USB devices attempting to register as Human Interface Devices (HID keystroke injection `0x16C0 / 0x05DF`) immediately trigger an optoelectronic lock, trip the `MAINTENANCE_QUARANTINE` compartment state, and broadcast a critical security alarm over the SSE telemetry bus.
+3. **Optoelectronic IR Break-Beam Sensor:** Each locker bay houses an optical infrared sensor detecting asset presence. Removal transitions the compartment to `CHECKED_OUT`; replacement triggers a 5V/3A continuity check and auto-locks the mechanical solenoid latch.
+
+---
+
+## Statutory Customs & FinOps Engine
+
+For multinational enterprises importing specialized conference hardware into India, KioskDrop incorporates a statutory landed-cost calculation engine compliant with Indian Customs Tariff and Central Goods and Services Tax (CGST) requirements:
+
+- **Statutory Tariff Classification:** Built for **HSN 85437099** (Electrical machines and apparatus having individual functions, n.e.s. in Chapter 85).
+- **Assessable Value ($V_a$):** Standard 1% landing charges applied to Cost, Insurance, and Freight (CIF):
+  $$V_a = \lfloor V_{\text{CIF}} \times 1.01 + 0.5 \rfloor$$
+- **Basic Customs Duty ($\text{BCD}$):** 20.00% statutory duty on $V_a$.
+- **Social Welfare Surcharge ($\text{SWS}$):** 10.00% statutory surcharge levied on BCD.
+- **Integrated Goods & Services Tax ($\text{IGST}$):** 18.00% IGST computed on $(V_a + \text{BCD} + \text{SWS})$.
+- **Input Tax Credit (ITC) Recovery:** 100% of the IGST component is tracked as recoverable corporate ITC against output tax liability, yielding the effective net landed cost.
 
 ---
 
 ## Engineering & Mathematical Rigor
 
 ### 1. Statutory Customs Duty Engine (Integer Paise)
-
-All monetary storage and arithmetic across Prisma and [`src/services/landed-cost.ts`](src/services/landed-cost.ts) uses **integer paise** (`1 INR = 100 paise`) and **basis points** (`100 bp = 1.00%`) with round-half-up applied independently to each statutory component (zero IEEE 754 floats):
-
-1. **Assessable Value ($V_a$)** (`1%` landing charges on CIF):
-   $$V_a = \lfloor V_{\text{CIF}} \times 1.01 + 0.5 \rfloor$$
-2. **Basic Customs Duty ($\text{BCD}$)** (default `2000 bp` = `20.00%` of $V_a$):
-   $$\text{BCD} = \lfloor V_a \times 0.20 + 0.5 \rfloor$$
-3. **Social Welfare Surcharge ($\text{SWS}$)** (default `1000 bp` = `10.00%` of $\text{BCD}$):
-   $$\text{SWS} = \lfloor \text{BCD} \times 0.10 + 0.5 \rfloor$$
-4. **Integrated GST ($\text{IGST}$)** (default `1800 bp` = `18.00%` on $V_a + \text{BCD} + \text{SWS}$):
-   $$\text{IGST} = \lfloor (V_a + \text{BCD} + \text{SWS}) \times 0.18 + 0.5 \rfloor$$
+All monetary calculations in [`src/services/landed-cost.ts`](src/services/landed-cost.ts) are executed in **integer paise** (`1 INR = 100 paise`) and basis points (`100 bp = 1.00%`), using half-up rounding to prevent IEEE 754 floating-point drift:
 
 *Verified Golden Test Vectors ([`test/landed-cost.test.ts`](test/landed-cost.test.ts)):*
-- **Direct Import — ₹1,000.00 (`100,000` paise):** `Va = ₹1,010.00`, `BCD = ₹202.00`, `SWS = ₹20.20`, `IGST = ₹221.80` -> **Total Duties = ₹444.00 (`44.40%`)**, **Landed Cost = ₹1,444.00**, **Net of ITC = ₹1,222.20**.
-- **Direct Import — ₹34,000.00 (`3,400,000` paise):** `Va = ₹34,340.00`, `BCD = ₹6,868.00`, `SWS = ₹686.80`, `IGST = ₹7,541.06` -> **Total Duties = ₹15,095.86**, **Landed Cost = ₹49,095.86**, **Net of ITC = ₹41,554.80**.
-- **Domestic Wholesale Mode:** Skips customs `BCD`/`SWS` (`₹0.00`) and computes standard `18%` GST recoverable 100% as Input Tax Credit (`effectiveCostNetOfItcPaise === cifAmountPaise`).
+- **Direct Import — ₹1,000.00 (`100,000` paise):** $V_a = ₹1,010.00$, $\text{BCD} = ₹202.00$, $\text{SWS} = ₹20.20$, $\text{IGST} = ₹221.80$ ➔ **Total Customs Duty = ₹444.00 (`44.40%`)**, **Landed Cost = ₹1,444.00**, **Net Cost (Post-ITC) = ₹1,222.20**.
+- **Direct Import — ₹34,000.00 (`3,400,000` paise):** $V_a = ₹34,340.00$, $\text{BCD} = ₹6,868.00$, $\text{SWS} = ₹686.80$, $\text{IGST} = ₹7,541.06$ ➔ **Total Customs Duty = ₹15,095.86**, **Landed Cost = ₹49,095.86**, **Net Cost (Post-ITC) = ₹41,554.80**.
+- **Domestic Wholesale Mode:** Bypasses customs BCD/SWS and applies 18% domestic GST with full ITC credit recovery.
 
-### 2. Concurrency & Race-Condition Resistance
-
-In [`src/services/reservation.ts`](src/services/reservation.ts), scarce physical bays are claimed via **atomic conditional `updateMany` guards** wrapped in explicit Prisma transaction timeouts (`maxWait: 10000, timeout: 15000`) and SQLite WAL jittered retry logic (`withSqliteRetry`, up to 20 retries):
+### 2. Atomic Concurrency & Race-Condition Resistance
+Locker compartments are claimed through **atomic conditional `updateMany` queries** in Prisma transactions with explicit timeouts and SQLite Write-Ahead Logging (WAL) exponential retry wrappers (`withSqliteRetry`):
 
 ```typescript
 const claimed = await tx.lockerCompartment.updateMany({
@@ -208,27 +239,22 @@ const claimed = await tx.lockerCompartment.updateMany({
 });
 
 if (claimed.count !== 1) {
-  // Concurrent requester claimed this bay first -> retry next candidate / proximity floor
+  // Concurrent worker claimed bay first -> failover to next candidate bay / floor
   continue;
 }
 ```
 
-- **Verified by [`test/concurrency.test.ts`](test/concurrency.test.ts):** **20 simultaneous workers** contend for **1 stocked unit** — **exact result: 1 reservation succeeds, 19 fail cleanly with `NoStockAvailableError`, zero double-bookings**.
+- **Concurrency Verification ([`test/concurrency.test.ts`](test/concurrency.test.ts)):** **20 concurrent asynchronous workers** contend simultaneously for a **single stocked bay** — **result: exactly 1 worker claims the bay, 19 fail safely with `NoStockAvailableError`, with zero double-booking or lock contention deadlocks**.
 
-### 3. Cryptographic PIN & Timing-Safe Session Security
-
-- **OTP Generation & Storage ([`src/services/pin.ts`](src/services/pin.ts)):** `crypto.randomInt(0, 1_000_000)` padded to 6 digits, hashed immediately via `HMAC-SHA256` with `SERVER_PIN_PEPPER`. Raw PINs are never persisted in SQLite.
-- **Constant-Time Verification:** `verifyPin` compares fixed-length buffers via `crypto.timingSafeEqual`, preventing timing side-channel leaks.
-- **Keypad Brute-Force Lockout (`src/lib/locker-lockout.ts`):** 5 consecutive failed unlock attempts trigger a 15-minute terminal security lockout (`HTTP 423 LOCKER_LOCKED_OUT`); foreign USB HID or VID/PID mismatch probes transition the compartment to `MAINTENANCE_QUARANTINE` and broadcast a BadUSB alarm.
-- **Session Verification ([`src/lib/session.ts`](src/lib/session.ts)):** Both web cookies (`kioskdrop_session`) and mobile Bearer tokens (`Authorization: Bearer <token>`) are verified with `HMAC-SHA256` + `crypto.timingSafeEqual`.
+### 3. Cryptographic PIN & Timing-Safe Verification
+- **One-Time Passcode (OTP) Generation ([`src/services/pin.ts`](src/services/pin.ts)):** Uses cryptographically secure pseudorandom numbers (`crypto.randomInt(0, 1_000_000)`), formatted to 6 digits and hashed immediately via `HMAC-SHA256` with a server pepper. Raw PINs are never persisted to storage.
+- **Constant-Time Verification:** Compares PIN digests using `crypto.timingSafeEqual` to eliminate timing side-channel attacks.
+- **Keypad Brute-Force Lockout ([`src/lib/locker-lockout.ts`](src/lib/locker-lockout.ts)):** 5 consecutive invalid entries trigger a 15-minute terminal lockout (`HTTP 423 LOCKER_LOCKED_OUT`).
 
 ### 4. Tamper-Evident SHA-256 Custody Chain
-
-Every reservation, solenoid unlock, break-beam checkout, return probe, TTL expiry (`cleanupExpiredReservations`), and BadUSB quarantine event appends an immutable `CustodyLog` record chained to the previous entry:
+Every reservation, solenoid unlock, break-beam checkout, return scan, and security alarm appends an immutable, hash-chained custody record:
 
 $$H_n = \text{SHA-256}\bigl(H_{n-1} : \text{eventType} : \text{timestamp} : \text{details}\bigr)$$
-
-*(Starting from genesis hash `"0".repeat(64)`.)*
 
 ---
 
@@ -236,56 +262,48 @@ $$H_n = \text{SHA-256}\bigl(H_{n-1} : \text{eventType} : \text{timestamp} : \tex
 
 ```text
 KioskDrop App/
-├── README.md                              # Project documentation & architecture hub
-├── PROJECT_GUIDE.md                       # Complete setup, mobile, emulator & troubleshooting guide
-├── package.json                           # Root scripts (dev, build, lint, test, db:seed, record:synced)
-├── next.config.js                         # Next.js 14 config + /api CORS headers for Expo Web/Mobile
+├── brand-assets/                          # Official vector & raster brand identity suite
+│   ├── brand-guide.json                   # Color tokens, typography, and geometry specifications
+│   ├── logo/svg/                          # Master vector brand marks (KD monogram & horizontal locks)
+│   ├── logo/png/                          # High-res exports (1024px, 512px, 192px)
+│   └── icons/android/                     # Adaptive foreground & background icon layers
+├── public/                                # Web public assets & downloadable release files
+├── mobile/                                # React Native / Expo SDK 52 mobile application
+│   ├── app/                               # Expo Router file-based screens (tabs, scanner, modal)
+│   ├── src/components/                    # AppSplashScreen, LoadingScreen, LoginScreen, UI suite
+│   ├── src/hooks/                         # useSession, useTelemetrySSE (react-native-sse)
+│   ├── src/lib/                           # API client, SecureStore, 4-tier URL resolver, formatters
+│   └── __tests__/                         # Jest + React Native Testing Library test suites
 ├── prisma/
-│   ├── schema.prisma                      # SQLite WAL schema (13 relational models, integer paise, indexes)
-│   └── seed.ts                            # Enterprise seed (3 personas, 4 rooms, 2 hubs / 24 bays, anomalies)
+│   ├── schema.prisma                      # Relational schema (13 models, integer paise, indexed WAL)
+│   └── seed.ts                            # Enterprise seed (3 personas, 4 rooms, 2 hubs / 24 bays)
 ├── src/
-│   ├── app/                               # Next.js App Router pages (/, /request, /kiosk-simulator, /admin)
-│   │   └── api/                           # 19 REST + SSE Route Handlers
-│   ├── domain/states.ts                   # Pure compartment & ticket FSM transition guards
-│   ├── lib/                               # Prisma WAL singleton, HMAC session (Cookie+Bearer), SSE telemetry bus
-│   ├── services/                          # triage, reservation, pin, kiosk, landed-cost, webhook services
-│   ├── components/                        # Web UI navbar & interactive views
-│   └── hooks/useTelemetry.ts              # Web EventSource SSE subscriber
-├── mobile/                                # React Native / Expo SDK 58 companion workspace
-│   ├── app/
-│   │   ├── _layout.tsx                    # Root shell, QueryClient, dynamic SystemUI & Android NavigationBar
-│   │   ├── scanner.tsx                    # Native expo-camera QR & barcode modal
-│   │   ├── +not-found.tsx                 # Fallback route handler
-│   │   └── (tabs)/                        # Bottom-tab screens: index, request, kiosk, admin
-│   ├── plugins/withCleartextTraffic.js    # Custom Expo config plugin for Release APK LAN/emulator HTTP
-│   ├── src/
-│   │   ├── components/                    # Layout header/sheets + request, kiosk, admin & UI primitives
-│   │   ├── constants/                     # Diagnostic symptom matrix, API presets, HSN options, BadUSB vector
-│   │   ├── hooks/                         # useSession, useTelemetrySSE (react-native-sse + haptics)
-│   │   ├── lib/                           # API client, 4-tier env resolver, formatters, QR parser, SecureStore, theme
-│   │   ├── schemas/api.ts                 # Zod runtime validation schemas for API payloads
-│   │   ├── store/app-store.ts             # Zustand persisted UI/theme/override state
-│   │   └── types/domain.ts                # Shared TypeScript interfaces
-│   ├── __tests__/                         # 5 Jest + RNTL test suites (24 passing tests)
-│   ├── app.json                           # Expo app metadata, scheme (kioskdrop://), native plugins
-│   ├── eas.json                           # EAS Build profiles (development, preview APK, production)
-│   └── README.md                          # Dedicated mobile development & EAS build guide
-├── test/                                  # 7 Vitest backend/API/concurrency suites (39 passing tests)
-├── docs/                                  # Architecture Decision Records, Business Deck (.md/.docx/.pdf), Guides
-├── scripts/                               # Mobile audit, Playwright demo recorder & edge-TTS voiceover utilities
-├── Dockerfile & docker-compose.yml        # Containerized stateful production stack
+│   ├── app/                               # Next.js 14 App Router (/, /request, /kiosk-simulator, /admin, /login)
+│   │   └── api/                           # 19 REST API & SSE Route Handlers
+│   ├── domain/states.ts                   # Finite-state machine transition guards
+│   ├── lib/                               # Prisma client, HMAC session security, telemetry bus
+│   ├── services/                          # Triage, reservation, pin, kiosk, landed-cost, webhooks
+│   └── components/                        # Web UI components, KioskDropLogo, ThemeProvider
+├── test/                                  # Vitest backend integration & concurrency test suites
+├── docs/                                  # Architecture Decision Records (ADRs), deployment & user guides
+├── KIOSKDROP_WEBSITE_UPGRADE_PLAN.md      # Master architectural blueprint for web upgrade
+├── TEAM_COMMUNICATION_CONTEXT.md          # AI-assisted team communication & standup context file
+├── Dockerfile & docker-compose.yml        # Multi-stage production container configuration
+└── package.json                           # Root scripts and workspace dependencies
 ```
 
 ---
 
-## Quick Start
+## Quick Start Guide
 
 ### Prerequisites
+- **Node.js** `>= 18.18.0` (LTS Recommended: `v20.x` or `v22.x`)
+- **npm** `>= 9.0.0`
+- **Optional (for mobile builds):** **Expo Go** app on Android/iOS, or **Android Studio + JDK 17** (`JAVA_HOME`)
 
-- **Node.js** `>= 18.18.0` (verified on `v20.x` and `v25.x`) and **npm** `>= 9.0.0`
-- **Optional (Mobile Emulator / APK builds):** **Expo Go** on Android/iOS, or **Android Studio + SDK + JDK 17** (`JAVA_HOME`)
+### 1. Backend & Web App (Root Workspace)
 
-### 1. Backend & Web App (Repository Root)
+Clone the repository and install dependencies:
 
 ```bash
 git clone https://github.com/AgrShubham/kioskdrop-mobile.git
@@ -293,40 +311,30 @@ cd kioskdrop-mobile
 npm install
 ```
 
-Copy environment variables and initialize SQLite WAL + seed data:
+Configure environment variables and initialize the SQLite database:
 
 ```bash
-# macOS / Linux:
+# Copy template configuration
 cp .env.example .env
 
-# Windows PowerShell:
-Copy-Item .env.example .env
-```
-
-```bash
+# Generate Prisma client, push schema, and run enterprise seed
 npx prisma generate
 npx prisma db push
 npm run db:seed
 ```
 
-Start the Next.js server bound on `0.0.0.0:3000` so both browser tabs and LAN/emulator mobile devices can reach `/api/*`:
+Start the Next.js server bound to `0.0.0.0:3000` (allowing both local browser tabs and LAN/emulator mobile devices to connect):
 
 ```bash
 npx next dev -H 0.0.0.0 -p 3000
-# Open http://localhost:3000
 ```
-
-> [!TIP]
-> On Windows, if physical devices on your Wi-Fi timeout reaching port `3000`, allow inbound TCP `3000` in an elevated PowerShell prompt:
-> ```powershell
-> New-NetFirewallRule -DisplayName "KioskDrop Nextjs Dev 3000" -Direction Inbound -Protocol TCP -LocalPort 3000 -Action Allow
-> ```
+*Open [http://localhost:3000](http://localhost:3000) in your browser.*
 
 ---
 
-### 2. Mobile App (Expo Go, Emulator, Web)
+### 2. Native Mobile App (Expo SDK 52)
 
-In a **second terminal** while the Next.js server runs on port `3000`:
+In a **separate terminal window**:
 
 ```bash
 cd mobile
@@ -334,196 +342,148 @@ npm install
 npm start
 ```
 
-From the Expo Metro prompt:
-- Press **`a`** — Open in a running **Android Emulator** (auto-targets `http://10.0.2.2:3000`; or run `adb reverse tcp:3000 tcp:3000`)
-- Press **`i`** — Open in **iOS Simulator** *(macOS only)*
-- Press **`w`** — Open **Expo Web** (`http://localhost:8081` -> CORS-enabled `http://localhost:3000`)
-- **Scan QR Code** — Open immediately on a physical phone via **Expo Go** on the same Wi-Fi (`http://<YOUR-PC-LAN-IP>:3000`)
-
-Verify server connectivity inside the mobile app via **Header Persona Pill (`EMP` / `IT` / `FIN`) -> Server Connection -> Test Ping**.
+From the interactive Expo terminal prompt:
+- Press **`a`** to open in a running **Android Emulator** (auto-targets `http://10.0.2.2:3000`).
+- Press **`w`** to open in **Expo Web** (`http://localhost:8081`).
+- Scan the printed QR code with **Expo Go** on a physical mobile device connected to the same Wi-Fi.
 
 ---
 
-### 3. Building a Standalone Android APK Locally or via EAS
+### 3. Standalone Android APK Sideload & Local Build
 
-#### Option A: Install Pre-Built Release APK (`v1.0.0`)
-Download [`kioskdrop-enterprise.apk`](https://github.com/AgrShubham/kioskdrop-mobile/releases/download/v1.0.0/kioskdrop-enterprise.apk) or install via ADB:
+#### Option A: Sideload Verified Production Release (`v1.0.3`)
+Download [`kioskdrop-enterprise-v1.0.3.apk`](https://github.com/AgrShubham/kioskdrop-mobile/releases/download/v1.0.3/kioskdrop-enterprise-v1.0.3.apk) and install via ADB:
 
 ```bash
-adb install -r kioskdrop-enterprise.apk
+adb install -r kioskdrop-enterprise-v1.0.3.apk
 ```
 
-#### Option B: Local Gradle Release Build (Windows / macOS / Linux)
+#### Option B: Compile Release APK Locally via Gradle
 Requires Android SDK + JDK 17 (`JAVA_HOME`):
 
-```powershell
-cd mobile
-$env:CI = "1"
-npx expo prebuild --platform android --clean
-
-cd android
-.\gradlew.bat assembleRelease "-PreactNativeArchitectures=arm64-v8a,x86_64" --max-workers=2 --no-daemon
-# Output: mobile/android/app/build/outputs/apk/release/app-release.apk
-```
-
-> [!NOTE]
-> **Windows `MAX_PATH` Fix for CMake/Ninja:** Deep repo paths on Windows can hit Ninja's 260-character object file limit during native `react-native-worklets` / `rngesturehandler_codegen` builds. If encountered locally, configure a short `externalNativeBuild.cmake.buildStagingDirectory` (e.g., `C:/x/...`) and `-DCMAKE_OBJECT_PATH_MAX=245` in `mobile/android/build.gradle` and `mobile/android/app/build.gradle`.
-
-#### Option C: Expo Application Services (EAS Cloud Build)
-
 ```bash
 cd mobile
-npx eas-cli login
-npx eas-cli build --platform android --profile preview
+npx expo prebuild --platform android --clean
+cd android
+./gradlew assembleRelease -PreactNativeArchitectures=arm64-v8a,x86_64
 ```
+*The compiled artifact will be generated at `mobile/android/app/build/outputs/apk/release/app-release.apk`.*
 
 ---
 
 ## Pre-Seeded Personas, Rooms & Hardware Fleet
 
-Use the interactive **Role / Persona Switcher** (top header bar on both Web & Mobile) to test RBAC and persona flows:
+The database seed provides three distinct corporate personas for evaluating Role-Based Access Control (RBAC):
 
-| Persona | Role | RFID Badge | Authorized Views & Actions |
-| :--- | :--- | :--- | :--- |
-| **Aarav Sharma** | `EMPLOYEE` | `RFID-EMP-8821` | Room triage (`/request`, `Drop`), locker pickup/return (`/kiosk-simulator`, `Kiosk`), duty estimator preview |
-| **Priya Patel** | `IT_ADMIN` | `RFID-IT-0042` | Full access to Zero-Trust USB Whitelist toggles, anomaly telemetry, reception intake scan, webhook replay (`Command`) |
-| **Vikram Malhotra** | `FINOPS_AUDITOR` | `RFID-FIN-1109` | Customs landed-cost modeling, Zaggle/Happay card ledger, SAP/Oracle/Zoho PO replenishment & reception (`Command`) |
+| Persona Name | Role | Email | Password | RFID Badge ID | Primary Permissions & Responsibilities |
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| **Aarav Sharma** | `EMPLOYEE` | `aarav.sharma@enterprise.corp` | `kiosk2026` | `RFID-EMP-8821` | Rapid AV request, room QR scan, locker pickup/return PIN. Command Center is hidden. |
+| **Priya Patel** | `IT_ADMIN` | `priya.patel@enterprise.corp` | `kiosk2026` | `RFID-IT-0042` | Superuser: USB Zero-Trust Whitelist, PO creation, emergency solenoid override, webhooks. |
+| **Vikram Malhotra** | `FINOPS_AUDITOR` | `vikram.malhotra@enterprise.corp` | `kiosk2026` | `RFID-FIN-1109` | Read-only Indian customs tariff audits (HSN 85437099), Zaggle/Happay card ledgers. |
 
-**Seeded Infrastructure Highlights:**
-- **Meeting Rooms (4):** `Executive Boardroom 4B` *(pre-seeded shrinkage anomaly)*, `Innovation Lab 4A`, `Townhall Auditorium 2A`, `Client Pitch Room 3C` *(tests floor-distance proximity fallback cleanly since Floor 3 has no hub)*.
-- **Smart Locker Fleet (2 Hubs / 24 Bays):** `Floor 4 Boardroom Hub` (12 bays) and `Floor 2 Townhall Hub` (12 bays).
-- **Hardware SKUs & HSN Tariffs:** 7 enterprise SKUs (Anker A8338-PRO USB-C 60W Hub, Barco CS-400W 4K Wireless HDMI, Kramer VP-427A HDCP 2.2 Scaler, Belkin HDMI 2.1, Club3D DP 1.4, Logitech Spotlight BLE, Shure CVB-B/O Mic) across HSN codes `85437099`, `85182210`, `85444299`, and `85181000`.
-
----
-
-## Deployment Options
-
-See [`docs/DEPLOYMENT_GUIDE.md`](docs/DEPLOYMENT_GUIDE.md) for complete production instructions.
-
-### Stateful Docker Compose (Recommended for Self-Hosted / VPS)
-
-Because persistent SSE telemetry streams (`/api/telemetry/stream`) and SQLite WAL live inside a single stateful Node.js process ([ADR D3](docs/DECISIONS.md)), containerized hosting preserves full real-time parity:
-
-```bash
-cp .env.example .env
-# Update SESSION_SECRET, SERVER_PIN_PEPPER, WEBHOOK_SIGNING_SECRET for production
-docker compose up -d --build
-```
-
-The [`docker-entrypoint.sh`](docker-entrypoint.sh) script runs Prisma schema sync / seed safely against a persistent SQLite volume mounted inside the container. Switch to the `vercel-serverless` branch if deploying to Vercel + Neon PostgreSQL.
+### Seeded Infrastructure
+- **Conference Rooms (4):** `Executive Boardroom 4B` *(pre-seeded shrinkage anomaly)*, `Innovation Lab 4A`, `Townhall Auditorium 2A`, and `Client Pitch Room 3C` *(tests proximity floor fallback)*.
+- **Smart Locker Bank (2 Hubs / 24 Compartments):** `Floor 4 Boardroom Hub` (12 bays) and `Floor 2 Townhall Hub` (12 bays).
+- **Enterprise AV Inventory:** 7 enterprise hardware SKUs (Anker USB-C 60W Hub, Barco 4K Wireless HDMI, Kramer HDCP 2.2 Scaler, Belkin Ultra HD, Club3D DP 1.4, Logitech Spotlight BLE Remote, Shure Cardioid Mic) cataloged across HSN codes `85437099`, `85182210`, `85444299`, and `85181000`.
 
 ---
 
-## Quality Gates & Verification
+## Enterprise Quality Gates & Verification
 
-Both workspaces enforce strict TypeScript checks and automated test suites (**63/63 tests passing**):
+Both root and mobile workspaces enforce strict TypeScript typechecking and automated test suites (**63/63 tests passing**):
 
-### Root Backend & Domain Checks
+### Root Backend & Domain Quality Gates
 
 ```bash
-npm run typecheck    # Strict tsc --noEmit (0 errors)
-npm run lint         # ESLint check (0 errors)
-npm run test         # Vitest single-thread suite: 7/7 files, 39/39 tests
-npm run build        # prisma generate && next build (7 static pages + 19 API routes)
+npm run typecheck    # Strict TypeScript (0 errors)
+npm run lint         # ESLint verification (0 errors)
+npm test             # Vitest single-thread suite: 7 files, 39 passing tests
+npm run build        # Production Next.js build: Static pages + 19 API Route Handlers
 ```
 
 <details>
 <summary>Root Vitest Suite Breakdown (39/39 Passing)</summary>
 
-| Test File | Scope | Tests |
+| Test File | Verification Scope | Passed Tests |
 | :--- | :--- | :--- |
-| `test/api-integration.test.ts` | End-to-end REST endpoints, auth, triage, compliance & FinOps | 10 |
-| `test/states.test.ts` | Compartment & Dispatch Ticket state machine transition guards | 8 |
-| `test/triage.test.ts` | Symptom-to-SKU routing & `Port Damaged` wireless override | 8 |
-| `test/kiosk.test.ts` | PIN lockout, IR break-beam removal, VID/PID probe & BadUSB quarantine | 5 |
-| `test/pin.test.ts` | CSPRNG OTP formatting, HMAC-SHA256 hashing & timing-safe compare | 4 |
+| `test/api-integration.test.ts` | End-to-end REST endpoints, sessions, triage, compliance & FinOps | 10 |
+| `test/states.test.ts` | Compartment & Dispatch Ticket finite-state machine transitions | 8 |
+| `test/triage.test.ts` | Symptom-to-SKU routing & `portDamaged` wireless override | 8 |
+| `test/kiosk.test.ts` | PIN lockout, IR break-beam removal, VID/PID probe & BadUSB alarm | 5 |
+| `test/pin.test.ts` | CSPRNG OTP formatting, HMAC-SHA256 hashing & timingSafeEqual | 4 |
 | `test/landed-cost.test.ts` | Golden Test Vectors A & B + domestic ITC recovery math | 3 |
 | `test/concurrency.test.ts` | 20 concurrent asynchronous workers contending for 1 bay | 1 |
 
 </details>
 
-### Mobile App Checks (`mobile/`)
+### Native Mobile Quality Gates (`mobile/`)
 
 ```bash
 cd mobile
-npm run typecheck                    # Strict tsc --noEmit (0 errors)
-npm test                             # Jest + React Native Testing Library: 5/5 suites, 24/24 tests
-npx expo-doctor                      # Expo SDK 58 config & dependency validation
-npx expo export --platform web --platform android --clear  # Production Metro/Hermes bundle export
+npm run typecheck    # Strict TypeScript (0 errors)
+npm test             # Jest + React Native Testing Library: 5 suites, 24 passing tests
 ```
-
-<details>
-<summary>Mobile Jest & RNTL Suite Breakdown (24/24 Passing)</summary>
-
-| Test Suite | Scope | Tests |
-| :--- | :--- | :--- |
-| `mobile/__tests__/format.test.ts` | INR paise & compact tick formatting, Customs Duty Golden Vectors A & B, countdowns, labels & 4-tier URL resolver | 9 |
-| `mobile/__tests__/qr-parser.test.ts` | `kioskdrop://` deep links, trusted HTTPS links, JSON payloads, untrusted URL rejection & PIN sanitization | 6 |
-| `mobile/__tests__/request-triage.test.tsx` | Floor 3 -> Floor 4 fallback notice, `portDamaged` wireless override, OTP pass card & masked replay guard | 2 |
-| `mobile/__tests__/keypad-kiosk.test.tsx` | Offline/loading gating, PIN validation, unlock, `401`/`423` lockout handling & RFID/Biometric flows | 5 |
-| `mobile/__tests__/admin-rbac.test.tsx` | RBAC-guarded HID toggles, SecureStore Bearer persistence on role switch & Landed-Cost Vector A UI | 2 |
-
-</details>
 
 ---
 
 ## API Specification
 
-All API routes run on the Node.js runtime (`force-dynamic`) with CORS headers configured in [`next.config.js`](next.config.js) and accept either cookie sessions or `Authorization: Bearer <token>`.
+All Route Handlers run on the Node.js runtime (`force-dynamic`) with CORS configured in [`next.config.js`](next.config.js) and accept either cookie sessions or `Authorization: Bearer <token>`:
 
-| Category | Endpoint | Method | Description |
-| :--- | :--- | :--- | :--- |
-| **Session & Auth** | `/api/session/current` | `GET` | Returns active persona session (`UserSession`) |
-| | `/api/session/role` | `POST` | Switches persona role (`EMPLOYEE`, `IT_ADMIN`, `FINOPS_AUDITOR`), returns cookie + Bearer `token` |
-| **Triage & Fleet** | `/api/rooms` | `GET` | Lists corporate meeting rooms, floors, display types & QR slugs |
-| | `/api/diagnose-and-reserve` | `POST` | Diagnoses AV symptom, performs atomic bay claim, returns 6-digit OTP & expiry |
-| | `/api/lockers` | `GET` | Lists smart locker hubs, temperatures, bay states & stocked SKUs (triggers lazy expiry sweep) |
-| | `/api/realtime/live-lockers` | `GET` | Realtime locker status polling fallback endpoint |
-| **Kiosk Hardware** | `/api/kiosk/authenticate-and-unlock` | `POST` | Validates PIN / RFID badge / Biometric ref & unlocks bay solenoid |
-| | `/api/kiosk/remove-asset` | `POST` | Triggers optoelectronic IR break-beam sensor checkout (`CHECKED_OUT`) |
-| | `/api/kiosk/return-asset` | `POST` | Probes USB VID/PID & 5V/3A charging continuity on asset return |
-| | `/api/kiosk/report-foreign-device` | `POST` | Quarantines compartment (`MAINTENANCE_QUARANTINE`) & emits BadUSB alarm |
-| **Telemetry** | `/api/telemetry/stream` | `GET` | Server-Sent Events stream with `15s` keepalive heartbeats & custody event broadcasts |
-| **Admin & FinOps** | `/api/admin/compliance` | `GET`, `POST` | Lists Zero-Trust hardware assets, BIS/WPC metadata & toggles `hidWhitelisted` |
-| | `/api/admin/compliance/landed-cost` | `POST` | Computes statutory Indian customs duty breakdown in integer paise |
-| | `/api/admin/finops` | `GET`, `POST` | Fetches Zaggle/Happay card ledger & creates SAP/Oracle/Zoho restock POs |
-| | `/api/admin/reception/scan` | `POST` | Inspects incoming PO shipments & restocks locker bays (`IT_ADMIN` / `FINOPS_AUDITOR`) |
-| | `/api/admin/analytics` | `GET` | Shrinkage anomaly heuristics, floor utilization & checkout distribution |
-| | `/api/admin/webhooks` | `GET`, `POST` | Lists ServiceNow/Zendesk webhook audit logs & replays events by ID |
-| **External Webhooks** | `/api/webhooks/servicenow` | `POST` | HMAC-SHA256 verified inbound ServiceNow ticket webhook |
-| | `/api/webhooks/zendesk` | `POST` | HMAC-SHA256 verified inbound Zendesk ticket webhook |
+| Category | Method | Endpoint | Description |
+| :--- | :---: | :--- | :--- |
+| **Authentication** | `POST` | `/api/auth/login` | Authenticates via credentials, role, or RFID badge; sets signed session cookie & returns token. |
+| | `POST` | `/api/auth/logout` | Clears active session cookie and invalidates client session state. |
+| | `GET` | `/api/session/current` | Returns active authenticated user session payload (`UserSession`). |
+| | `POST` | `/api/session/role` | Switches active persona role (`EMPLOYEE`, `IT_ADMIN`, `FINOPS_AUDITOR`). |
+| **Triage & Inventory** | `GET` | `/api/rooms` | Lists conference meeting rooms, floor assignments, display types & QR slugs. |
+| | `POST` | `/api/diagnose-and-reserve`| Diagnoses AV symptom, executes atomic bay reservation, returns 6-digit PIN. |
+| | `GET` | `/api/lockers` | Lists locker banks, temperatures, compartment statuses, and stocked SKUs. |
+| **Locker Hardware** | `POST` | `/api/kiosk/authenticate-and-unlock` | Verifies PIN / RFID badge and releases mechanical solenoid latch. |
+| | `POST` | `/api/kiosk/remove-asset` | Triggers optoelectronic IR break-beam sensor checkout (`CHECKED_OUT`). |
+| | `POST` | `/api/kiosk/return-asset` | Probes USB VID/PID & 5V/3A smart charging continuity upon return. |
+| | `POST` | `/api/kiosk/report-foreign-device` | Quarantines compartment (`MAINTENANCE_QUARANTINE`) and emits BadUSB alarm. |
+| **Telemetry** | `GET` | `/api/telemetry/stream` | Server-Sent Events (SSE) stream with 15s heartbeats & custody event broadcasts. |
+| **Admin & FinOps** | `GET, POST` | `/api/admin/compliance` | Zero-Trust hardware asset registry & USB HID whitelist management. |
+| | `POST` | `/api/admin/compliance/landed-cost` | Computes statutory Indian customs duty breakdown in integer paise. |
+| | `GET, POST` | `/api/admin/finops` | Fetches corporate card ledgers (Zaggle, Happay) and generates restock POs. |
+| | `POST` | `/api/admin/reception/scan` | Barcode intake scanner for receiving and stocking incoming shipments. |
+| | `GET` | `/api/admin/analytics` | Shrinkage anomaly analytics, floor utilization & checkout distribution. |
+| | `GET, POST` | `/api/admin/webhooks` | Lists ITSM webhook audit logs and triggers event replay by ID. |
+| **Webhooks** | `POST` | `/api/webhooks/servicenow` | Inbound HMAC-SHA256 verified ServiceNow ticket webhook endpoint. |
+| | `POST` | `/api/webhooks/zendesk` | Inbound HMAC-SHA256 verified Zendesk ticket webhook endpoint. |
 
 ---
 
 ## Architecture Decision Records (ADRs)
 
-Full design rationale is documented in [`docs/DECISIONS.md`](docs/DECISIONS.md):
+Key architectural decisions are documented in [`docs/DECISIONS.md`](docs/DECISIONS.md):
 
-- **D1 — Enterprise Simulator Posture:** Authentic contracts, isolated mock adapter boundaries for external ERP/ITSM/regulatory endpoints.
-- **D2 — SQLite WAL + Atomic Conditional Updates:** Zero-dependency local concurrency (`PRAGMA journal_mode = WAL`, `busy_timeout = 10000`, `updateMany` optimistic bay lock, explicit SQLite indexes).
-- **D3 — Stateful Node.js Runtime:** Supports persistent SSE pub/sub (`telemetry-bus.ts`) and local background timers without mandatory Redis infrastructure.
-- **D4 — Exact Version Pinning:** Pinned core Next.js 14 / React 18 / Prisma 6 / Tailwind 3 versions at root for deterministic CI/Docker builds.
-- **D5 — Shared Service Layer:** Web Route Handlers, Server Actions, and Mobile API callers share the exact same domain services in `src/services/`.
-- **D6 — Integer Paise & Basis Points:** All financial figures stored as integer paise (`Int`) and tariff percentages as basis points (`Int`).
+- **D1 — Enterprise Simulator Posture:** Authentic production contracts with isolated mock adapter boundaries for external ERP/ITSM/customs endpoints.
+- **D2 — SQLite WAL + Atomic Conditional Updates:** High-performance, zero-dependency local concurrency (`PRAGMA journal_mode = WAL`, `busy_timeout = 10000`, atomic `updateMany` optimistic locking).
+- **D3 — Stateful Node.js Runtime:** Enables persistent in-memory SSE telemetry broadcasting (`telemetry-bus.ts`) and background timers without requiring external message brokers.
+- **D4 — Strict Dependency Pinning:** Fixed versions for Next.js 14, React 18, React Native 0.76, Expo SDK 52, and Prisma 6 ensuring reproducible builds across operating systems.
+- **D5 — Shared Service Architecture:** Identical domain services in `src/services/` power Web Route Handlers, Server Actions, and Native Mobile API callers.
+- **D6 — Integer Paise & Basis Points Accounting:** All currency amounts stored as integer paise (`Int`) and tariff rates as basis points (`Int`) to guarantee zero IEEE 754 precision loss.
 
 ---
 
 ## Documentation & Media Tooling
 
-- **[PROJECT_GUIDE.md](PROJECT_GUIDE.md):** Complete developer walkthrough covering branch differences, backend + Expo Go setup, Android emulator launch, UI architecture, and troubleshooting.
-- **[mobile/README.md](mobile/README.md):** Dedicated Expo SDK 58 setup, LAN firewall rules, deep-link CLI testing, and EAS build instructions.
-- **[docs/MOBILE_APP_USER_GUIDE.md](docs/MOBILE_APP_USER_GUIDE.md):** End-user walkthrough for Employee, IT Admin, and FinOps mobile personas.
+- **[PROJECT_GUIDE.md](PROJECT_GUIDE.md):** Comprehensive setup and development guide for both web and mobile environments.
+- **[KIOSKDROP_WEBSITE_UPGRADE_PLAN.md](KIOSKDROP_WEBSITE_UPGRADE_PLAN.md):** Complete architectural blueprint for the web portal upgrade.
+- **[TEAM_COMMUNICATION_CONTEXT.md](TEAM_COMMUNICATION_CONTEXT.md):** Project context file for AI-assisted team communications and standups.
+- **[brand-assets/README.md](brand-assets/README.md):** Master brand assets documentation and vector design files.
+- **[mobile/README.md](mobile/README.md):** Dedicated mobile development, Android emulator, and EAS build guide.
 - **[docs/BUSINESS_DECK.md](docs/BUSINESS_DECK.md):** 12-page executive business presentation ([DOCX](docs/KioskDrop_Enterprise_12_Page_Business_Deck.docx) · [PDF](docs/KioskDrop_Enterprise_12_Page_Business_Deck.pdf)).
-- **[docs/DEPLOYMENT_GUIDE.md](docs/DEPLOYMENT_GUIDE.md):** Docker, Railway, Render, VPS, Nginx, and Vercel Serverless deployment guides.
-- **[docs/PUBLIC_DEPLOYMENT_AND_APK_GUIDE.md](docs/PUBLIC_DEPLOYMENT_AND_APK_GUIDE.md):** Public multi-location hosting & standalone APK (v1.0.2) deployment guide.
-- **[docs/DEMO_VIDEO_GUIDE_AND_SCRIPT.md](docs/DEMO_VIDEO_GUIDE_AND_SCRIPT.md):** Automated Playwright screen recording (`npm run record:video` / `npm run record:synced`) & AI voiceover (`npm run demo:voiceover`) guide.
-- **[docs/SECURITY_AUDIT_EXCEPTIONS.md](docs/SECURITY_AUDIT_EXCEPTIONS.md):** Documented simulator security scope & mitigations.
+- **[docs/DEPLOYMENT_GUIDE.md](docs/DEPLOYMENT_GUIDE.md):** Production hosting guide (Docker, Railway, Render, VPS, and Vercel).
+- **[docs/DEMO_VIDEO_GUIDE_AND_SCRIPT.md](docs/DEMO_VIDEO_GUIDE_AND_SCRIPT.md):** Automated Playwright video capture and Edge-TTS voiceover generation script.
 
 ---
 
 <div align="center">
 
-**Built with precision for enterprise boardroom AV reliability across Web, Android, and iOS.**
+**KioskDrop Enterprise** • Built for enterprise boardroom AV hardware reliability across Web, Android, and iOS.
 
 [Back to Top ↑](#kioskdrop-enterprise)
 
